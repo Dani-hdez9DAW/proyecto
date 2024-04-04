@@ -1,4 +1,4 @@
-package org.agaray.spring.pap2024;
+package org.proyect;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
