@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
 @Entity
@@ -19,8 +19,11 @@ public class Pelicula extends Elemento {
     @Column
     private String nombre;
 
-    @OneToMany(mappedBy = "actores")
+    @ManyToMany(mappedBy = "pelicula")
     private Collection<Actor> actores;
+
+    @ManyToMany
+    private Usuario usuarios;
 
     // ==================
 

@@ -3,6 +3,8 @@ package org.proyect.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +18,9 @@ public class Juego extends Elemento{
 
     @Column
     private String plataforma;
+
+    @ManyToMany
+    private Usuario usuarios;
 
 
     // ==================

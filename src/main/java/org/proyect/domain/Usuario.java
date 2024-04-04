@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 
@@ -21,10 +22,10 @@ public class Usuario extends Persona{
     @Column
     private Long descuento;
 
-    @OneToMany(mappedBy = "peliculasFav")
+    @ManyToMany(mappedBy = "usuarios")
     private Collection<Pelicula> peliculasFav;
 
-    @OneToMany(mappedBy = "juegosFav")
+    @ManyToMany(mappedBy = "usuarios")
     private Collection<Juego> juegosFav;
 
     // ==================

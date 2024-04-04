@@ -2,6 +2,7 @@ package org.proyect.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,10 @@ public class Actor extends Persona{
 
     @Column
     private String apellido;
+
+    @ManyToMany
+    private Pelicula pelicula;
+
 
     // ==================
 
