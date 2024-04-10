@@ -28,7 +28,7 @@ public class Evento {
     @Column
     private String localizacion;
     @ManyToOne
-    private Admin admin;
+    private Usuario usuario;
     
 
 

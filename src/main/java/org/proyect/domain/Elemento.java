@@ -2,12 +2,14 @@ package org.proyect.domain;
 
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,8 +25,8 @@ public class Elemento {
     @Column
     private String titulo;
 
-    @Column
-    private Categoria categoria;
+    @ManyToMany
+    private List<Categoria> categorias;
 
     @Column
     private String clasificacion;

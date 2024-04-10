@@ -1,7 +1,7 @@
 package org.proyect.domain;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,10 +22,10 @@ public class Usuario extends Persona{
     private Long descuento;
 
     @ManyToMany(mappedBy = "usuarios")
-    private Collection<Pelicula> peliculasFav;
+    private List<Pelicula> peliculasFav;
 
     @ManyToMany(mappedBy = "usuarios")
-    private Collection<Juego> juegosFav;
+    private List<Juego> juegosFav;
 
     @Column
     private Boolean estaRegistrado;

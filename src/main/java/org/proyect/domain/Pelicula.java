@@ -21,10 +21,10 @@ public class Pelicula extends Elemento {
     private String nombre;
 
     @ManyToMany(mappedBy = "pelicula")
-    private Collection<Actor> actores;
+    private List<Actor> actores;
 
     @ManyToMany
-    private Usuario usuarios;
+    private List<Usuario> usuarios;
 
     @Column
     private List<Juego> juegosRelacionados;

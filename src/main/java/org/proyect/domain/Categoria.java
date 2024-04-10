@@ -6,28 +6,38 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class Categoria{
 
-    @Column
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_categoria;
 
     @Column
+    private Long id;
+
+    @Column
     private String nombre;
+
     @Column
     private String tipo;
+
     @ManyToMany(mappedBy="categorias")
     private List<Elemento>elementos;
 
 
-
     // ==================
+
+    public Categoria() {
+        this.elementos=new ArrayList<>();
+    }
 
     public Categoria(Long id_categoria, String nombre, String tipo) {
         this.id_categoria = id_categoria;
