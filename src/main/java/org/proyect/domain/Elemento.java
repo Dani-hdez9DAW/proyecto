@@ -24,10 +24,10 @@ public class Elemento {
     private String titulo;
 
     @Column
-    private String categoria;
+    private Categoria categoria;
 
     @Column
-    private String edad;
+    private String clasificacion;
 
     @Column
     private String sinopsis;
@@ -36,11 +36,13 @@ public class Elemento {
     private Date fechaSalida;
 
     @Column
-    private String lugarDisponible;
+    private String plataforma;
 
     @Column
-    private String creador;
+    private String imagen;
 
+    @Column
+    private String url;
 
     // ==================
 
