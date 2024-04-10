@@ -1,10 +1,12 @@
 package org.proyect.domain;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,7 +29,7 @@ public class Categoria{
 
     // ==================
 
-    public Categoria(Long id_categoria, String nombre) {
+    public Categoria(Long id_categoria, String nombre, String tipo) {
         this.id_categoria = id_categoria;
         this.nombre = nombre;
         this.tipo= tipo;
