@@ -6,7 +6,6 @@ import java.util.Collection;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Entity
@@ -27,6 +26,12 @@ public class Usuario extends Persona{
 
     @ManyToMany(mappedBy = "usuarios")
     private Collection<Juego> juegosFav;
+
+    @Column
+    private Boolean estaRegistrado;
+
+    @Column
+    private Boolean esAdmin;
 
     // ==================
 
