@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Juego {
+public class Juego extends Elemento  {
 
    
     @Id
@@ -26,6 +26,9 @@ public class Juego {
 
     @ManyToMany(mappedBy = "juegosFav")
     private List<Usuario> usuarios;
+
+    @ManyToMany(mappedBy="categoriaJuegos")
+    private List<Categoria>categorias;
 
 
     public Juego(Long id_juego, String plataforma) {
