@@ -7,11 +7,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class Usuario extends Persona{
 
     @Column
@@ -35,9 +33,19 @@ public class Usuario extends Persona{
     @Column
     private Boolean esAdmin;
 
+
     // ==================
 
- 
+    public Usuario() {
+        this.peliculasFav=new ArrayList<>();
+        this.juegosFav=new ArrayList<>();
+    }
+
+    public Usuario(String nombre) {
+        super.setNombre(nombre); // Usar el setter heredado de Persona
+        this.peliculasFav=new ArrayList<>();
+        this.juegosFav=new ArrayList<>();
+    }
 
     public Usuario(Long id_usuario, Long puntos, Long descuento) {
         this.id_usuario = id_usuario;

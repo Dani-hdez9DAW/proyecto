@@ -1,26 +1,24 @@
 package org.proyect.domain;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
-public class Actor  {
+public class Actor extends Persona {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id_actor;
+
+    @Column
+    private String nombre;
 
     @Column
     private String apellido;
@@ -33,12 +31,22 @@ public class Actor  {
 
     // ==================
 
+    public Actor() {
+      this.peliculas=new ArrayList<>();
+    }
+
+    public Actor(String nombre) {
+        this.nombre=nombre;
+        this.peliculas=new ArrayList<>();
+
+    }
 
 
-    public Actor(Long id_actor,String  apellido) {
+    public Actor(Long id_actor,String nombre,String apellido) {
         this.id_actor = id_actor;
+        this.nombre=nombre;
         this.apellido = apellido;
-      
+        this.peliculas=new ArrayList<>();
     }
 
 }
