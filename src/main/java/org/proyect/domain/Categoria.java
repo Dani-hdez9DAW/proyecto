@@ -33,7 +33,7 @@ public class Categoria {
     @ManyToMany
     private List<Pelicula> categoriaPelis;
 
-    @ManyToMany(mappedBy = "")
+    @ManyToMany
     private List<Juego> categoriaJuegos;
 
     // ==================
