@@ -7,9 +7,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Usuario extends Persona{
 
     @Column
@@ -24,7 +26,7 @@ public class Usuario extends Persona{
     @ManyToMany(mappedBy = "usuarios")
     private List<Pelicula> peliculasFav;
 
-    @ManyToMany(mappedBy = "usuarios")
+    @ManyToMany
     private List<Juego> juegosFav;
 
     @Column
@@ -35,10 +37,7 @@ public class Usuario extends Persona{
 
     // ==================
 
-    public Usuario() {
-        this.peliculasFav=new ArrayList<>();
-        this.juegosFav=new ArrayList<>();
-    }
+ 
 
     public Usuario(Long id_usuario, Long puntos, Long descuento) {
         this.id_usuario = id_usuario;
