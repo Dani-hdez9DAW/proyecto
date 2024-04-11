@@ -3,27 +3,30 @@ package org.proyect.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-public class Juego extends Elemento {
+@NoArgsConstructor
+public class Juego {
 
+   
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_juego;
-
+    @Column
     private String plataforma;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "juegosFav")
     private List<Usuario> usuarios;
 
-
-    public Juego() {
-        this.usuarios = new ArrayList<>();
-    }
 
     public Juego(Long id_juego, String plataforma) {
         this.id_juego = id_juego;
