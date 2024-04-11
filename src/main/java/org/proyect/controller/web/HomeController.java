@@ -35,7 +35,5 @@ public class HomeController {
 
 		m.put("view", "/_t/info");
 		return "/_t/frame";
-	}
-
-	
+	}	
 }
