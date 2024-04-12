@@ -1,8 +1,12 @@
 package org.proyect.repository;
+ 
 
+import org.proyect.domain.Categoria;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CategoriaRepository {
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+
     
-}
+} 

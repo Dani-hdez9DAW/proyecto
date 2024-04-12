@@ -16,8 +16,7 @@ import lombok.Data;
 @Data
 public class Pelicula extends Elemento{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @Column
