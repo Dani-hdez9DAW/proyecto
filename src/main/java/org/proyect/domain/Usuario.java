@@ -10,10 +10,9 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Usuario extends Persona{
+public class Usuario extends Persona {
 
-    @Column
-    private Long id_usuario;
+   
 
     @Column
     private Long puntos;
@@ -33,26 +32,26 @@ public class Usuario extends Persona{
     @Column
     private Boolean esAdmin;
 
-
     // ==================
 
     public Usuario() {
-        this.peliculasFav=new ArrayList<>();
-        this.juegosFav=new ArrayList<>();
+        this.peliculasFav = new ArrayList<>();
+        this.juegosFav = new ArrayList<>();
     }
 
-    public Usuario(String nombre) {
+    public Usuario(String nombre, String passwd) {
         super.setNombre(nombre); // Usar el setter heredado de Persona
-        this.peliculasFav=new ArrayList<>();
-        this.juegosFav=new ArrayList<>();
+        super.setContraseña(passwd);
+        this.peliculasFav = new ArrayList<>();
+        this.juegosFav = new ArrayList<>();
     }
 
-    public Usuario(Long id_usuario, Long puntos, Long descuento) {
-        this.id_usuario = id_usuario;
+    public Usuario(Long puntos, Long descuento) {
+
         this.puntos = puntos;
         this.descuento = descuento;
-        this.peliculasFav=new ArrayList<>();
-        this.juegosFav=new ArrayList<>();
+        this.peliculasFav = new ArrayList<>();
+        this.juegosFav = new ArrayList<>();
     }
 
 }

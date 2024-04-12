@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ActorService {
-    
+
     @Autowired
     private ActorRepository actorRepository;
 
@@ -28,6 +28,7 @@ public class ActorService {
     public Actor findById(Long id_Actor) {
         return actorRepository.findById(id_Actor).get();
     }
+
     public void update(Long id_Actor, String nombre) {
         Actor actor = actorRepository.findById(id_Actor).get();
         actor.setNombre(nombre);

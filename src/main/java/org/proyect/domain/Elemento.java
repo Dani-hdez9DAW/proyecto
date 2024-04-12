@@ -1,6 +1,5 @@
 package org.proyect.domain;
 
-
 import java.sql.Date;
 import java.util.List;
 
@@ -13,10 +12,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 
-
 @MappedSuperclass
 
-public abstract class Elemento  {
+public abstract class Elemento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +22,6 @@ public abstract class Elemento  {
 
     @Column
     private String titulo;
-
-    
 
     @Column
     private String clasificacion;
@@ -49,7 +45,5 @@ public abstract class Elemento  {
     private List<Categoria> categorias;
 
     // ==================
-
-
 
 }
