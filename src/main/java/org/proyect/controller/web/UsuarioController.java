@@ -41,10 +41,10 @@ public class UsuarioController {
             @RequestParam("pass") String password) throws DangerException {
         try {
             usuarioService.save(nombre, password);
-            PRG.info("El usuario  con el nombre " + nombre + " ha sido creado", "/usuario/c");
+            PRG.info("El usuario  con el nombre " + nombre + " ha sido creado", "/");
         } catch (Exception e) {
-            PRG.error("El usuario  con el nombre " + nombre + " ya existe", "/usuario/c");
+            PRG.error("El usuario  con el nombre " + nombre + " ya existe", "/");
         }
-        return "redirect:/usuario/r";
+        return "redirect:/";
     }
 }
