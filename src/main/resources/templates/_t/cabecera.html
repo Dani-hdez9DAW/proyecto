@@ -5,25 +5,50 @@
 
 
 <nav class="container-fluid navbar navbar-expand-lg bg-dark navbar-dark rounded justify-content-center">
-    <a class="navbar-brand" href="/">
-        <img src="/img/home-alt.png" alt="INICIO" style="width:40px;">
-    </a>
-    <form class="d-flex">
-        <input class="form-control me-8" type="search" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
-
-    <i id="personIcon" class="bi bi-person-circle d-lg-flex" style="font-size: 24px; color: white; cursor: pointer;"> <a th:if="${session.usuario==null}">LOGIN</a>
-	</i>
-	<span class="nav-item" th:if="${session.usuario!=null}"
-	th:text="|Hola ${session.usuario.nombre}    |"></span>
-<li class="nav-item">
-	<a class="nav-link" th:if="${session.usuario!=null}" href="/logout">Logout</a>
-</li>
+    <div class="container-lg">
+        <a class="navbar-brand" href="/">Inicio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="navbar-brand" href="/">
+                        <img src="/img/home-alt.png" alt="INICIO" style="width:40px;">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">Acerca de</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/services">Servicios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contacto</a>
+                </li>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <li class="nav-item">
+                    <i id="personIcon" class="bi bi-person-circle d-lg-flex"
+                        style="font-size: 24px; color: white; cursor: pointer;">
+                        <a th:if="${session.usuario==null}"></a>
+                    </i>
+                </li>
+                <span class="nav-item" th:if="${session.usuario!=null}" th:text="|${session.usuario.nombre}|"></span>
+                <li class="nav-item">
+                    <a class="nav-link" th:if="${session.usuario!=null}" href="/logout"> <button class="btn btn-danger"
+                            type="button">Logout</button></a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
-
 <!-- Modal de Autenticación de usuario -->
-<div class="modal fade" id="personModal" tabindex="-1" role="dialog" aria-labelledby="personModalLabel" aria-hidden="true">
+<div class="modal fade" id="personModal" tabindex="-1" role="dialog" aria-labelledby="personModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -41,9 +66,10 @@
                     </div>
                     <!-- Los botones deben estar dentro del formulario -->
                     <div class="modal-footer">
-						<div>
-							<button class="btn btn-success btn-block" id="registerModalButton" type="button">Registrarse</button>
-						</div>
+                        <div>
+                            <button class="btn btn-success btn-block" id="registerModalButton"
+                                type="button">Registrarse</button>
+                        </div>
                         <button class="btn btn-primary btn-block" type="submit">Aceptar</button>
                         <button class="btn btn-secondary btn-block" type="button" data-dismiss="modal">Cancelar</button>
                     </div>
@@ -54,7 +80,8 @@
 </div>
 
 <!-- Modal de Registro -->
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -66,12 +93,14 @@
                         <label for="id-nombre">Nombre</label>
                         <input type="text" class="form-control" id="id-nombre" autofocus="autofocus" name="nombre" />
                     </div>
-                   
+
                     <div class="form-group">
                         <label for="id-pass">Contraseña</label>
                         <input type="password" class="form-control" id="id-pass" name="pass" />
                     </div>
-                    <div><p><br></p></div>
+                    <div>
+                        <p><br></p>
+                    </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary btn-block" type="submit">Aceptar</button>
                         <button class="btn btn-secondary btn-block" type="button" data-dismiss="modal">Cancelar</button>
@@ -85,7 +114,7 @@
 <script>
     jQuery(document).ready(function ($) {
         $('#personIcon').click(function () {
-            $('#personModal').modal('show'); 
+            $('#personModal').modal('show');
         });
 
         // Abre el modal de registro cuando se hace clic en el botón "Registrarse"

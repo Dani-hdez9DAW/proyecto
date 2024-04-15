@@ -2,17 +2,7 @@
 <div class="container bg-secondary">
     <h1>NOMBRE APP</h1>
 
-    <button onclick="window.location.href='/_bean/r'">_BEan</button>
-    <li class="nav-item">
-        <a class="nav-link" th:if="${session.usuario==null}" href="/login">LOGIN</a>
-    </li>
-    <span class="nav-item" th:if="${session.usuario!=null}"
-        th:text="|Hola ${session.usuario.nombre}    |"></span>
-    <li class="nav-item">
-        <a class="nav-link" th:if="${session.usuario!=null}" href="/logout">Logout</a>
-    </li>
+  
+   
 
-    <li class="nav-item">
-        <a class="nav-link" href="/usuario/c">Crear</a>
-    </li>
 </div>
