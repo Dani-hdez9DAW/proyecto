@@ -22,6 +22,9 @@ public class PeliculaService {
         peliculaRepository.save(pelicula);
 
     }
+    public List<Pelicula> findByNombre(String nombre) {
+        return peliculaRepository.findByNombre(nombre);
+    }
 
     public Pelicula findById(Long id) {
         // TODO Auto-generated method stub

@@ -1,3 +1,5 @@
+/*package org.proyect.service;
+
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +18,4 @@ public class FilmaffinityService {
         String url = apiUrl + "/peliculas/" + idPelicula;
         return restTemplate.getForObject(url, Object.class);
     }
-}
+}*/

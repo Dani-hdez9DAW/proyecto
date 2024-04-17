@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 
-@RequestMapping("/categoria")
+@RequestMapping("/categoria/")
 @Controller
 public class CategoriaController {
 
@@ -24,7 +24,7 @@ public class CategoriaController {
     public String r(
             ModelMap m) {
         m.put("categorias", categoriaService.findAll());
-        m.put("view", "category/r");
+        m.put("view", "categoria/r");
         return "_t/frame";
     }
 
@@ -33,7 +33,7 @@ public class CategoriaController {
             ModelMap m,
             HttpSession s) {
 
-        m.put("view", "_bean/c");
+        m.put("view", "categoria/c");
         return "_t/frame";
     }
 
@@ -42,19 +42,19 @@ public class CategoriaController {
             @RequestParam("nombre") String nombre, HttpSession s) throws Exception {
  
         try {
-            _beanService.save(nombre);
+            categoriaService.save(nombre);
         } catch (Exception e) {
-            PRG.error("El país " + nombre + " ya existe", "/_bean/c");
+            PRG.error("El país " + nombre + " ya existe", "/categoria/c");
         }
-        return "redirect:/_bean/r";
+        return "redirect:/categoria/r";
     }
 
     @GetMapping("u")
     public String update(
             @RequestParam("id") Long id_Bean,
             ModelMap m) {
-        m.put("_bean", _beanService.findById(id_Bean));
-        m.put("view", "_bean/u");
+        m.put("_bean", categoriaService.findById(id_Bean));
+        m.put("view", "categoria/u");
         return "_t/frame";
     }
 
@@ -63,21 +63,21 @@ public class CategoriaController {
             @RequestParam("id_Bean") Long id_Bean,
             @RequestParam("nombre") String nombre) throws DangerException {
         try {
-            _beanService.update(id_Bean, nombre);
+            categoriaService.update(id_Bean, nombre);
         } catch (Exception e) {
-            PRG.error("El país no pudo ser actualizado", "/_bean/r");
+            PRG.error("El país no pudo ser actualizado", "/categoria/r");
         }
-        return "redirect:/_bean/r";
+        return "redirect:/categoria/r";
     }
 
     @PostMapping("d")
     public String delete(
             @RequestParam("id") Long id_Bean) throws DangerException {
         try {
-            _beanService.delete(id_Bean);
+            categoriaService.delete(id_Bean);
         } catch (Exception e) {
-            PRG.error("No se puede borrar un país que tenga algún nacido/residente", "/_bean/r");
+            PRG.error("No se puede borrar un país que tenga algún nacido/residente", "/categoria/r");
         }
-        return "redirect:/_bean/r";
+        return "redirect:/categoria/r";
     }
 }

@@ -1,5 +1,9 @@
 package org.proyect.service;
 
+import java.util.List;
+
+import org.proyect.domain.Categoria;
+import org.proyect.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,28 +13,28 @@ public class CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     public List<Categoria> findAll() {
-        return _beanRepository.findAll();
+        return  categoriaRepository.findAll();
     }
 
-    public List<_Bean> findByNombre(String nombre) {
-        return _beanRepository.findByNombre(nombre);
+    public List<Categoria> findByNombre(String nombre) {
+        return categoriaRepository.findByNombre(nombre);
     }
 
-    public _Bean save(String nombre) {
-        return _beanRepository.save(new _Bean(nombre));
+    public Categoria save(String nombre) {
+        return  categoriaRepository.save(new Categoria(null, nombre, nombre));
     }
 
-    public _Bean findById(Long id_Bean) {
-        return _beanRepository.findById(id_Bean).get();
+    public Categoria findById(Long idCategoria) {
+        return  categoriaRepository.findById(idCategoria).get();
     }
 
-    public void update(Long id_Bean, String nombre) {
-        _Bean _bean = _beanRepository.findById(id_Bean).get();
-        _bean.setNombre(nombre);
-        _beanRepository.save(_bean);
+    public void update(Long idCategoria, String nombre) {
+        Categoria Categoria =  categoriaRepository.findById(idCategoria).get();
+        Categoria.setNombre(nombre);
+         categoriaRepository.save(Categoria);
     }
 
-    public void delete(Long id_Bean) {
-        _beanRepository.delete(_beanRepository.getReferenceById(id_Bean));
+    public void delete(Long idCategoria) {
+         categoriaRepository.delete( categoriaRepository.getReferenceById(idCategoria));
     }
 }
