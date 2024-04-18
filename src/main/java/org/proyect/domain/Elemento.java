@@ -4,13 +4,12 @@ import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
+
 
 @MappedSuperclass
 
@@ -24,19 +23,35 @@ public abstract class Elemento {
     private String titulo;
 
     @Column
-    private String clasificacion;
+    private String clasificacion;//Lo de pegi 7,etc 
 
     @Column
     private String sinopsis;
 
     @Column
-    private Date fechaSalida;
+    private Date fecha_salida;
 
     @Column
-    private String plataforma;
+    private String plataforma;//Añadir en la base de datos
 
     @Column
-    private String imagen;
+    private String imagen;//Añadir en la base de datos
+
+    @Column
+    private String estado;
+
+    @Column
+    private Integer duracion;
+
+    @Column
+    private Integer puntuacion;
+
+    @Column
+    private Integer cuenta_votos;
+
+    @Column
+    private String trailer;
+
 
     @Column
     private String url;
