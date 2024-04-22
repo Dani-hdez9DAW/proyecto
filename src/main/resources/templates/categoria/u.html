@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificacion de categoria</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="text-center">Modificacion de categoria</h1>
+                    </div>
+                    <div class="card-body">
+                        <form action="/categoria/u" method="post">
+                            <div class="form-group">
+                                <label for="id-nombre">Nombre:</label>
+                                <input type="text" id="id-nombre" autofocus="autofocus" name="nombre"
+                                    class="form-control" required th:value="${categoria.nombre}">
+                                    <input type="hidden" id="idcategoria" name="idcategoria" th:value="${categoria.id_categoria}">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success mr-2">Modificar categoria</button>
+                                <button type="button" onclick="window.location.href='/categoria/rAdmin'"
+                                    class="btn btn-secondary">Cancelar categoria</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

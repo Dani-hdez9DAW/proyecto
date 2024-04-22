@@ -1,6 +1,7 @@
 package org.proyect.controller.web;
 
 import org.proyect.exception.DangerException;
+import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +28,32 @@ public class CategoriaController {
         m.put("view", "categoria/r");
         return "_t/frame";
     }
+    @GetMapping("rAdmin")
+    public String rAdmin(
+            ModelMap m,HttpSession s) {
+                if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+                    m.put("categorias", categoriaService.findAll());
+                    m.put("view", "categoria/rAdmin");
+                    return "_t/frame";
+                } else {
+                    // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
+                    // de sesión u otra página apropiada.
+                    return "/"; // Redirige a la página de inicio de sesión
+                }
+    }
 
     @GetMapping("c")
     public String c(
             ModelMap m,
             HttpSession s) {
-
-        m.put("view", "categoria/c");
-        return "_t/frame";
+                if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+                    m.put("view", "categoria/c");
+                    return "_t/frame";
+                } else {
+                    // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
+                    // de sesión u otra página apropiada.
+                    return "/"; // Redirige a la página de inicio de sesión
+                }
     }
 
     @PostMapping("c")
@@ -51,21 +70,21 @@ public class CategoriaController {
 
     @GetMapping("u")
     public String update(
-            @RequestParam("id") Long id_Bean,
+            @RequestParam("id") Long idCategoria,
             ModelMap m) {
-        m.put("_bean", categoriaService.findById(id_Bean));
+        m.put("categoria", categoriaService.findById(idCategoria));
         m.put("view", "categoria/u");
         return "_t/frame";
     }
 
     @PostMapping("u")
     public String updatePost(
-            @RequestParam("id_Bean") Long id_Bean,
+            @RequestParam("idcategoria") Long idCategoria,
             @RequestParam("nombre") String nombre) throws DangerException {
         try {
-            categoriaService.update(id_Bean, nombre);
+            categoriaService.update(idCategoria, nombre);
         } catch (Exception e) {
-            PRG.error("El país no pudo ser actualizado", "/categoria/r");
+            PRG.error("La categoria no pudo ser actualizada", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }

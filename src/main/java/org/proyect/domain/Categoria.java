@@ -22,13 +22,8 @@ public class Categoria {
     private Long id_categoria;
 
     @Column
-    private Long id;
-
-    @Column
     private String nombre;
 
-    @Column
-    private String tipo;
 
     @ManyToMany
     private List<Pelicula> categoriaPelis;
@@ -38,13 +33,10 @@ public class Categoria {
 
     // ==================
 
-    public Categoria(Long id_categoria, String nombre, String tipo) {
-        this.id_categoria = id_categoria;
+    public Categoria(String nombre) {
         this.nombre = nombre;
-        this.tipo = tipo;
         this.categoriaJuegos = new ArrayList<>();
         this.categoriaPelis = new ArrayList<>();
-
     }
 
 }
