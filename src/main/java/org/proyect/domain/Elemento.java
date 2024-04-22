@@ -9,10 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Data;
 
 
 @MappedSuperclass
-
+@Data
 public abstract class Elemento {
 
     @Id

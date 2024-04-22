@@ -27,7 +27,7 @@ public class PeliculaController {
 
         List<Pelicula> peliculas = peliculaService.findAll();
         m.put("peliculas", peliculas);
-        m.put("view", "pelicula/r");
+        m.put("view", "/pelicula/r");
         return "_t/frame";
     }
 
