@@ -19,6 +19,7 @@ public class Usuario extends Persona {
 
     @Column
     private Long descuento;
+    
 
     @ManyToMany(mappedBy = "usuarios")
     private List<Pelicula> peliculasFav;
