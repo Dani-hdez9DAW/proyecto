@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear categoria</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="my-4">Nueva categoria</h1>
+        <form id="categoriaForm" action="/categoria/c" method="post">
+            <div class="form-group">
+                <label for="id-nombre">Nombre</label>
+                <input type="text" class="form-control" id="id-nombre" autofocus="autofocus" name="nombre" />
+                <small id="nombreHelp" class="form-text text-danger"></small>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Crear">
+        </form>
+        <button class="btn btn-primary" onclick="window.location.href='/categoria/r'">Volver</button>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script>
+        $(document).ready(function () {
+            $('#categoriaForm').submit(function (event) {
+                // Evitar que se envíe el formulario por defecto
+                event.preventDefault();
+                // Validar el campo de nombre
+                var nombre = $('#id-nombre').val();
+                if (nombre == null ) {
+                    $('#nombreHelp').text('Por favor, introduce un nombre.');
+                } else {
+                    // Si el nombre está presente, enviar el formulario
+                    this.submit();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

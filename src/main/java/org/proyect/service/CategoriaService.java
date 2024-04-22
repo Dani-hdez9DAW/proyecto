@@ -13,7 +13,7 @@ public class CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     public List<Categoria> findAll() {
-        return  categoriaRepository.findAll();
+        return categoriaRepository.findAll();
     }
 
     public List<Categoria> findByNombre(String nombre) {
@@ -21,20 +21,20 @@ public class CategoriaService {
     }
 
     public Categoria save(String nombre) {
-        return  categoriaRepository.save(new Categoria(null, nombre, nombre));
+        return categoriaRepository.save(new Categoria(nombre));
     }
 
     public Categoria findById(Long idCategoria) {
-        return  categoriaRepository.findById(idCategoria).get();
+        return categoriaRepository.findById(idCategoria).get();
     }
 
     public void update(Long idCategoria, String nombre) {
-        Categoria Categoria =  categoriaRepository.findById(idCategoria).get();
-        Categoria.setNombre(nombre);
-         categoriaRepository.save(Categoria);
+        Categoria categoria = categoriaRepository.findById(idCategoria).get();
+        categoria.setNombre(nombre);
+        categoriaRepository.save(categoria);
     }
 
     public void delete(Long idCategoria) {
-         categoriaRepository.delete( categoriaRepository.getReferenceById(idCategoria));
+        categoriaRepository.delete(categoriaRepository.getReferenceById(idCategoria));
     }
 }
