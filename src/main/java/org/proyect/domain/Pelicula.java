@@ -2,23 +2,18 @@ package org.proyect.domain;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
 @Entity
 @Data
-public class Pelicula{
+public class Pelicula extends Elemento{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @Column
@@ -30,6 +25,8 @@ public class Pelicula{
     @ManyToMany
     private List<Usuario> usuarios;
 
+    @ManyToMany(mappedBy="categoriaPelis")
+    private List<Categoria> categorias;
     
 
     // ==================

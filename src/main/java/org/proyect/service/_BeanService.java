@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class _BeanService {
-    
+
     @Autowired
     private _BeanRepository _beanRepository;
 
@@ -28,6 +28,7 @@ public class _BeanService {
     public _Bean findById(Long id_Bean) {
         return _beanRepository.findById(id_Bean).get();
     }
+
     public void update(Long id_Bean, String nombre) {
         _Bean _bean = _beanRepository.findById(id_Bean).get();
         _bean.setNombre(nombre);

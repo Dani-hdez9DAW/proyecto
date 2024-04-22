@@ -7,21 +7,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
-public class Usuario extends Persona{
+public class Usuario extends Persona {
 
-    @Column
-    private Long id_usuario;
+   
 
     @Column
     private Long puntos;
 
     @Column
     private Long descuento;
+    
 
     @ManyToMany(mappedBy = "usuarios")
     private List<Pelicula> peliculasFav;
@@ -37,14 +35,24 @@ public class Usuario extends Persona{
 
     // ==================
 
- 
+    public Usuario() {
+        this.peliculasFav = new ArrayList<>();
+        this.juegosFav = new ArrayList<>();
+    }
 
-    public Usuario(Long id_usuario, Long puntos, Long descuento) {
-        this.id_usuario = id_usuario;
+    public Usuario(String nombre, String passwd) {
+        super.setNombre(nombre); // Usar el setter heredado de Persona
+        super.setContraseña(passwd);
+        this.peliculasFav = new ArrayList<>();
+        this.juegosFav = new ArrayList<>();
+    }
+
+    public Usuario(Long puntos, Long descuento) {
+
         this.puntos = puntos;
         this.descuento = descuento;
-        this.peliculasFav=new ArrayList<>();
-        this.juegosFav=new ArrayList<>();
+        this.peliculasFav = new ArrayList<>();
+        this.juegosFav = new ArrayList<>();
     }
 
 }

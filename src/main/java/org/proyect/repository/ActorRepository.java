@@ -2,11 +2,11 @@ package org.proyect.repository;
 
 import java.util.List;
 
-import org.proyect.domain._Bean;
+import org.proyect.domain.Actor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface _BeanRepository extends JpaRepository<_Bean, Long> {
-    public List<_Bean> findByNombre(String nombre);
+public interface ActorRepository extends JpaRepository<Actor, Long> {
+    public List<Actor> findByNombre(String nombre);
 }
