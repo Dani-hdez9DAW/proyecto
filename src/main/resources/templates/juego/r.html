@@ -1,37 +1,85 @@
-<style>
-    .card {
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .card:hover {
-        transform: translateY(-5px); /* Cambia la tarjeta hacia arriba cuando el cursor está sobre ella */
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Añade una sombra más pronunciada */
-    }
-</style>
-
-<body class="container bg-info">
-    <ul class="bg-secondary" style="list-style: none; padding: 50px 80px 80px 80px; --bs-bg-opacity: .5;">
-        <li th:each="juego : ${juegos}">
-            <div class="card mb-3" style="border-radius:25px">
-                <h3 class="card-header bg-info text-white" style="border-radius:25px 25px 0px 0px" th:text="${juego.titulo}"></h3>
-
-                <div class="card-body">
-                    <div class="row justify-content-center px-md-3">
-
-                        <div class="col-md-3">
-                            <img th:src="${juego.imagen}">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0-alpha1/css/bootstrap.min.css"> -->
+    <style>
+        .card {
+            perspective: 1000px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+        .front, .back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+        }
+        .front {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .back {
+            background-color: #f1f1f1;
+            padding: 20px;
+            transform: rotateY(180deg);
+        }
+        .back p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container bg-info">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div th:each="juego : ${juegos}" class="col">
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="front">
+                            <img src="..." class="card-img-top" alt="...">
                         </div>
-                        <div class="col-md-9">
+                        <div class="back">
+                            <h5 class="card-title" th:text="${juego.titulo}">Movies-</h5>
                             <p class="card-text" th:text="${juego.sinopsis}"></p>
-                            <span class="badge text-dark bg-info">Duración:<div th:text="|${juego.duracion}m|"></div></span>
-                            <span class="badge text-dark bg-warning">Puntuación:<div th:text="${juego.puntuacion}"></div></span>
+                            <p class="card-text" th:text="${juego.fecha_salida}"></p>
+                            <p class="card-text" th:text="${juego.puntuacion}"></p>
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Ver más
+                            </a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="card-footer text-muted" style="border-radius:0px 0px 25px 25px">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalles del Juego</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
-        </li>
-    </ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>
