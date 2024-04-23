@@ -12,8 +12,6 @@ import lombok.Data;
 @Data
 public class Usuario extends Persona {
 
-   
-
     @Column
     private Long puntos;
 
