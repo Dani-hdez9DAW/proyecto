@@ -21,8 +21,8 @@ public class EventoController {
     @GetMapping("r")
     public String r(
             ModelMap m) {
-        m.put("categorias", eventoService.findAll());
-        m.put("view", "categoria/r");
+        m.put("eventos", eventoService.findAll());
+        m.put("view", "evento/r");
         return "_t/frame";
     }
 
@@ -30,8 +30,7 @@ public class EventoController {
     public String c(
             ModelMap m,
             HttpSession s) {
-
-        m.put("view", "categoria/c");
+        m.put("view", "evento/c");
         return "_t/frame";
     }
 

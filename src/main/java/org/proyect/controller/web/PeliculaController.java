@@ -27,13 +27,13 @@ public class PeliculaController {
 
         List<Pelicula> peliculas = peliculaService.findAll();
         m.put("peliculas", peliculas);
-        m.put("view", "pelicula/r");
+        m.put("view", "/pelicula/r");
         return "_t/frame";
     }
 
     @GetMapping("c")
     public String c(ModelMap m, HttpSession session) {
-        if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado
+        if (H.isRolOk("admin", session)) { // Verifica si el usuario está autenticado
             m.put("view", "pelicula/c");
             return "_t/frame";
         } else {

@@ -1,0 +1,37 @@
+<style>
+    .card {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px); /* Cambia la tarjeta hacia arriba cuando el cursor está sobre ella */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Añade una sombra más pronunciada */
+    }
+</style>
+
+<body class="container bg-info">
+    <ul class="bg-secondary" style="list-style: none; padding: 50px 80px 80px 80px; --bs-bg-opacity: .5;">
+        <li th:each="juego : ${juegos}">
+            <div class="card mb-3" style="border-radius:25px">
+                <h3 class="card-header bg-info text-white" style="border-radius:25px 25px 0px 0px" th:text="${juego.titulo}"></h3>
+
+                <div class="card-body">
+                    <div class="row justify-content-center px-md-3">
+
+                        <div class="col-md-3">
+                            <img th:src="${juego.imagen}">
+                        </div>
+                        <div class="col-md-9">
+                            <p class="card-text" th:text="${juego.sinopsis}"></p>
+                            <span class="badge text-dark bg-info">Duración:<div th:text="|${juego.duracion}m|"></div></span>
+                            <span class="badge text-dark bg-warning">Puntuación:<div th:text="${juego.puntuacion}"></div></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer text-muted" style="border-radius:0px 0px 25px 25px">
+                </div>
+            </div>
+        </li>
+    </ul>
+</body>
