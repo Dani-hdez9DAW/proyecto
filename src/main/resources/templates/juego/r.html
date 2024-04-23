@@ -78,6 +78,17 @@
             border-radius: 5px; /* Agrega bordes redondeados al título */
             text-align: center; /* Centra el texto */
         }
+        .points{
+            color: yellow;
+        } 
+
+        .date{
+            color: rgb(208, 255, 0);
+        } 
+
+        .time{
+            color: rgb(208, 255, 0);
+        } 
     </style>
 </head>
 
@@ -94,9 +105,9 @@
                         <div class="back">
                             <h5 class="card-title" th:text="${juego.titulo}">Movies-</h5>
                             <p class="card-text" th:text="${juego.sinopsis}"></p>
-                            <p class="card-text" th:text="| Fecha: ${juego.fecha_salida}|"></p>
-                             <p class="card-text" th:text="| Puntuación: ${juego.puntuacion} puntos|"></p>
-                             <p class="card-text" th:text="| Duración: ${juego.duracion} m|"></p>
+                            <p class="card-text points"><span th:utext="'<i class=\'bi bi-star-fill\'></i> ' + |${juego.puntuacion} puntos.|"></span></p>
+                            <p class="card-text date"><span th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${juego.fecha_salida}"></span></p>
+                            <p class="card-text time"><span th:utext="'<i class=\'bi bi-alarm\'></i>  ' + |${juego.duracion} m.|"></span></p>
                             <a href="#" class="btn btn-primary" data-bs-toggle="modal" 
                                 data-bs-target="#exampleModal">
                                 Ver más
