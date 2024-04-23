@@ -1,0 +1,234 @@
+Definición de variables
+:root {
+  --primary: hsl(222, 80%, 50%);
+  --light: hsl(222, 50%, 95%);
+  /* --titleMovie: rgba(255, 255, 255, .79); */
+  --titleMovie: hsla(0, 0%, 100%, .8);
+}
+
+/* Estilos generales */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+/* Mixin para estilos móviles */
+@media screen and (max-width: 640px) {
+  /* Aquí deberían ir los estilos específicos para dispositivos móviles */
+}
+
+/* Estilos para el documento HTML */
+html {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 300;
+  color: #333;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: var(--light);
+  background-attachment: fixed;
+}
+
+#spinner:not([hidden]) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#spinner::after {
+  content: "";
+  width: 80px;
+  height: 80px;
+  border: 4px solid #f3f3f3;
+  border-top: 3px solid var(--primary);
+  border-radius: 100%;
+  will-change: transform;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos para el contenido */
+.content {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1000px;
+}
+
+p.overview {
+  font-size: 12.5px;
+  height: 200px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.heading {
+  width: 100%;
+  margin-left: 1rem;
+  font-weight: 900;
+  font-size: 1.618rem;
+  text-transform: uppercase;
+  letter-spacing: .1ch;
+  line-height: 1;
+  padding-bottom: .5em;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.heading:after {
+  display: block;
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(135deg, adjust-hue(var(--primary), -20deg), var(--primary));
+  bottom: 0;
+}
+
+.description {
+  width: 100%;
+  margin-top: 0;
+  margin-left: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* Estilos para las tarjetas */
+.card {
+  color: inherit;
+  width: calc(33% - 2rem);
+  min-width: calc(33% - 2rem);
+  height: 400px;
+  min-height: 400px;
+  perspective: 1000px;
+  margin: 1rem;
+  position: relative;
+}
+
+.card.flip {
+  transform: rotateY(180deg);
+}
+
+.frontWeb,
+.back {
+  display: flex;
+  border-radius: 6px;
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: ease-in-out 600ms;
+}
+
+.frontWeb {
+  cursor: pointer;
+  background-size: cover;
+  padding: 2rem;
+  font-size: 1.62rem;
+  font-weight: 600;
+  color: var(--titleMovie);
+  overflow: hidden;
+  font-family: Poppins, sans-serif;
+}
+
+.frontWeb:before {
+  position: absolute;
+  display: block;
+  content: '';
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, adjust-hue(var(--primary), -20deg), var(--primary));
+  opacity: .25;
+  z-index: -1;
+}
+
+.card:hover .frontWeb,
+.card:nth-child(even):hover .frontWeb {
+  transform: rotateY(180deg);
+}
+
+.card:hover .back,
+.card:nth-child(even) .back {
+  transform: rotateY(0deg);
+}
+
+.back {
+  background: #fff;
+  transform: rotateY(-180deg);
+  padding: 0 2em;
+}
+
+.back .card:hover,
+.card:nth-child(even) .back {
+  transform: rotateY(180deg);
+}
+
+.button {
+  text-decoration: none;
+  height: 40px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  padding: .5em 1em;
+  border-radius: 100px;
+  font: inherit;
+  background: linear-gradient(135deg, adjust-hue(var(--primary), -20deg), var(--primary));
+  border: none;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: 300ms ease;
+}
+
+.button:before {
+  position: absolute;
+  display: block;
+  content: '';
+  transform: translateZ(-40px);
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
+  border-radius: 100px;
+  left: 10px;
+  top: 16px;
+  box-shadow: 0 0 10px 10px rgba(var(--primary), 0.25);
+  background-color: rgba(var(--primary), 0.25);
+}
+
+.button:hover {
+  text-decoration: underline;
+  transform: translateZ(55px);
+}
+
+.button:active {
+  transform: translateZ(20px);
+}
