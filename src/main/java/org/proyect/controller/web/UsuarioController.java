@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
-import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.PRG;
 import org.proyect.repository.JuegoRepository;
@@ -28,13 +27,16 @@ public class UsuarioController {
     private PeliculaRepository peliculaRepository;
 
     @Autowired
-    private JuegoRepository videojuegoRepository;
+    private JuegoRepository juegoRepository;
 
     @GetMapping("r")
     public String r(ModelMap m) {
+        List<Pelicula> pelicula = peliculaRepository.findAll();
+        List<Juego> juego = juegoRepository.findAll();
 
-        List<Usuario> usuarios = usuarioService.findAll();
-        m.put("usuarios", usuarios);
+        m.put("peliculas", pelicula);
+        m.put("juegos", juego);
+      
         m.put("view", "usuario/r");
         return "_t/frame";
     }
@@ -56,16 +58,5 @@ public class UsuarioController {
             PRG.error("El usuario  con el nombre " + nombre + " ya existe", "/");
         }
         return "redirect:/";
-    }
-
-    @GetMapping("listar")
-    public String listar(ModelMap m) {
-        List<Pelicula> peliculas = peliculaRepository.findAll();
-        List<Juego> videojuegos = videojuegoRepository.findAll();
-
-        m.put("peliculas", peliculas);
-        m.put("videojuegos", videojuegos);
-        m.put("view", "usuario/listar");
-        return "_t/frame";
     }
 }

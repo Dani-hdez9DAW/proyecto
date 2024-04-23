@@ -14,36 +14,33 @@
 <br>
 <br>
 
-    <h1 class="table table-bordered text-center">Mis Favoritos</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Películas</h2>
-                <div class="card">
-                    <img src="imagen_pelicula_1.jpg" class="card-img-top" alt="Película 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Título de la Película 1</h5>
-                        <p class="card-text">Descripción de la Película 1.</p>
-                        <a href="#" class="btn btn-primary">Ver detalles</a>
-                    </div>
+<h1 class="table table-bordered text-center">Mis Favoritos</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Películas</h2>
+            <div th:each="pelicula : ${peliculas}" class="card">
+                <img th:src="${pelicula.imagen}" class="card-img-top" th:alt="${pelicula.titulo}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${pelicula.titulo}"></h5>
+                    <p class="card-text" th:text="${pelicula.sinopsis}"></p>
+                    <a href="#" class="btn btn-primary">Ver detalles</a>
                 </div>
-                <!-- Repite este bloque para cada película -->
             </div>
-            <div class="col-md-6">
-                <h2>Videojuegos</h2>
-                <div class="card">
-                    <img src="imagen_videojuego_1.jpg" class="card-img-top" alt="Videojuego 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Título del Videojuego 1</h5>
-                        <p class="card-text">Descripción del Videojuego 1.</p>
-                        <a href="#" class="btn btn-primary">Ver detalles</a>
-                    </div>
+        </div>
+        <div class="col-md-6">
+            <h2>Juegos</h2>
+            <div th:each="juego : ${juegos}" class="card">
+                <img th:src="${juego.imagen}" class="card-img-top" th:alt="${juego.titulo}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${juego.titulo}"></h5>
+                    <p class="card-text" th:text="${juego.sinopsis}"></p>
+                    <a href="#" class="btn btn-primary">Ver detalles</a>
                 </div>
-                <!-- Repite este bloque para cada videojuego -->
             </div>
         </div>
     </div>
-    
+</div>
     
     
     
