@@ -2,9 +2,12 @@ package org.proyect.controller.web;
 
 import java.util.List;
 
-import org.proyect.domain.Usuario;
+import org.proyect.domain.Juego;
+import org.proyect.domain.Pelicula;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.PRG;
+import org.proyect.repository.JuegoRepository;
+import org.proyect.repository.PeliculaRepository;
 import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +23,20 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private PeliculaRepository peliculaRepository;
+
+    @Autowired
+    private JuegoRepository juegoRepository;
+
     @GetMapping("r")
     public String r(ModelMap m) {
+        List<Pelicula> pelicula = peliculaRepository.findAll();
+        List<Juego> juego = juegoRepository.findAll();
 
-        List<Usuario> usuarios = usuarioService.findAll();
-        m.put("usuarios", usuarios);
+        m.put("peliculas", pelicula);
+        m.put("juegos", juego);
+      
         m.put("view", "usuario/r");
         return "_t/frame";
     }

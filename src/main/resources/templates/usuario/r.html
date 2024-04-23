@@ -1,0 +1,48 @@
+<script>
+    function goBack() {
+      window.history.back();
+    }
+    </script>
+
+<div class="container">
+    <!--Botón volver atrás--> 
+    <a href="#" onclick="goBack()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
+</svg>
+    </a>
+<br>
+<br>
+
+<h1 class="table table-bordered text-center">Mis Favoritos</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Películas</h2>
+            <div th:each="pelicula : ${peliculas}" class="card">
+                <img th:src="${pelicula.imagen}" class="card-img-top" th:alt="${pelicula.titulo}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${pelicula.titulo}"></h5>
+                    <p class="card-text" th:text="${pelicula.sinopsis}"></p>
+                    <a href="#" class="btn btn-primary">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>Juegos</h2>
+            <div th:each="juego : ${juegos}" class="card">
+                <img th:src="${juego.imagen}" class="card-img-top" th:alt="${juego.titulo}">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${juego.titulo}"></h5>
+                    <p class="card-text" th:text="${juego.sinopsis}"></p>
+                    <a href="#" class="btn btn-primary">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+    
+    
+</div>
