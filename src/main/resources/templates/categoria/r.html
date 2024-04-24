@@ -4,24 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de categorias</title>
-    <!-- Bootstrap CSS -->
-    <style>
-        /* Estilos personalizados */
-        .bg-warning {
-            background-color: #ffc107 !important;
-            color: #343a40 !important;
-        }
-
-        .bg-success {
-            background-color: #28a745 !important;
-            color: #fff !important;
-        }
-
-        .table th,
-        .table td {
-            vertical-align: middle;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/categorias/categorias.css">
 </head>
 
 <body>
@@ -32,22 +15,20 @@
                 <h1>Lista de categorias</h1>
             </div>
         </div>
-        <table class="table table-striped text-center mt-3">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Nº de elementos asignados</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="categoria : ${categorias}">
-                    <td class="bg-warning text-dark" th:text="${categoria.nombre}"></td>
-                    <td class="bg-success text-dark" th:text="${categoria.categoriaPelis.size() + categoria.categoriaJuegos.size()}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-3 col-6" th:each="categoria : ${categorias}">
+                <div class="wrap">
+                    <div class="box one">
+                        <div class="date">
+                        </div>
+                        <h1 th:text="${categoria.nombre}"></h1>
+                        <div class="poster p1">
+                            <h4 th:text="${#strings.substring(categoria.nombre, 0, 1)}"></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </body>
-
 </html>
