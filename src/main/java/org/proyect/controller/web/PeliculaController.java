@@ -1,11 +1,14 @@
 package org.proyect.controller.web;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.proyect.domain.Categoria;
 import org.proyect.domain.Pelicula;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
+import org.proyect.service.CategoriaService;
 import org.proyect.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +24,15 @@ import jakarta.servlet.http.HttpSession;
 public class PeliculaController {
     @Autowired
     private PeliculaService peliculaService;
+    @Autowired
+    private CategoriaService categoriaServiceService;
+
 
     @GetMapping("r")
     public String r(ModelMap m) {
 
         List<Pelicula> peliculas = peliculaService.findAll();
+        
         m.put("peliculas", peliculas);
         m.put("view", "/pelicula/r");
         return "_t/frame";
@@ -34,25 +41,39 @@ public class PeliculaController {
     @GetMapping("c")
     public String c(ModelMap m, HttpSession session) {
         if (H.isRolOk("admin", session)) { // Verifica si el usuario está autenticado
+            List<Categoria> categorias = categoriaServiceService.findAll();
+            m.put("categorias", categorias);
             m.put("view", "pelicula/c");
+            
             return "_t/frame";
         } else {
             // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio de sesión u otra página apropiada.
-            return "redirect:/login"; // Redirige a la página de inicio de sesión
+            return "redirect:/"; // Redirige a la página de inicio de sesión
         }
     }
 
     @PostMapping("c")
-    public String cPost(
-            @RequestParam("nombre") String nombre) throws DangerException {
-        try {
-            peliculaService.save(nombre);
-            PRG.info("La pelicula con el " + nombre + " ha sido creado", "/pelicula/c");
-        } catch (Exception e) {
-            PRG.error("La pelicula con DNI " + nombre + " ya existe", "/pelicula/c");
-        }
-        return "redirect:/pelicula/r";
+public String cPost(
+        @RequestParam("titulo") String titulo,
+        @RequestParam(value = "categoria[]", required = false) List<Long> categoria,
+        @RequestParam("clasificacion") String clasificacion,
+        @RequestParam("duracion") Integer duracion,
+        @RequestParam("estado") String estado,
+        @RequestParam("plataforma") String plataforma,
+        @RequestParam("sinopsis") String sinopsis,
+        @RequestParam("fechaLanzamiento") LocalDate fechaLanzamiento,
+        @RequestParam("imagen") String imagen,
+        @RequestParam("trailer") String trailer,
+        @RequestParam("url") String url) throws DangerException {
+    try {
+        peliculaService.save(titulo, categoria, clasificacion, duracion, estado,plataforma, sinopsis,fechaLanzamiento, imagen, trailer, url);
+        PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
+    } catch (Exception e) {
+        PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
     }
+    return "redirect:/pelicula/r";
+}
+
 
     @GetMapping("u")
     public String update(@RequestParam("id") Long id, ModelMap m) {
