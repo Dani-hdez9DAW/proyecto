@@ -12,13 +12,12 @@ import lombok.Data;
 @Data
 public class Usuario extends Persona {
 
-   
-
     @Column
     private Long puntos;
 
     @Column
     private Long descuento;
+    
 
     @ManyToMany(mappedBy = "usuarios")
     private List<Pelicula> peliculasFav;

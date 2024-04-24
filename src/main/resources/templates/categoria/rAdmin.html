@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de categorias</title>
+    <style>
+        /* Estilos personalizados */
+        .bg-warning {
+            background-color: #ffc107 !important;
+            color: #343a40 !important;
+        }
+
+        .bg-success {
+            background-color: #28a745 !important;
+            color: #fff !important;
+        }
+
+        .bg-info {
+            background-color: #17a2b8 !important;
+            color: #fff !important;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            animation: fadeIn 1s ease;
+        }
+
+        /* Alinear botones */
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .btn-group .btn {
+            margin-left: 5px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-group">
+                    <!-- Botón de creación de categoría -->
+                    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary"
+                        onclick="window.location.href='/categoria/c'">Crear categoria</button>
+                </div>
+                <h1>Gestion de categorias</h1>
+            </div>
+        </div>
+        <table class="table table-striped text-center mt-3">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="categoria : ${categorias}">
+                    <td class="bg-warning text-dark" th:text="${categoria.nombre}"></td>
+                    <td class="bg-info">
+                        <!-- Botones de edición y eliminación -->
+                        <div class="btn-group">
+                            <button class="btn btn-warning"
+                                th:onclick="|window.location.href='/categoria/u?id=${categoria.id_categoria}'|">Editar</button>
+                            <form action="/categoria/d" method="post">
+                                <button class="btn btn-danger">Eliminar</button>
+                                <input type="hidden" name="id" th:value="${categoria.id_categoria}">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

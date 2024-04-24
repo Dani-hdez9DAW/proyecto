@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear pelicula</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1 class="my-4">Nueva Pelicula</h1>
+        <form id="peliculaForm" action="/pelicula/c" method="post">
+            <div class="form-group">
+                <label for="id-nombre">Nombre</label>
+                <input type="text" class="form-control" id="id-nombre" autofocus="autofocus" name="nombre" />
+            </div>
+
+
+            <input type="submit" class="btn btn-primary" value="Crear">
+        </form>
+        <button class="btn btn-primary" onclick="window.location.href='/pelicula/r'">Volver</button>
+
+    </div>
+</body>
+
+</html>

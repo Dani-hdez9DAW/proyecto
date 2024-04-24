@@ -69,7 +69,10 @@ public class HomeController {
 			ModelMap m) throws DangerException {
 		try {
 			Usuario usuario = usuarioService.login(nombre, password);
+			usuarioService.setRegistro(nombre);
 			s.setAttribute("usuario", usuario);
+			s.setAttribute("nombre", nombre);
+
 		} catch (Exception e) {
 			PRG.error("Usuario o contraseña incorrectos");
 		}
@@ -78,6 +81,8 @@ public class HomeController {
 
 	@GetMapping("/logout")
 	public String logout(HttpSession s) {
+		String nombre = (String) s.getAttribute("nombre");
+		usuarioService.setLogout(nombre);
 		s.invalidate();
 		return "redirect:/";
 	}

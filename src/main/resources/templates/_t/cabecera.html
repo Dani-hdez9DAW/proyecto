@@ -1,9 +1,3 @@
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
 <nav class="container-fluid navbar navbar-expand-lg bg-dark navbar-dark rounded justify-content-center">
     <div class="container-lg">
         <a class="navbar-brand" href="/">Inicio</a>
@@ -19,14 +13,28 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/about">Acerca de</a>
+                    <a class="nav-link" href="/pelicula/r">Peliculas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/services">Servicios</a>
+                    <a class="nav-link" href="/juego/r">Videojuegos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact">Contacto</a>
+                    <a class="nav-link" href="/categoria/r">Categorias</a>
                 </li>
+                <li th:if="${session.usuario!=null and session.usuario.esAdmin==true}">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Acciones
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="/pelicula/c">Peliculas</a>
+                          <a class="dropdown-item" href="/categoria/rAdmin">Categorias</a>
+                          <a class="dropdown-item" href="/juego/c">Juegos</a>
+                          <a class="dropdown-item" href="/evento/c">Eventos</a>
+                          <a class="dropdown-item" href="/usuario/rAdmin">Usuarios</a>
+                        </div>
+                      </div>
+                </li>             
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search">
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
@@ -110,13 +118,17 @@
         </div>
     </div>
 </div>
-
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 <script>
     jQuery(document).ready(function ($) {
         $('#personIcon').click(function () {
             $('#personModal').modal('show');
         });
-
+        $('.dropdown-toggle').dropdown()
         // Abre el modal de registro cuando se hace clic en el botón "Registrarse"
         $('#registerModalButton').click(function () {
             $('#registerModal').modal('show');

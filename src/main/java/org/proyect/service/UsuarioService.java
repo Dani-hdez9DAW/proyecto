@@ -56,4 +56,24 @@ public class UsuarioService {
         }
         return usuario;
     }
+    public void setRegistro(String nombre) {
+        Usuario usuario = usuarioRepository.getByNombre(nombre);
+        if (usuario != null) {
+            usuario.setEstaRegistrado(true);
+            usuarioRepository.save(usuario);
+        } else {
+            // Manejar el caso en que el usuario no exista
+            throw new IllegalArgumentException("El usuario con nombre " + nombre + " no existe");
+        }
+    }
+    public void setLogout(String nombre) {
+        Usuario usuario = usuarioRepository.getByNombre(nombre);
+        if (usuario != null) {
+            usuario.setEstaRegistrado(false);
+            usuarioRepository.save(usuario);
+        } else {
+            // Manejar el caso en que el usuario no exista
+            throw new IllegalArgumentException("El usuario con nombre " + nombre + " no existe");
+        }
+    }
 }

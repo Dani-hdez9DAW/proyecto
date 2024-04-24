@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peliculas</title>
+    <style>
+        .card {
+            perspective: 1000px;
+            width: 100%;
+            height: 500px;
+            /* Tamaño fijo para la tarjeta */
+            background-color: transparent; /* Hace que el fondo de la tarjeta sea transparente */
+            color: white; /* Cambia el color del texto a blanco */
+            overflow: hidden; /* Oculta el contenido que se desborde */
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: auto;
+            /* Ajusta la altura de la tarjeta automáticamente */
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .front,
+        .back {
+            width: 100%;
+            height: 500px;
+            /* Ajusta la altura de la tarjeta automáticamente */
+            position: absolute;
+            backface-visibility: hidden;
+            padding: 20px;
+            /* Agrega relleno a las caras de la tarjeta */
+        }
+
+        .front {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .back {
+            /* background-color: blueviolet; */
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            /* Alinear los elementos verticalmente */
+            justify-content: space-between;
+            /* Distribuir el contenido de manera uniforme */
+        }
+
+        .back p {
+            margin-bottom: 10px;
+        }
+
+        .card .card-img-top {
+            width: 100%;
+            /* La imagen ocupará toda la anchura de la tarjeta */
+            height: 100%; /* La imagen ocupará toda la altura de la tarjeta */
+            object-fit: cover; /* Escalar la imagen para que cubra toda la tarjeta */
+        }
+
+        .container {
+            border-radius: 10px; /* Agrega bordes redondeados al contenedor */
+        }
+
+        h5 {
+            color: white; /* Cambia el color del título a blanco */
+            background-color: #007bff; /* Agrega color de fondo */
+            padding: 10px; /* Agrega relleno alrededor del título */
+            border-radius: 5px; /* Agrega bordes redondeados al título */
+            text-align: center; /* Centra el texto */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container bg-primary mt-4">
+        <h5>Peliculas</h5>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div th:each="pelicula : ${peliculas}" class="col">
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="front">
+                            <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" class="card-img-top" alt="...">
+                        </div>
+                        <div class="back">
+                            <h5 class="card-title" th:text="${pelicula.titulo}">Movies-</h5>
+                            <p class="card-text" th:text="${pelicula.sinopsis}"></p>
+                            <p class="card-text" th:text="| Fecha: ${pelicula.fecha_salida}|"></p>
+                             <p class="card-text" th:text="| Puntuación: ${pelicula.puntuacion} puntos|"></p>
+                             <p class="card-text" th:text="| Duración: ${pelicula.duracion} m|"></p>
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" 
+                                data-bs-target="#exampleModal">
+                                Ver más
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalles del pelicula</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

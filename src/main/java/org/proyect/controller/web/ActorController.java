@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 
-@RequestMapping("/actor")
+@RequestMapping("/actor/")
 @Controller
 public class ActorController {
 
