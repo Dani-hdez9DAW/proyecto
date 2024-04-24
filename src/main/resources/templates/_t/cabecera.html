@@ -1,44 +1,125 @@
-<!-- Menú de la página web -->
-	<!-- Opciones del menú -->
-	<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Navbar</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
-				aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarColor01">
-				<ul class="navbar-nav me-auto">
-					<li class="nav-item">
-						<a class="nav-link active" href="#">Home
-							<span class="visually-hidden">(current)</span>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Features</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Pricing</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">About</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-							aria-haspopup="true" aria-expanded="false">Dropdown</a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" href="#">Action</a>
-							<a class="dropdown-item" href="#">Another action</a>
-							<a class="dropdown-item" href="#">Something else here</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
-						</div>
-					</li>
-				</ul>
-				<form class="d-flex">
-					<input class="form-control me-sm-2" type="search" placeholder="Search">
-					<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-				</form>
-			</div>
-		</div>
-	</nav>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<nav class="container-fluid navbar navbar-expand-lg bg-dark navbar-dark rounded justify-content-center">
+    <div class="container-lg">
+        <a class="navbar-brand" href="/">Inicio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="navbar-brand" href="/">
+                        <img src="/img/home-alt.png" alt="INICIO" style="width:40px;">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">Acerca de</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/services">Servicios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contacto</a>
+                </li>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <li class="nav-item">
+                    <i id="personIcon" class="bi bi-person-circle d-lg-flex"
+                        style="font-size: 24px; color: white; cursor: pointer;">
+                        <a th:if="${session.usuario==null}"></a>
+                    </i>
+                </li>
+                <span class="nav-item" th:if="${session.usuario!=null}" th:text="|${session.usuario.nombre}|"></span>
+                <li class="nav-item">
+                    <a class="nav-link" th:if="${session.usuario!=null}" href="/logout"> <button class="btn btn-danger"
+                            type="button">Logout</button></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Modal de Autenticación de usuario -->
+<div class="modal fade" id="personModal" tabindex="-1" role="dialog" aria-labelledby="personModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="personModalLabel">Autenticación de usuario</h5>
+            </div>
+            <div class="modal-body">
+                <form action="/login" method="post" class="mt-4">
+                    <div class="form-group">
+                        <label for="id-nombre">Nombre</label>
+                        <input type="text" name="nombre" id="id-nombre" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id-password">Contraseña</label>
+                        <input type="password" name="pass" id="id-password" class="form-control" required>
+                    </div>
+                    <!-- Los botones deben estar dentro del formulario -->
+                    <div class="modal-footer">
+                        <div>
+                            <button class="btn btn-success btn-block" id="registerModalButton"
+                                type="button">Registrarse</button>
+                        </div>
+                        <button class="btn btn-primary btn-block" type="submit">Aceptar</button>
+                        <button class="btn btn-secondary btn-block" type="button" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Registro -->
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Registro de usuario</h5>
+            </div>
+            <div class="modal-body">
+                <form id="usuarioForm" action="/usuario/c" method="post">
+                    <div class="form-group">
+                        <label for="id-nombre">Nombre</label>
+                        <input type="text" class="form-control" id="id-nombre" autofocus="autofocus" name="nombre" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id-pass">Contraseña</label>
+                        <input type="password" class="form-control" id="id-pass" name="pass" />
+                    </div>
+                    <div>
+                        <p><br></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-block" type="submit">Aceptar</button>
+                        <button class="btn btn-secondary btn-block" type="button" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function ($) {
+        $('#personIcon').click(function () {
+            $('#personModal').modal('show');
+        });
+
+        // Abre el modal de registro cuando se hace clic en el botón "Registrarse"
+        $('#registerModalButton').click(function () {
+            $('#registerModal').modal('show');
+        });
+    });
+</script>

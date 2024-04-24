@@ -1,6 +1,5 @@
 package org.proyect.domain;
 
-
 import java.sql.Date;
 
 import jakarta.persistence.Column;
@@ -29,8 +28,6 @@ public class Evento {
     private String localizacion;
     @ManyToOne
     private Usuario usuario;
-    
-
 
     // ==================
 

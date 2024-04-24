@@ -5,9 +5,6 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +12,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Juego {
+public class Juego extends Elemento {
 
-   
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id_juego;
     @Column
     private String plataforma;
@@ -27,6 +22,8 @@ public class Juego {
     @ManyToMany(mappedBy = "juegosFav")
     private List<Usuario> usuarios;
 
+    @ManyToMany(mappedBy = "categoriaJuegos")
+    private List<Categoria> categorias;
 
     public Juego(Long id_juego, String plataforma) {
         this.id_juego = id_juego;
