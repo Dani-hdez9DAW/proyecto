@@ -1,5 +1,10 @@
 package org.proyect.controller.web;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 @RequestMapping("/pelicula/")
@@ -62,17 +68,40 @@ public String cPost(
         @RequestParam("plataforma") String plataforma,
         @RequestParam("sinopsis") String sinopsis,
         @RequestParam("fechaLanzamiento") LocalDate fechaLanzamiento,
-        @RequestParam("imagen") String imagen,
+        @RequestParam("imagen") MultipartFile imagen,
         @RequestParam("trailer") String trailer,
         @RequestParam("url") String url) throws DangerException {
     try {
-        peliculaService.save(titulo, categoria, clasificacion, duracion, estado,plataforma, sinopsis,fechaLanzamiento, imagen, trailer, url);
+        String nombreImagen = null; // variable para guardar el nombre de la imagen
+        if (!imagen.isEmpty()) {
+            String directorioImagenes = "src//main//resources//static/img/peliculas";
+            Path rutaDirectorio = Paths.get(directorioImagenes);
+            
+            // Verifica si el directorio existe, si no, intenta crearlo
+            if (!Files.exists(rutaDirectorio)) {
+                Files.createDirectories(rutaDirectorio);
+            }
+            
+            byte[] bytesImg = imagen.getBytes();
+            nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
+            
+            Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
+            
+            try (OutputStream os = Files.newOutputStream(rutaCompleta)) {
+                os.write(bytesImg);
+            } catch (IOException e) {
+                // Manejo de errores al escribir el archivo
+                throw new RuntimeException("Error al escribir la imagen", e);
+            }
+        }
+        peliculaService.save(titulo, categoria, clasificacion, duracion, estado, plataforma, sinopsis, fechaLanzamiento, nombreImagen, trailer, url);
         PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
     } catch (Exception e) {
         PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
     }
     return "redirect:/pelicula/r";
 }
+
 
 
     @GetMapping("u")
