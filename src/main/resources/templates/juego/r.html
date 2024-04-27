@@ -260,6 +260,15 @@
         body {
             margin-top: 5%;
         }
+        .switch-container {
+            display: flex;
+            justify-content: center; 
+            margin-bottom: 20px; 
+        }
+
+        .switch-label {
+            margin-right: 10px; 
+        }
     </style>
 </head>
 
@@ -268,9 +277,9 @@
         <button onclick="toggleView('list-view')">Vista de Lista</button>
         <button onclick="toggleView('table-view')">Vista de Tabla</button>
     </div> -->
-
+    <div class="switch-container">
     <span style="text-align: center;">Modo de vista:</span>
-    
+</div>
     <div class="toggle-container">
         <input class="toggle-input" type="checkbox" onclick="toggleView()">
         <div class="toggle-handle-wrapper">
