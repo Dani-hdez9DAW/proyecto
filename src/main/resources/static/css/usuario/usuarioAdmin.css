@@ -9,7 +9,7 @@ body {
     background-color: #F2E9E4;
 }
 
-h1 {
+/* h1 {
     font-size: 3em;
     font-weight: 300;
     line-height: 1em;
@@ -66,15 +66,15 @@ h2 a {
 }
 
 /* Background-color of the odd rows */
-.container tr:nth-child(odd) {
+/* .container tr:nth-child(odd) {
     background-color: #323C50;
-}
+} */
 
 /* Background-color of the even rows */
-.container tr:nth-child(even) {
+/* .container tr:nth-child(even) {
     background-color: #2C3446;
-}
-
+} */
+/* 
 .container th {
     background-color: #1F2739;
 }
@@ -111,4 +111,4 @@ h2 a {
     .container th:nth-child(4) {
         display: none;
     }
-}
+} */ 
