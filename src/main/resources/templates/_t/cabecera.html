@@ -124,7 +124,6 @@
     .navbar-brand {
         letter-spacing: 3px;
     }
-
 </style>
 
 <nav class="navbar navbar-expand-lg fixed-top bg-dark navbar-dark rounded justify-content-center navbar-scroll">
@@ -166,51 +165,56 @@
                         </div>
                     </div>
                 </li>
-            </ul><div class="d-flex justify-content-center"></div>
+            </ul>
+            <div class="d-flex justify-content-center"></div>
             <form class="d-flex input-group w-auto">
                 <input type="search" class="form-control" placeholder="Título, Autor..." aria-label="Search" />
                 <button class="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark"
                     style="padding: .45rem 1.5rem .35rem;">
                     Buscar
                 </button>
-            </form></div>
-            <ul class="navbar-nav mb-2 mb-lg-0 mr-3">
-
-
-                <li class="nav-item" th:if="${session.usuario==null}">
-                    <a class="nav-link" href="#" style="color: white;">
-                        <i id="personIcon" class="bi bi-person-circle  " style="font-size: 20px; cursor: pointer;"> <span style="margin-left: 5px;">Identificate</span></i>
-                    </a>
-                </li>
-                
-
-                <div class="dropdown-menu-right" style="text-align: justify;">
-                    <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" th:if="${session.usuario!=null}"
-                        th:text="|Buenas, ${session.usuario.nombre}.|">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-mdb-toggle="dropdown" aria-expanded="false">
-                        </a>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="/pelicula/c">Peliculas </a>
-                        <a class="dropdown-item" href="/juego/c">Juegos </a>
-
-                        <hr class="dropdown-divider" />
-
-                        <a class="dropdown-item" href="#">Mi cuenta</a>
-                        <a class="dropdown-item" href="#">Ayuda</a>
-                        <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button class="btn btn-primary" type="button">Logout</button></a>
-
-                    </div>
-                    <div class="mr-4"></div>
-                
-                </div>
-                </li>
-            </ul>
+            </form>
         </div>
+        <ul class="navbar-nav mb-2 mb-lg-0 mr-3">
+
+
+            <li class="nav-item" th:if="${session.usuario==null}">
+                <a class="nav-link" href="#" style="color: white;">
+                    <i id="personIcon" class="bi bi-person-circle  " style="font-size: 20px; cursor: pointer;"> <span
+                            style="margin-left: 5px;">Identificate</span></i>
+                </a>
+            </li>
+
+
+            <div class="dropdown-menu-right" style="text-align: justify;">
+                <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false" th:if="${session.usuario!=null}"
+                    th:text="|Buenas, ${session.usuario.nombre}.|">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-mdb-toggle="dropdown" aria-expanded="false">
+                    </a>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="/pelicula/c">Peliculas </a>
+                    <a class="dropdown-item" href="/juego/c">Juegos </a>
+
+                    <hr class="dropdown-divider" />
+
+                    <a class="dropdown-item" href="#">Mi cuenta</a>
+                    <a class="dropdown-item" href="#">Ayuda</a>
+                    <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button
+                            class="btn btn-primary" type="button">Logout</button></a>
+
+                </div>
+
+
+            </div>
+            </li>
+        </ul>
+    </div>
     </div>
 </nav>
+<div class="container"></div>
 <!-- Modal de Autenticación de usuario -->
 <div class="modal fade" id="personModal" tabindex="-1" role="dialog" aria-labelledby="personModalLabel"
     aria-hidden="true">
