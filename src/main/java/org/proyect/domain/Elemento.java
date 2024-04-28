@@ -1,6 +1,6 @@
 package org.proyect.domain;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -21,41 +21,41 @@ public abstract class Elemento {
     private Long id_elemento;
 
     @Column
-    private String titulo;
+    protected String titulo;
 
     @Column
-    private String clasificacion;//Lo de pegi 7,etc 
+    protected String clasificacion;//Lo de pegi 7,etc 
 
     @Column
-    private String sinopsis;
+    protected String sinopsis;
 
     @Column
-    private Date fecha_salida;
+    protected LocalDate fecha_salida;
 
     @Column
-    private String plataforma;//Añadir en la base de datos
+    protected String plataforma;//Añadir en la base de datos
 
     @Column
-    private String imagen;//Añadir en la base de datos
+    protected String imagen;//Añadir en la base de datos
 
     @Column
-    private String estado;
+    protected String estado;
 
     @Column
-    private Integer duracion;
+    protected Integer duracion;
 
     @Column
-    private Integer puntuacion;
+    protected Integer puntuacion;
 
     @Column
-    private Integer cuenta_votos;
+    protected Integer cuenta_votos;
 
     @Column
-    private String trailer;
+    protected String trailer;
 
 
     @Column
-    private String url;
+    protected String url;
 
     @ManyToMany
     private List<Categoria> categorias;
