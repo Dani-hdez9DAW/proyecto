@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar películas</title>
+    <!-- Carga de estilos de DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <style>
+        .dataTables_wrapper {
+            font-size: 14px;
+            color: white;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: black;
+            background-color: plum;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container bg-primary mt-4 text-primary" id="table-view-container">
+        <h1 class="mt-4">Películas</h1>
+        <table id="peliculasTable" class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Título</th>
+                    <th>Fecha de Salida</th>
+                    <th>Estado</th>
+                    <th>Duración</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Renderiza los datos directamente aquí -->
+                <tr th:each="pelicula : ${peliculas}">
+                    <td th:text="${pelicula.titulo}"></td>
+                    <td th:text="${pelicula.fecha_salida}"></td>
+                    <td th:text="${pelicula.estado}"></td>
+                    <td th:text="${pelicula.duracion}"></td>
+
+                    <td>
+                        <!-- <button id="editarPelicula" th:onclick="|window.location.href='/pelicula/u?id=${pelicula.id}'|">
+                            Editar
+                        </button> -->
+                    </td>
+
+                    <td>
+                        <!-- <form action="/pelicula/d" method="post">
+                            <input type="hidden" name="id" th:value="${pelicula.id}">
+                            <i class="bi bi-trash3-fill"></i>
+                        </form> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Carga de jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Carga de DataTables -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        // Función para inicializar DataTables
+        $(document).ready(function () {
+            $('#peliculasTable').DataTable();
+            $('#peliculasTable').on('click', '#editarPelicula', function () {
+                var peliculaId = $(this).closest('tr').find('td:first').text(); // Obtener el ID de la película
+                window.location.href = '/pelicula/u?id=' + peliculaId;
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
