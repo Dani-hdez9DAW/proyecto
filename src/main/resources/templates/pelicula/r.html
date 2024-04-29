@@ -201,7 +201,7 @@
                                     <i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span></p>
                             <p class="card-text time"><span th:utext="'
                                         <i class=\'bi bi-alarm\'></i>  ' + |${pelicula.duracion} m.|"></span></p>
-                            <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <a th:onclick="|window.location.href='/pelicula/rDetailed?id=${pelicula.id_elemento}'|" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 Ver más
                             </a>
                         </div>
