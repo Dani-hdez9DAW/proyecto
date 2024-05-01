@@ -118,11 +118,20 @@ public class PeliculaController {
         return "redirect:/pelicula/r";
     }
 
+    @GetMapping("rDetailed")
+    public String rDetailed(
+            @RequestParam("id_elemento") Long id_elemento,
+            ModelMap m) {
+        m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
+        m.put("view", "pelicula/rDetailed");
+        return "_t/frame";
+    }
+
     @GetMapping("u")
     public String update(
             @RequestParam("id") Long id_Pelicula,
             ModelMap m) {
-        m.put("pelicula", peliculaService.findById(id_Pelicula));
+        m.put("pelicula", peliculaService.findByIdElemento(id_Pelicula));
         m.put("view", "pelicula/u");
         return "_t/frame";
     }

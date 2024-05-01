@@ -49,7 +49,7 @@ public class HomeController {
 
 	@GetMapping("/init")
 	public String crearAdmin() {
-		usuarioService.save("admin", "admin");
+		usuarioService.save("admin", "admin", null);
 		usuarioService.setAdmin("-1");
 		return "redirect:/";
 	}
@@ -63,15 +63,15 @@ public class HomeController {
 
 	@PostMapping("/login")
 	public String loginPost(
-			@RequestParam("nombre") String nombre,
+			@RequestParam("email") String email,
 			@RequestParam("pass") String password,
 			HttpSession s,
 			ModelMap m) throws DangerException {
 		try {
-			Usuario usuario = usuarioService.login(nombre, password);
-			usuarioService.setRegistro(nombre);
+			Usuario usuario = usuarioService.login(email, password);
+			usuarioService.setRegistro(email);
 			s.setAttribute("usuario", usuario);
-			s.setAttribute("nombre", nombre);
+			s.setAttribute("nombre", email);
 
 		} catch (Exception e) {
 			PRG.error("Usuario o contraseña incorrectos");

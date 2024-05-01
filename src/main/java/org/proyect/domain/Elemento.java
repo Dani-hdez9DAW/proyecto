@@ -18,7 +18,7 @@ public abstract class Elemento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_elemento;
+    private Long idElemento;
 
     @Column
     protected String titulo;

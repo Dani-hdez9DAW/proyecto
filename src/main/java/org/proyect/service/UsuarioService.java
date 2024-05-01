@@ -22,8 +22,8 @@ public class UsuarioService {
         return usuarioRepository.findByNombre(nombre);
     }
 
-    public Usuario save(String nombre, String passwd) {
-        return usuarioRepository.save(new Usuario(nombre, (new BCryptPasswordEncoder()).encode(passwd)));
+    public Usuario save(String nombre, String passwd,String correo) {
+        return usuarioRepository.save(new Usuario(nombre, (new BCryptPasswordEncoder()).encode(passwd), correo, 0));
     }
 
     public Usuario findById(Long id_Usuario) {
@@ -46,34 +46,34 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
-    public Usuario login(String nombre, String password) throws Exception {
-        Usuario usuario = usuarioRepository.getByNombre(nombre);
+    public Usuario login(String email, String password) throws Exception {
+        Usuario usuario = usuarioRepository.getByCorreo(email);
         if (usuario == null) {
-            throw new Exception("El nombre del usuario " + nombre + " no existe");
+            throw new Exception("El nombre del usuario " + email + " no existe");
         }
         if (!(new BCryptPasswordEncoder()).matches(password, usuario.getContraseña())) {
-            throw new Exception("La contraseña para el usuario " + nombre + " es incorrecta");
+            throw new Exception("La contraseña para el usuario " + email + " es incorrecta");
         }
         return usuario;
     }
-    public void setRegistro(String nombre) {
-        Usuario usuario = usuarioRepository.getByNombre(nombre);
+    public void setRegistro(String email) {
+        Usuario usuario = usuarioRepository.getByCorreo(email);
         if (usuario != null) {
             usuario.setEstaRegistrado(true);
             usuarioRepository.save(usuario);
         } else {
             // Manejar el caso en que el usuario no exista
-            throw new IllegalArgumentException("El usuario con nombre " + nombre + " no existe");
+            throw new IllegalArgumentException("El usuario con nombre " + email + " no existe");
         }
     }
-    public void setLogout(String nombre) {
-        Usuario usuario = usuarioRepository.getByNombre(nombre);
+    public void setLogout(String email) {
+        Usuario usuario = usuarioRepository.getByCorreo(email);
         if (usuario != null) {
             usuario.setEstaRegistrado(false);
             usuarioRepository.save(usuario);
         } else {
             // Manejar el caso en que el usuario no exista
-            throw new IllegalArgumentException("El usuario con nombre " + nombre + " no existe");
+            throw new IllegalArgumentException("El usuario con nombre " + email + " no existe");
         }
     }
 }
