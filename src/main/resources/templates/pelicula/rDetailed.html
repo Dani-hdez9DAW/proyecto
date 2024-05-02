@@ -1,26 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vista detallada de película</title>
 </head>
+
 <body>
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h1 class="text-center">Modificación de película</h1>
+                        <h1 class="text-center" id="titulo">Detalles de la pelicula</h1>
                     </div>
                     <div class="card-body">
                         <form action="/guardar-modificacion" method="post">
                             <div class="form-group">
-                                <label for="id-nombre">Nombre:</label>
+                                <label for="id-nombre">Nombre</label>
                                 <input type="text" id="id-nombre" autofocus="autofocus" name="nombre"
-                                       class="form-control" required th:value="${pelicula.titulo}">
+                                    class="form-control" disabled="disabled" required th:value="${pelicula.titulo}">
+                                <!-- <label for="id-categoria">Categoria</label>
+                                <input type="text" id="id-categoria" autofocus="autofocus" name="categoria"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.categoria}"> -->
+                                <label for="id-nombre">Clasificación</label>
+                                <input type="text" id="id-clasificacion" autofocus="autofocus" name="clasificacion"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.clasificacion}">
+                                <label for="id-sinopsis">Sinopsis</label>
+                                <input type="text" id="id-sinopsis" autofocus="autofocus" name="sinopsis"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.sinopsis}">
+                                <label for="id-estado">Estado</label>
+                                <input type="text" id="id-estado" autofocus="autofocus" name="estado"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.estado}">
+                                <label for="id-fechaSalida">Fecha de estreno</label>
+                                <input type="text" id="id-fechaSalida" autofocus="autofocus" name="fechaSalida"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.fecha_salida}">
+                                <label for="id-duracion">Duracion</label>
+                                <input type="text" id="id-duracion" autofocus="autofocus" name="duracion"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.duracion}">
+                                <label for="id-plataforma">Plataforma</label>
+                                <input type="text" id="id-plataforma" autofocus="autofocus" name="plataforma"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.plataforma}">
+                                <label for="id-cuentaVotos">Cuenta votos</label>
+                                <input type="text" id="id-cuentaVotos" autofocus="autofocus" name="cuentaVotos"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.cuenta_votos}">
+                                <label for="id-trailer">Ver trailer</label>
+                                <input type="text" id="id-trailer" autofocus="autofocus" name="trailer"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.trailer}">
+                                    <label for="id-urlCompra">Url de compra</label>
+                                <input type="text" id="id-urlCompra" autofocus="autofocus" name="urlCompra"
+                                    class="form-control" disabled="disabled" required
+                                    th:value="${pelicula.url}">
+
+
+
                                 <input type="hidden" id="idpelicula" name="idpelicula"
-                                       th:value="${pelicula.idElemento}">
+                                    th:value="${pelicula.idElemento}">
                             </div>
                             <!-- Agrega aquí los demás campos del formulario -->
                             <button type="submit" class="btn btn-primary">Guardar</button>
@@ -31,4 +76,5 @@
         </div>
     </div>
 </body>
+
 </html>
