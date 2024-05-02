@@ -13,7 +13,7 @@ import lombok.Data;
 public class Usuario extends Persona {
 
     @Column
-    private Long puntos;
+    private Integer puntos;
 
     @Column
     private Long descuento;
@@ -38,14 +38,16 @@ public class Usuario extends Persona {
         this.juegosFav = new ArrayList<>();
     }
 
-    public Usuario(String nombre, String passwd) {
+    public Usuario(String nombre, String passwd,String correo,Integer puntos) {
         super.setNombre(nombre); // Usar el setter heredado de Persona
         super.setContraseña(passwd);
+        super.setCorreo(correo);
+        this.puntos = puntos;
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
     }
 
-    public Usuario(Long puntos, Long descuento) {
+    public Usuario(Integer puntos, Long descuento) {
 
         this.puntos = puntos;
         this.descuento = descuento;

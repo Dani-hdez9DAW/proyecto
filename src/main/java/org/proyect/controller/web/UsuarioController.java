@@ -69,9 +69,10 @@ public class UsuarioController {
     @PostMapping("c")
     public String cPost(
             @RequestParam("nombre") String nombre,
-            @RequestParam("pass") String password) throws DangerException {
+            @RequestParam("pass") String password,
+            @RequestParam("email") String correo ) throws DangerException {
         try {
-            usuarioService.save(nombre, password);
+            usuarioService.save(nombre, password,correo);
             PRG.info("El usuario  con el nombre " + nombre + " ha sido creado", "/");
         } catch (Exception e) {
             PRG.error("El usuario  con el nombre " + nombre + " ya existe", "/");

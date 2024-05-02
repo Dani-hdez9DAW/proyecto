@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
+
 @RequestMapping("/pelicula/")
 @Controller
 public class PeliculaController {
@@ -33,15 +34,28 @@ public class PeliculaController {
     @Autowired
     private CategoriaService categoriaServiceService;
 
-
     @GetMapping("r")
     public String r(ModelMap m) {
 
         List<Pelicula> peliculas = peliculaService.findAll();
-        
+
         m.put("peliculas", peliculas);
         m.put("view", "/pelicula/r");
         return "_t/frame";
+    }
+
+    @GetMapping("rAdmin")
+    public String rAdmin(
+            ModelMap m, HttpSession s) {
+        if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("peliculas", peliculaService.findAll());
+            m.put("view", "pelicula/rAdmin");
+            return "_t/frame";
+        } else {
+            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
+            // de sesión u otra página apropiada.
+            return "/"; // Redirige a la página de inicio de sesión
+        }
     }
 
     @GetMapping("c")
@@ -50,67 +64,88 @@ public class PeliculaController {
             List<Categoria> categorias = categoriaServiceService.findAll();
             m.put("categorias", categorias);
             m.put("view", "pelicula/c");
-            
+
             return "_t/frame";
         } else {
-            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio de sesión u otra página apropiada.
+            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
+            // de sesión u otra página apropiada.
             return "redirect:/"; // Redirige a la página de inicio de sesión
         }
     }
 
     @PostMapping("c")
-public String cPost(
-        @RequestParam("titulo") String titulo,
-        @RequestParam(value = "categoria[]", required = false) List<Long> categoria,
-        @RequestParam("clasificacion") String clasificacion,
-        @RequestParam("duracion") Integer duracion,
-        @RequestParam("estado") String estado,
-        @RequestParam("plataforma") String plataforma,
-        @RequestParam("sinopsis") String sinopsis,
-        @RequestParam("fechaLanzamiento") LocalDate fechaLanzamiento,
-        @RequestParam("imagen") MultipartFile imagen,
-        @RequestParam("trailer") String trailer,
-        @RequestParam("url") String url) throws DangerException {
-    try {
-        String nombreImagen = null; // variable para guardar el nombre de la imagen
-        if (!imagen.isEmpty()) {
-            String directorioImagenes = "src//main//resources//static/img/peliculas";
-            Path rutaDirectorio = Paths.get(directorioImagenes);
-            
-            // Verifica si el directorio existe, si no, intenta crearlo
-            if (!Files.exists(rutaDirectorio)) {
-                Files.createDirectories(rutaDirectorio);
+    public String cPost(
+            @RequestParam("titulo") String titulo,
+            @RequestParam(value = "categoria[]", required = false) List<Long> categoria,
+            @RequestParam("clasificacion") String clasificacion,
+            @RequestParam("duracion") Integer duracion,
+            @RequestParam("estado") String estado,
+            @RequestParam("plataforma") String plataforma,
+            @RequestParam("sinopsis") String sinopsis,
+            @RequestParam("fechaLanzamiento") LocalDate fechaLanzamiento,
+            @RequestParam("imagen") MultipartFile imagen,
+            @RequestParam("trailer") String trailer,
+            @RequestParam("url") String url) throws DangerException {
+        try {
+            String nombreImagen = null; // variable para guardar el nombre de la imagen
+            if (!imagen.isEmpty()) {
+                String directorioImagenes = "src//main//resources//static/img/peliculas";
+                Path rutaDirectorio = Paths.get(directorioImagenes);
+
+                // Verifica si el directorio existe, si no, intenta crearlo
+                if (!Files.exists(rutaDirectorio)) {
+                    Files.createDirectories(rutaDirectorio);
+                }
+
+                byte[] bytesImg = imagen.getBytes();
+                nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
+
+                Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
+
+                try (OutputStream os = Files.newOutputStream(rutaCompleta)) {
+                    os.write(bytesImg);
+                } catch (IOException e) {
+                    // Manejo de errores al escribir el archivo
+                    throw new RuntimeException("Error al escribir la imagen", e);
+                }
             }
-            
-            byte[] bytesImg = imagen.getBytes();
-            nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
-            
-            Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
-            
-            try (OutputStream os = Files.newOutputStream(rutaCompleta)) {
-                os.write(bytesImg);
-            } catch (IOException e) {
-                // Manejo de errores al escribir el archivo
-                throw new RuntimeException("Error al escribir la imagen", e);
-            }
+            peliculaService.save(titulo, categoria, clasificacion, duracion, estado, plataforma, sinopsis,
+                    fechaLanzamiento, nombreImagen, trailer, url);
+            PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
+        } catch (Exception e) {
+            PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
         }
-        peliculaService.save(titulo, categoria, clasificacion, duracion, estado, plataforma, sinopsis, fechaLanzamiento, nombreImagen, trailer, url);
-        PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
-    } catch (Exception e) {
-        PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
+        return "redirect:/pelicula/r";
     }
-    return "redirect:/pelicula/r";
-}
 
-
+    @GetMapping("rDetailed")
+    public String rDetailed(
+            @RequestParam("id_elemento") Long id_elemento,
+            ModelMap m) {
+        m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
+        m.put("view", "pelicula/rDetailed");
+        return "_t/frame";
+    }
 
     @GetMapping("u")
-    public String update(@RequestParam("id") Long id, ModelMap m) {
-        Pelicula pelicula = peliculaService.findById(id);
-        m.put("pelicula", pelicula);
-
+    public String update(
+            @RequestParam("id") Long id_Pelicula,
+            ModelMap m) {
+        m.put("pelicula", peliculaService.findByIdElemento(id_Pelicula));
         m.put("view", "pelicula/u");
         return "_t/frame";
+    }
+
+    @PostMapping("u")
+    public String updatePost(
+            @RequestParam("id") Long id_Asignatura,
+            @RequestParam("nombre") String nombre) throws DangerException {
+        try {
+            // asignaturaService.update(id_Asignatura, nombre);
+        } catch (Exception e) {
+            PRG.error("El país no pudo ser actualizado", "/asignatura/r");
+        }
+        return "redirect:/asignatura/r";
     }
 
     /*
