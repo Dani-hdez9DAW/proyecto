@@ -3,6 +3,7 @@ package org.proyect.service;
 import java.util.List;
 
 import org.proyect.domain.Juego;
+import org.proyect.domain.Pelicula;
 import org.proyect.repository.JuegoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,14 @@ public class JuegoService {
     }
 
     public Juego findById(Long id) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+
+    public List<Juego> findByTitulo(String titulo) {
+        return juegoRepository.findByTitulo(titulo);
+    }
+
+    public Juego findByIdElemento(Long elementoId) {
+        return juegoRepository.findById(elementoId).get();
     }
 }
