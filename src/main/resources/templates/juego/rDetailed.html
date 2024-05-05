@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vista detallada de película</title>
+    <!-- Tu archivo de estilos CSS personalizado -->
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        /* Estilos personalizados */
+        .movie-poster {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-right: 20px;
+        }
+
+        .movie-details {
+            width: calc(100% - 150px);
+            /* Para dejar espacio a la imagen */
+        }
+
+        #id-sinopsis {
+            height: 150px;
+            /* Altura ajustable */
+            resize: none;
+            /* Deshabilita el redimensionamiento */
+        }
+    </style>
+</head>
+
+<body>
+    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary" onclick="habilitarCampos();"> <i class="bi bi-pen-fill"></i></button>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="text-center">Detalles de la película</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Tarjeta para la imagen -->
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="movie-poster">
+                                            <img th:src="@{'/img/juegos/' + ${juego.imagen}}"
+                                                alt="Poster de la película" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Tarjeta para los detalles -->
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form action="/guardar-modificacion" method="post">
+                                            <div class="form-group">
+                                                <label for="id-nombre">Nombre</label>
+                                                <input type="text" id="id-nombre" name="nombre" class="form-control"
+                                                    disabled required th:value="${juego.titulo}">
+                                                <label for="id-clasificacion">Clasificación</label>
+                                                <input type="text" id="id-clasificacion" name="clasificacion"
+                                                    class="form-control" disabled required
+                                                    th:value="${juego.clasificacion}">
+                                                <label for="id-estado">Estado</label>
+                                                <input type="text" id="id-estado" name="estado" class="form-control"
+                                                    disabled required th:value="${juego.estado}">
+                                                <label for="id-fechaSalida">Fecha de estreno</label>
+                                                <input type="text" id="id-fechaSalida" name="fechaSalida"
+                                                    class="form-control" disabled required
+                                                    th:value="${juego.fecha_salida}">
+                                                <label for="id-duracion">Duración</label>
+                                                <input type="text" id="id-duracion" name="duracion" class="form-control"
+                                                    disabled required th:value="${juego.duracion}">
+                                                <label for="id-plataforma">Plataforma</label>
+                                                <input type="text" id="id-plataforma" name="plataforma"
+                                                    class="form-control" disabled required
+                                                    th:value="${juego.plataforma}">
+                                                <label for="id-cuentaVotos">Cuenta votos</label>
+                                                <input type="text" id="id-cuentaVotos" name="cuentaVotos"
+                                                    class="form-control" disabled required
+                                                    th:value="${juego.cuenta_votos}">
+                                                <label for="id-trailer">Ver trailer</label>
+                                                <input type="text" id="id-trailer" name="trailer" class="form-control"
+                                                    disabled required th:value="${juego.trailer}">
+                                                <label for="id-urlCompra">URL de compra</label>
+                                                <input type="text" id="id-urlCompra" name="urlCompra"
+                                                    class="form-control" disabled required th:value="${juego.url}">
+                                                <label for="id-sinopsis">Sinopsis</label>
+                                                <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
+                                                    th:text="${juego.sinopsis}" disabled="disabled"></textarea>
+                                                <input type="hidden" id="idjuego" name="idjuego"
+                                                    th:value="${juego.idElemento}">
+                                            </div>
+                                            <button type="submit" style="display:none"
+                                                class="btn btn-primary btn-block">Guardar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

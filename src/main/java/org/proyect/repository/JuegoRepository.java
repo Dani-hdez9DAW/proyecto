@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JuegoRepository extends JpaRepository<Juego, Long>  {
+public interface JuegoRepository extends JpaRepository<Juego, Long> {
     public List<Juego> findByPlataforma(String plataforma);
+
+    public List<Juego> findByTitulo(String titulo);
+
+    public List<Juego> findByIdElemento(Long idElemento);
 }

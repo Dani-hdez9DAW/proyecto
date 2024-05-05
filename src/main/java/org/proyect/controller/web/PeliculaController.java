@@ -118,14 +118,19 @@ public class PeliculaController {
         return "redirect:/pelicula/r";
     }
 
-    @GetMapping("rDetailed")
-    public String rDetailed(
-            @RequestParam("id_elemento") Long id_elemento,
-            ModelMap m) {
+   @GetMapping("rDetailed")
+public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
+                        ModelMap m, HttpSession session) {
+    if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
+        // Si el usuario está autenticado, continúa con la lógica para cargar la vista rDetailed
         m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
         m.put("view", "pelicula/rDetailed");
         return "_t/frame";
+    } else {
+        // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la página de inicio de sesión
+        return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
     }
+}
 
     @GetMapping("u")
     public String update(

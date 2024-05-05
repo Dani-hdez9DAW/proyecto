@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear juego</title>
+    <link rel="stylesheet" href="/css/juegos/juegos.css">
+    <style>
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .small {
+            font-size: .7em;
+        }
+
+        .square {
+            width: .7em;
+            height: .7em;
+            margin: .5em;
+            display: inline-block;
+        }
+
+        /* Custom dropdown */
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 10px;
+            /* demo only */
+        }
+
+        .custom-dropdown select {
+            background-color: #B18FCF;
+            color: #fff;
+            font-size: inherit;
+            padding: .5em;
+            padding-right: 2.5em;
+            border: 0;
+            margin: 0;
+            border-radius: 3px;
+            text-indent: 0.01px;
+            text-overflow: '';
+            -webkit-appearance: button;
+            /* hide default arrow in chrome OSX */
+        }
+
+        .custom-dropdown::before,
+        .custom-dropdown::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .custom-dropdown::after {
+            /*  Custom dropdown arrow */
+            content: "\25BC";
+            height: 1em;
+            font-size: .625em;
+            line-height: 1;
+            right: 1.2em;
+            top: 50%;
+            margin-top: -.5em;
+        }
+
+        .custom-dropdown::before {
+            /*  Custom dropdown arrow cover */
+            width: 2em;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .custom-dropdown select[disabled] {
+            color: rgba(0, 0, 0, .3);
+        }
+
+        .custom-dropdown select[disabled]::after {
+            color: rgba(0, 0, 0, .1);
+        }
+
+        .custom-dropdown::before {
+            background-color: rgba(0, 0, 0, .15);
+        }
+
+        .custom-dropdown::after {
+            color: rgba(0, 0, 0, .4);
+        }
+
+        button {
+            padding: 17px 40px;
+            border-radius: 10px;
+            border: 0;
+            background-color: #B18FCF;
+            letter-spacing: 1.5px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: #f402f4;
+            color: hsl(0, 0%, 100%);
+            cursor: pointer;
+        }
+
+        button:hover {
+            box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
+        }
+
+        button:active {
+            background-color: rgb(255, 56, 86);
+            /*50, 168, 80*/
+            box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
+            transform: translateY(5px);
+            transition: 200ms;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="my-4">Nueva juego</h1>
+        <form id="juegoForm" action="/juego/c" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="titulo">Titulo</label>
+                        <input class="input form-control" name="titulo" type="text" placeholder="Nombre de la juego">
+                    </div>
+                    <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <span class="custom-dropdown ">
+                            <select name="categoria[]" id="categoria" multiple="multiple" class="form-control">
+                                <option th:each="categoria : ${categorias}" th:text="${categoria.nombre}"
+                                    th:value="${categoria.id_categoria}"></option>
+                            </select>
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clasificacion">Clasificación</label>
+                        <input class="input form-control" name="clasificacion" type="text"
+                            placeholder="Clasificación de la juego">
+                    </div>
+                    <div class="form-group">
+                        <label for="duracion">Duración</label>
+                        <input class="input form-control" name="duracion" type="text"
+                            placeholder="Duración de la juego">
+                    </div>
+                    <div class="form-group">
+                        <label for="plataforma">Plataforma</label>
+                        <input type="text" class="input form-control" name="plataforma"
+                            placeholder="Plataforma de la juego">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <input class="input form-control" name="estado" type="text" placeholder="Estado de la juego">
+                    </div>
+                    <div class="form-group">
+                        <label for="sinopsis">Sinopsis</label>
+                        <textarea class="input form-control" name="sinopsis" placeholder="Sinopsis de la juego"
+                            rows="5" cols="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_lanzamiento">Fecha de salida</label>
+                        <input type="date" class="input form-control" id="fecha_lanzamiento" name="fechaLanzamiento"
+                            placeholder="Fecha de lanzamiento">
+                    </div>
+                    <div class="form-group">
+                        <label for="imagen">Imagen</label>
+                        <input class="input form-control" name="imagen" id="imagen" type="file"
+                            onchange="previewImage(event)">
+                        <!-- Contenedor para la previsualización de la imagen -->
+                        <div id="image-preview-container" style="margin-top: 10px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="trailer">Tráiler</label>
+                        <input class="input form-control" name="trailer" type="text" placeholder="URL del tráiler">
+                    </div>
+                    <div class="form-group">
+                        <label for="url">URL</label>
+                        <input class="input form-control" name="url" type="text"
+                            placeholder="URL de compra de la juego">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="float-end">Crear</button>
+            </div>
+        </form>
+        <div class="button-container" style="top:-20px;">
+            <button onclick="window.location.href='/juego/r'">Volver</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        // Función para previsualizar la imagen seleccionada
+        function previewImage(event) {
+            var input = event.target;
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var imagePreviewContainer = document.getElementById('image-preview-container');
+                    imagePreviewContainer.innerHTML = '<img src="' + e.target.result + '" class="img-fluid" alt="Vista previa de la imagen">';
+                };
+
+                reader.readAsDataURL(input.files[0]); // Lee el contenido de la imagen como una URL
+            }
+        }
+    </script>
+</body>
+
+</html>

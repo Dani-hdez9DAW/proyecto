@@ -54,5 +54,9 @@ public class Usuario extends Persona {
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
     }
+    public Boolean getEsAdmin() {
+        // Manejo del caso en el que esAdmin sea nulo
+        return esAdmin != null ? esAdmin : false; // Devuelve false si esAdmin es nulo
+    }
 
 }

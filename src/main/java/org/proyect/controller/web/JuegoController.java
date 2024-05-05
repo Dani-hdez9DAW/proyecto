@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
+
 @RequestMapping("/juego/")
 @Controller
 public class JuegoController {
@@ -37,7 +38,8 @@ public class JuegoController {
             m.put("view", "juego/c");
             return "_t/frame";
         } else {
-            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio de sesión u otra página apropiada.
+            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
+            // de sesión u otra página apropiada.
             return "redirect:/login"; // Redirige a la página de inicio de sesión
         }
     }
@@ -61,6 +63,22 @@ public class JuegoController {
 
         m.put("view", "juegos/u");
         return "_t/frame";
+    }
+
+    @GetMapping("rDetailed")
+    public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
+            ModelMap m, HttpSession session) {
+        if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
+            // Si el usuario está autenticado, continúa con la lógica para cargar la vista
+            // rDetailed
+            m.put("juego", juegoService.findByIdElemento(id_elemento));
+            m.put("view", "juego/rDetailed");
+            return "_t/frame";
+        } else {
+            // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la
+            // página de inicio de sesión
+            return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
+        }
     }
 
     /*
