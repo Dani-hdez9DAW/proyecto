@@ -1,8 +1,14 @@
 package org.proyect.controller.web;
 
+import java.util.List;
+
+import org.proyect.domain.Juego;
+import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.PRG;
+import org.proyect.service.JuegoService;
+import org.proyect.service.PeliculaService;
 import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,10 +25,28 @@ public class HomeController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	@Autowired
+    private PeliculaService peliculaService;
+	@Autowired
+    private JuegoService juegoService;
 
 	@GetMapping("/")
-	public String home(
-			ModelMap m) {
+	public String home(ModelMap m) {
+		List<Juego> juegos = juegoService.findAll();
+		int cantidadMaximaJuegos = 4; 
+        m.put("juegos", juegos);
+		m.addAttribute("cantidadMaximaJuegos", cantidadMaximaJuegos);
+
+		
+
+		List<Pelicula> peliculas = peliculaService.findAll();
+		int cantidadMaximaPeliculas = 4; 
+		m.put("peliculas", peliculas);
+		m.addAttribute("cantidadMaximaPeliculas", cantidadMaximaPeliculas);
+
+
+		// List<Pelicula> peliculasPF = peliculaService.findLastFourMovies();
+		// m.put("peliculasPF", peliculasPF);
 		m.put("view", "home/home");
 		return "_t/frame";
 	}

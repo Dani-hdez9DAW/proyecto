@@ -1,11 +1,280 @@
-<body class="bg-secondary"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* body {
+            margin-top: 15%;
+        } */
 
-    <div class="container ">
-    <h1>NOMBRE APP</h1>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
- 
-   
+        .carousel-inner {
+            height: 100%;
+        }
 
-</div>
+        .carousel-caption {
+            z-index: 10;
+        }
 
+        .carousel .carousel-inner .carousel-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .carousel .carousel-inner .carousel-item img {
+            width: calc(33.33% - 10px);
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .carousel .carousel-inner .carousel-item:last-child img {
+            margin-right: 0;
+        }
+
+        .carousel .carousel-inner .carousel-item .carousel-caption {
+            display: none;
+        }
+
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cards {
+            display: flex;
+            flex-direction: column;
+            /* Display cards in a column */
+            align-items: center;
+            /* Align cards in the center horizontally */
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            height: 100px;
+            width: 750px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: 400ms;
+            animation: fadeIn 1s ease forwards;
+            /* Apply the animation to each card */
+        }
+
+        /* Delay the animation for each card */
+        .cards .card:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .cards .card:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+
+        .cards .card h1.tip {
+            font-size: 1em;
+            font-weight: 700;
+        }
+
+        .cards .card h1.second-text {
+            font-size: .7em;
+        }
+
+        .cards .card:hover {
+            transform: scale(1.1, 1.1);
+        }
+
+        .cards:hover>.card:not(:hover) {
+            filter: blur(10px);
+            transform: scale(0.9, 0.9);
+        }
+
+        .bsb-hero-5 {
+            margin-top: -160px;
+            height: 55%;
+            background-image: url('/img/banner.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            /* Ajusta la imagen para cubrir todo el div */
+            background-position: center;
+            /* Centra la imagen en el div */
+            width: 100%;
+        }
+
+        .description {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-top: 30px;
+            /* Espacio entre el texto y el título */
+        }
+
+        .description p {
+            margin-bottom: 20px;
+            /* Espacio entre párrafos */
+        }
+
+
+        .pelicula-image {
+        width: 100%; 
+        height: auto;  
+        margin-bottom: 20px; 
+    }
+
+    .pelicula-image img {
+        width: 100%;  
+        height: auto; 
+        display: block;  
+    }
+    </style>
+</head>
+
+<body class="bg-black">
+
+
+    <!-- <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css" /> -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/heroes/hero-5/assets/css/hero-5.css" /> -->
+
+    <section class="bsb-hero-5 px-3 bsb-overlay">
+        <div class="container">
+            <div class="row justify-content-md-center align-items-center">
+                <div class="col-12 col-md-11 col-lg-9 col-xl-8 col-xxl-7">
+                    <br><br><br><br><br><br>
+                    <h1 class="display-5 text-white text-center fw-bold mb-2 mt-4 titulo">Bienvenido al Catálogo de
+                        Películas y Juegos</h1>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <button type="button" class="btn bsb-btn-sm btn-outline-light">Registrate para mayor
+                            personalización</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="container">
+        <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div th:each="pelicula, iterStat : ${peliculas}" class="carousel-item"
+                    th:classappend="${iterStat.index == 0} ? 'active'">
+                    <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" class="d-block" th:alt="${pelicula.titulo}">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div> -->
+
+        <div class="row justify-content-center ">
+            <div class="col-md-10">
+                <div class="description bg-black text-white justify">
+                    <p>
+                        Explora un universo de entretenimiento sin límites con nuestro catálogo de películas y juegos.
+                        Sumérgete en una experiencia única donde podrás descubrir una amplia selección de emocionantes
+                        títulos que satisfarán todos tus gustos y preferencias. Desde las últimas superproducciones de
+                        Hollywood hasta los clásicos más aclamados por la crítica, nuestro catálogo de películas te
+                        ofrece una variedad infinita de historias cautivadoras, emocionantes aventuras y conmovedoras
+                        narrativas que te transportarán a mundos inimaginables.
+                    </p>
+                    <p>
+                        ¿Prefieres la emoción y la competencia de los videojuegos? ¡No hay problema! Nuestra colección
+                        de juegos incluye desde los éxitos más recientes hasta los juegos de culto, ofreciendo desafíos
+                        para jugadores de todos los niveles y géneros. Desde batallas épicas hasta experiencias
+                        multijugador en línea, encontrarás todo lo que necesitas para satisfacer tu sed de diversión y
+                        aventura.
+                    </p>
+                    <p>
+                        Explora nuestro catálogo, elige tus películas y juegos favoritos, y prepárate para vivir
+                        momentos inolvidables de entretenimiento puro. ¡El universo del cine y los videojuegos te
+                        espera!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: left;">
+        <h1 class="text-black bg-secondary" style="border-radius: 10%; width: 12%;">PELÍCULAS</h1>
+        <div class="row">
+            <div th:each="pelicula, iterStat : ${peliculas}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaPeliculas}">
+                <div class="pelicula-image">
+                    <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Imagen de Película">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+
+    <div class="bg-secondary">
+        <br>
+    </div>
+
+    <div style="text-align: right;">
+        <h1 class="text-black bg-secondary" style="border-radius: 10%; width: 12%;">JUEGOS</h1>
+        <div class="row">
+            <div th:each="juego, iterStat : ${juego}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaJuegos}">
+                <div class="juego-image">
+                    <img th:src="@{'/img/juegos/' + ${juego.imagen}}" alt="Imagen de Juego">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+
+    <!-- <div class="cards">
+        <div class="row">
+            <div class="card bg-primary" onclick="showInfo('peliculas')">
+                <h1 class="tip">PELICULAS</h1>
+            </div>
+            <div class="card bg-primary" onclick="showInfo('videojuegos')">
+                <h1 class="tip">VIDEOJUEGOS</h1>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Information sections
+    <div id="peliculasInfo" style="display: none;">
+        <p>peliculas</p>
+    </div>
+    <div id="videojuegosInfo" style="display: none;">
+        <p>juegos</p>
+    </div> -->
+
+
+    <script>
+        // JavaScript function to show information based on selected card
+        function showInfo(category) {
+            // Hide all information sections
+            document.getElementById('peliculasInfo').style.display = 'none';
+            document.getElementById('videojuegosInfo').style.display = 'none';
+
+            // Show information section based on the selected category
+            document.getElementById(category + 'Info').style.display = 'block';
+        }
+    </script>
 </body>
