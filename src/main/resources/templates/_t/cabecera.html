@@ -124,24 +124,125 @@
     .navbar-brand {
         letter-spacing: 3px;
     }
+
+
+
+
+
+
+
+    
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+
+
+.navbar {
+    background-color: transparent !important;
+    border-bottom: none !important;
+  }
+
+  .navbar-nav .nav-link {
+    color: white !important; /* Color del texto del navbar */
+  }
+
+  .navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 0.7) !important; /* Color del texto del navbar al pasar el mouse */
+  }
+
 </style>
 
-<nav class="navbar navbar-expand-lg fixed-top bg-dark navbar-dark rounded justify-content-center navbar-scroll">
+
+<div id="mySidenav" class="sidenav" style="margin-top:80px opacity-0">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="/pelicula/r">Peliculas</a>
+    <a href="/juego/r">Juegos</a>
+    <a href="/categoria/r">Categorias</a>
+    <a th:if="${session.usuario!=null and session.usuario.esAdmin==true}">
+        <div class="dropdown">
+            <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Acciones
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="/pelicula/rAdmin">Peliculas</a>
+                <a class="dropdown-item" href="/categoria/rAdmin">Categorias</a>
+                <a class="dropdown-item" href="/juego/c">Juegos</a>
+                <a class="dropdown-item" href="/evento/c">Eventos</a>
+                <a class="dropdown-item" href="/usuario/rAdmin">Usuarios</a>
+            </div>
+        </div>
+    </a>
+    <a href="#">Contact</a>
+</div>
+
+  
+  
+  <script>
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+  }
+  
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+  }
+  </script>
+
+
+
+
+<nav class="navbar navbar-expand-lg  navbar-dark rounded justify-content-center navbar-scroll">
     <div class="container-fluid">
+        <span style="font-size:30px;cursor:pointer;" onclick="openNav()">&#9776;</span>
         <a class="navbar-brand" href="/">Inicio</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item active">
+                <!-- <li class="nav-item active">
                     <a class="navbar-brand" href="/">
                         <img src="/img/home-alt.png" alt="INICIO" style="width:40px;">
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> -->
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="/pelicula/r">Peliculas</a>
                 </li>
                 <li class="nav-item">
@@ -149,7 +250,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/categoria/r">Categorias</a>
-                </li>
+                </li> -->
                 <li th:if="${session.usuario!=null and session.usuario.esAdmin==true}">
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"

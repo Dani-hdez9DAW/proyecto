@@ -24,7 +24,7 @@ public abstract class Elemento {
     protected String titulo;
 
     @Column
-    protected String clasificacion;//Lo de pegi 7,etc 
+    protected String clasificacion; 
 
     @Column
     protected String sinopsis;
@@ -33,10 +33,10 @@ public abstract class Elemento {
     protected LocalDate fecha_salida;
 
     @Column
-    protected String plataforma;//Añadir en la base de datos
+    protected String plataforma; 
 
     @Column
-    protected String imagen;//Añadir en la base de datos
+    protected String imagen; 
 
     @Column
     protected String estado;

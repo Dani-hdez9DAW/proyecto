@@ -53,5 +53,11 @@ public class PeliculaService {
     public Pelicula findByIdElemento(Long elementoId) {
         return peliculaRepository.findById(elementoId).get();
     }
+
+    // public List<Pelicula> findLastFourMovies() {
+    //     return peliculaRepository.findLastFourMovies();
+    // }
+
+    
     
 }
