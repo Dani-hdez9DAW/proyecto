@@ -53,5 +53,27 @@ public class PeliculaService {
     public Pelicula findByIdElemento(Long elementoId) {
         return peliculaRepository.findById(elementoId).get();
     }
+
+    public void update(Long idPelicula, String titulo, String clasificacion, Integer duracion,
+            String estado, String plataforma, String sinopsis, LocalDate fechaLanzamiento, Integer cuentaVotos,
+            String trailer, String url) {
+        Pelicula pelicula = peliculaRepository.findById(idPelicula).get();
+        pelicula.setTitulo(titulo);
+        pelicula.setClasificacion(clasificacion);
+        pelicula.setDuracion(duracion);
+        pelicula.setEstado(estado);
+        pelicula.setPlataforma(plataforma);
+        pelicula.setSinopsis(sinopsis);
+        pelicula.setFecha_salida(fechaLanzamiento);
+        pelicula.setCuenta_votos(cuentaVotos);
+        pelicula.setTrailer(trailer);
+        pelicula.setUrl(url);
+        pelicula.setCategorias(null);
+        peliculaRepository.save(pelicula);
+    }
+
+    public void delete(Long idPelicula) {
+        peliculaRepository.delete(peliculaRepository.getReferenceById(idPelicula));
+    }
     
 }

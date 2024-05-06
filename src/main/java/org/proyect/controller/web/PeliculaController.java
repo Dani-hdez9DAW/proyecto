@@ -132,64 +132,39 @@ public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
     }
 }
 
-    @GetMapping("u")
-    public String update(
-            @RequestParam("id") Long id_Pelicula,
-            ModelMap m) {
-        m.put("pelicula", peliculaService.findByIdElemento(id_Pelicula));
-        m.put("view", "pelicula/u");
-        return "_t/frame";
-    }
-
     @PostMapping("u")
     public String updatePost(
-            @RequestParam("id") Long id_Asignatura,
-            @RequestParam("nombre") String nombre) throws DangerException {
+        @RequestParam("idpelicula") Long idPelicula,
+        @RequestParam("nombre") String titulo,
+        @RequestParam("clasificacion") String clasificacion,
+        @RequestParam("duracion") Integer duracion,
+        @RequestParam("estado") String estado,
+        @RequestParam("plataforma") String plataforma,
+        @RequestParam("sinopsis") String sinopsis,
+        @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
+        @RequestParam("cuentaVotos") Integer cuentaVotos,
+        @RequestParam("trailer") String trailer,
+        @RequestParam("urlCompra") String url) throws DangerException {
         try {
-            // asignaturaService.update(id_Asignatura, nombre);
+            peliculaService.update(idPelicula,titulo, clasificacion, duracion, estado, plataforma, sinopsis,
+                    fechaLanzamiento,cuentaVotos, trailer, url);
+            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
         } catch (Exception e) {
-            PRG.error("El país no pudo ser actualizado", "/asignatura/r");
+            PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/r");
         }
-        return "redirect:/asignatura/r";
+        return "redirect:/pelicula/r";
     }
-
-    /*
-     * @PostMapping("u")
-     * public String updatePost(@RequestParam("idpelicula") Long
-     * id, @RequestParam("dni") String dni,
-     * 
-     * @RequestParam("nombre") String nombre,
-     * 
-     * @RequestParam("pass") String pass,
-     * 
-     * @RequestParam("id-nace") Long idNace, @RequestParam("id-vive") Long idVive,
-     * 
-     * @RequestParam(value = "gustoId[]", required = false) List<Long> idsGusto,
-     * 
-     * @RequestParam(value = "odioId[]", required = false) List<Long> idsOdio)
-     * throws DangerException, InfoException {
-     * try {
-     * peliculaService.update(id, dni, nombre,pass, idNace, idVive, idsGusto,
-     * idsOdio);
-     * } catch (Exception e) {
-     * PRG.error("La pelicula con el nombre " + nombre + " ya existe",
-     * "/pelicula/u?id=" + id);
-     * }
-     * PRG.info("La pelicula con el nombre  " + nombre + " ha sido actualizado",
-     * "/pelicula/r");
-     * return "redirect:/pelicula/r";
-     * }
-     * 
-     * @PostMapping("d")
-     * public String delete(@RequestParam("id") Long idpelicula) throws
-     * DangerException {
-     * try {
-     * peliculaService.delete(idpelicula);
-     * } catch (Exception e) {
-     * PRG.error("Error al borrar a la pelicula");
-     * }
-     * 
-     * return "redirect:/pelicula/r";
-     * }
-     */
+    
+    @PostMapping("d")
+    public String delete(
+            @RequestParam("idpelicula") Long idPelicula) throws DangerException {
+        try {
+            peliculaService.delete(idPelicula);
+        } catch (Exception e) {
+            PRG.error("", "/pelicula/r");
+        }
+        return "redirect:/pelicula/r";
+    }
 }
+    
+

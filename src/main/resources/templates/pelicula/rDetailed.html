@@ -30,7 +30,12 @@
 </head>
 
 <body>
-    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary" onclick="habilitarCampos();"> <i class="bi bi-pen-fill"></i></button>
+    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary"
+        onclick="habilitarCampos();"> <i class="bi bi-pen-fill"></i></button>
+    <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" id="borrarButton"
+        class="btn btn-primary" onclick="cambiarDireccionForm()">
+        Borrar
+    </button>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -55,7 +60,7 @@
                             <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form action="/guardar-modificacion" method="post">
+                                        <form action="/pelicula/u" method="post">
                                             <div class="form-group">
                                                 <label for="id-nombre">Nombre</label>
                                                 <input type="text" id="id-nombre" name="nombre" class="form-control"
@@ -68,7 +73,7 @@
                                                 <input type="text" id="id-estado" name="estado" class="form-control"
                                                     disabled required th:value="${pelicula.estado}">
                                                 <label for="id-fechaSalida">Fecha de estreno</label>
-                                                <input type="text" id="id-fechaSalida" name="fechaSalida"
+                                                <input type="date" id="id-fechaSalida" name="fechaSalida"
                                                     class="form-control" disabled required
                                                     th:value="${pelicula.fecha_salida}">
                                                 <label for="id-duracion">Duración</label>
@@ -83,18 +88,20 @@
                                                     class="form-control" disabled required
                                                     th:value="${pelicula.cuenta_votos}">
                                                 <label for="id-trailer">Ver trailer</label>
-                                                <input type="text" id="id-trailer" name="trailer" class="form-control"
-                                                    disabled required th:value="${pelicula.trailer}">
+                                                <a id="trailerLink" class="btn btn-secondary" name="trailer"
+                                                    th:href="${pelicula.trailer}" target="_blank">Ver trailer</a>
+
                                                 <label for="id-urlCompra">URL de compra</label>
-                                                <input type="text" id="id-urlCompra" name="urlCompra"
-                                                    class="form-control" disabled required th:value="${pelicula.url}">
+                                                <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
+                                                    th:href="${pelicula.url}" target="_blank">Comprar</a>
+
                                                 <label for="id-sinopsis">Sinopsis</label>
                                                 <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
                                                     th:text="${pelicula.sinopsis}" disabled="disabled"></textarea>
                                                 <input type="hidden" id="idpelicula" name="idpelicula"
                                                     th:value="${pelicula.idElemento}">
                                             </div>
-                                            <button type="submit" style="display:none"
+                                            <button type="submit" id="btnActualizar" style="display:none"
                                                 class="btn btn-primary btn-block">Guardar</button>
                                         </form>
                                     </div>
@@ -108,5 +115,43 @@
     </div>
 
 </body>
+<script>
+
+    function cambiarDireccionForm() {
+        var form = document.querySelector('form[action="/pelicula/u"]');
+        form.setAttribute('action', '/pelicula/d');
+        // Cambiar el texto del botón a "Cancelar"
+        var borrarButton = document.getElementById('btnActualizar');
+        borrarButton.textContent = 'Borrar';
+        borrarButton.classList.remove('btn-primary');
+        borrarButton.classList.add('btn-danger');
+    }
+
+    function habilitarCampos() {
+        // Obtener el valor del href de los botones de trailer y URL de compra
+        var trailerLink = document.getElementById('trailerLink').getAttribute('href');
+        var urlCompraLink = document.getElementById('urlCompraLink').getAttribute('href');
+
+        // Convertir los botones de trailer y URL de compra a campos de texto
+        var trailerCampo = document.getElementById('trailerLink');
+        trailerCampo.outerHTML = '<input type="text" id="id-trailer" name="trailer" class="form-control" required value="' + trailerLink + '">';
+
+        var urlCompraCampo = document.getElementById('urlCompraLink');
+        urlCompraCampo.outerHTML = '<input type="text" id="id-urlCompra" name="urlCompra" class="form-control" required value="' + urlCompraLink + '">';
+
+        // Obtener todos los elementos de formulario dentro del div con la clase "card-body"
+        var campos = document.querySelectorAll('.card-body input, .card-body textarea');
+
+        // Iterar sobre los elementos y habilitarlos
+        campos.forEach(function (campo) {
+            campo.removeAttribute('disabled');
+        });
+
+        // Mostrar el botón de guardar
+        document.getElementById('btnActualizar').style.display = 'block';
+    }
+</script>
+
+
 
 </html>

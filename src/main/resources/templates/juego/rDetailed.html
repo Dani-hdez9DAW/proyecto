@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vista detallada de película</title>
+    <title>Vista detallada de juego</title>
     <!-- Tu archivo de estilos CSS personalizado -->
     <link href="styles.css" rel="stylesheet">
     <style>
@@ -30,13 +30,19 @@
 </head>
 
 <body>
-    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary" onclick="habilitarCampos();"> <i class="bi bi-pen-fill"></i></button>
+    <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" class="btn btn-primary"
+        onclick="habilitarCampos();">
+        <i class="bi bi-pen-fill"></i>
+    </button>
+
+    
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h1 class="text-center">Detalles de la película</h1>
+                        <h1 class="text-center">Detalles del juego</h1>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -44,9 +50,9 @@
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="movie-poster">
-                                            <img th:src="@{'/img/juegos/' + ${juego.imagen}}"
-                                                alt="Poster de la película" class="img-fluid">
+                                        <div class="game-poster">
+                                            <img th:src="@{'/img/juego/' + ${juego.imagen}}" alt="Poster del juego"
+                                                class="img-fluid">
                                         </div>
                                     </div>
                                 </div>
@@ -55,46 +61,27 @@
                             <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form action="/guardar-modificacion" method="post">
+                                        <form action="/juego/u" method="post">
                                             <div class="form-group">
                                                 <label for="id-nombre">Nombre</label>
                                                 <input type="text" id="id-nombre" name="nombre" class="form-control"
                                                     disabled required th:value="${juego.titulo}">
-                                                <label for="id-clasificacion">Clasificación</label>
-                                                <input type="text" id="id-clasificacion" name="clasificacion"
-                                                    class="form-control" disabled required
-                                                    th:value="${juego.clasificacion}">
-                                                <label for="id-estado">Estado</label>
-                                                <input type="text" id="id-estado" name="estado" class="form-control"
-                                                    disabled required th:value="${juego.estado}">
-                                                <label for="id-fechaSalida">Fecha de estreno</label>
-                                                <input type="text" id="id-fechaSalida" name="fechaSalida"
-                                                    class="form-control" disabled required
-                                                    th:value="${juego.fecha_salida}">
-                                                <label for="id-duracion">Duración</label>
-                                                <input type="text" id="id-duracion" name="duracion" class="form-control"
-                                                    disabled required th:value="${juego.duracion}">
-                                                <label for="id-plataforma">Plataforma</label>
-                                                <input type="text" id="id-plataforma" name="plataforma"
-                                                    class="form-control" disabled required
-                                                    th:value="${juego.plataforma}">
-                                                <label for="id-cuentaVotos">Cuenta votos</label>
-                                                <input type="text" id="id-cuentaVotos" name="cuentaVotos"
-                                                    class="form-control" disabled required
-                                                    th:value="${juego.cuenta_votos}">
+                                                <!-- Otros campos aquí... -->
                                                 <label for="id-trailer">Ver trailer</label>
-                                                <input type="text" id="id-trailer" name="trailer" class="form-control"
-                                                    disabled required th:value="${juego.trailer}">
+                                                <a id="trailerLink" class="btn btn-secondary" name="trailer"
+                                                    th:href="${juego.trailer}" target="_blank">Ver trailer</a>
+
                                                 <label for="id-urlCompra">URL de compra</label>
-                                                <input type="text" id="id-urlCompra" name="urlCompra"
-                                                    class="form-control" disabled required th:value="${juego.url}">
+                                                <a id="urlCompraLink" class="btn btn-secondary" name="urlCompra"
+                                                    th:href="${juego.url}" target="_blank">Comprar</a>
+
                                                 <label for="id-sinopsis">Sinopsis</label>
                                                 <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
                                                     th:text="${juego.sinopsis}" disabled="disabled"></textarea>
-                                                <input type="hidden" id="idjuego" name="idjuego"
+                                                <input type="hidden" id="idjuego" name="idJuego"
                                                     th:value="${juego.idElemento}">
                                             </div>
-                                            <button type="submit" style="display:none"
+                                            <button type="submit" id="btnActualizar" style="display:none"
                                                 class="btn btn-primary btn-block">Guardar</button>
                                         </form>
                                     </div>
@@ -107,6 +94,44 @@
         </div>
     </div>
 
+
 </body>
+<script>
+    function cambiarDireccionForm() {
+        var form = document.querySelector('form[action="/juego/u"]');
+        form.setAttribute('action', '/juego/d');
+        // Cambiar el texto del botón a "Cancelar"
+        var borrarButton = document.getElementById('btnActualizar');
+        borrarButton.textContent = 'Borrar';
+        borrarButton.classList.remove('btn-primary');
+        borrarButton.classList.add('btn-danger');
+    }
+
+    function habilitarCampos() {
+        // Obtener el valor del href de los botones de trailer y URL de compra
+        var trailerLink = document.getElementById('trailerLink').getAttribute('href');
+        var urlCompraLink = document.getElementById('urlCompraLink').getAttribute('href');
+
+        // Convertir los botones de trailer y URL de compra a campos de texto
+        var trailerCampo = document.getElementById('trailerLink');
+        trailerCampo.outerHTML = '<input type="text" id="id-trailer" name="trailer" class="form-control" required value="' + trailerLink + '">';
+
+        var urlCompraCampo = document.getElementById('urlCompraLink');
+        urlCompraCampo.outerHTML = '<input type="text" id="id-urlCompra" name="urlCompra" class="form-control" required value="' + urlCompraLink + '">';
+
+        // Obtener todos los elementos de formulario dentro del div con la clase "card-body"
+        var campos = document.querySelectorAll('.card-body input, .card-body textarea');
+
+        // Iterar sobre los elementos y habilitarlos
+        campos.forEach(function (campo) {
+            campo.removeAttribute('disabled');
+        });
+
+        // Mostrar el botón de guardar
+        document.getElementById('btnActualizar').style.display = 'block';
+    }
+</script>
+
+
 
 </html>

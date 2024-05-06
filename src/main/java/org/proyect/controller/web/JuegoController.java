@@ -1,5 +1,6 @@
 package org.proyect.controller.web;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.proyect.domain.Juego;
@@ -81,43 +82,36 @@ public class JuegoController {
         }
     }
 
-    /*
-     * @PostMapping("u")
-     * public String updatePost(@RequestParam("idjuegos") Long
-     * id, @RequestParam("dni") String dni,
-     * 
-     * @RequestParam("nombre") String nombre,
-     * 
-     * @RequestParam("pass") String pass,
-     * 
-     * @RequestParam("id-nace") Long idNace, @RequestParam("id-vive") Long idVive,
-     * 
-     * @RequestParam(value = "gustoId[]", required = false) List<Long> idsGusto,
-     * 
-     * @RequestParam(value = "odioId[]", required = false) List<Long> idsOdio)
-     * throws DangerException, InfoException {
-     * try {
-     * juegoService.update(id, dni, nombre,pass, idNace, idVive, idsGusto,
-     * idsOdio);
-     * } catch (Exception e) {
-     * PRG.error("La juegos con el nombre " + nombre + " ya existe",
-     * "/juegos/u?id=" + id);
-     * }
-     * PRG.info("La juegos con el nombre  " + nombre + " ha sido actualizado",
-     * "/juegos/r");
-     * return "redirect:/juego/r";
-     * }
-     * 
-     * @PostMapping("d")
-     * public String delete(@RequestParam("id") Long idjuegos) throws
-     * DangerException {
-     * try {
-     * juegoService.delete(idjuegos);
-     * } catch (Exception e) {
-     * PRG.error("Error al borrar a la juegos");
-     * }
-     * 
-     * return "redirect:/juego/r";
-     * }
-     */
+    @PostMapping("u")
+    public String updatePost(
+            @RequestParam("idJuego") Long idJuego,
+            @RequestParam("nombre") String titulo,
+            @RequestParam("clasificacion") String clasificacion,
+            @RequestParam("duracion") Integer duracion,
+            @RequestParam("estado") String estado,
+            @RequestParam("plataforma") String plataforma,
+            @RequestParam("sinopsis") String sinopsis,
+            @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
+            @RequestParam("cuentaVotos") Integer cuentaVotos,
+            @RequestParam("trailer") String trailer,
+            @RequestParam("urlCompra") String url) throws DangerException {
+        try {
+            juegoService.update(idJuego, titulo, clasificacion, duracion, estado, plataforma, sinopsis,
+                    fechaLanzamiento, cuentaVotos, trailer, url);
+            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/juego/r");
+        } catch (Exception e) {
+            PRG.error("Error al crear la película: " + e.getMessage(), "/juego/r");
+        }
+        return "redirect:/juego/r";
+    }
+    @PostMapping("d")
+    public String delete(
+            @RequestParam("idJuego") Long idJuego) throws DangerException {
+        try {
+            juegoService.delete(idJuego);
+        } catch (Exception e) {
+            PRG.error("", "/pelicula/r");
+        }
+        return "redirect:/pelicula/r";
+    }
 }
