@@ -70,13 +70,6 @@
             border-radius: 10px;
         }
 
-        h1 {
-            color: white;
-            background-color: #076b7a;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
 
         .points {
             color: yellow;
@@ -276,16 +269,27 @@
         .switch-label {
             margin-right: 10px;
         }
+
+        .highlight-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #c5c2c7;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="container">
     <!-- <div>
         <button onclick="toggleView('list-view')">Vista de Lista</button>
         <button onclick="toggleView('table-view')">Vista de Tabla</button>
     </div> -->
     <div class="switch-container">
-        <span style="text-align: center;">Modo de vista:</span>
+        <span style="text-align: right;">Modo de vista:</span>
     </div>
     <div class="toggle-container">
         <input class="toggle-input" type="checkbox" onclick="toggleView()">
@@ -302,9 +306,9 @@
         </div>
     </div>
 
-
-    <div class="container bg-info mt-4 grid-view" id="list-view-container">
-        <h1 class="mt-4">Juegos</h1>
+    <h1 class="highlight-text">Juegos</h1>
+    <div class="  mt-4 grid-view" id="list-view-container" style="border-radius:5%">
+        
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div th:each="juego : ${juegos}" class="col">
                 <div class="card bg-secondary carta">
@@ -349,8 +353,7 @@
                 </div> -->
 
 
-    <div class="container bg-info mt-4 text-info" id="table-view-container" style="display: none;">
-        <h1 class="mt-4">Juegos</h1>
+    <div class="container bg-info mt-4 mb-5 text-info" id="table-view-container" style="display: none;">
         <table id="juegosTable" class="table table-striped table-bordered">
             <thead class="thead-dark">
                 <tr>
@@ -409,7 +412,7 @@
             }
         }
     </script>
-
+</div>
 </body>
 
 </html>
