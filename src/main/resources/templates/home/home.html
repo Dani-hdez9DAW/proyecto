@@ -189,7 +189,7 @@
 
         <div class="row justify-content-center ">
             <div class="col-md-10">
-                <div class="description bg-black text-white justify">
+                <div class="description text-white justify">
                     <p>
                         Explora un universo de entretenimiento sin límites con nuestro catálogo de películas y juegos.
                         Sumérgete en una experiencia única donde podrás descubrir una amplia selección de emocionantes
@@ -213,7 +213,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    
     <div style="text-align: left;">
         <h1 class="text-black bg-secondary" style="border-radius: 10%; width: 12%;">PELÍCULAS</h1>
         <div class="row">
@@ -227,15 +227,14 @@
     </div>
 
 
-
-    <div class="bg-secondary">
-        <br>
+    <div>
+        <br><br><br>
     </div>
 
     <div style="text-align: right;">
         <h1 class="text-black bg-secondary" style="border-radius: 10%; width: 12%;">JUEGOS</h1>
         <div class="row">
-            <div th:each="juego, iterStat : ${juego}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaJuegos}">
+            <div th:each="juego, iterStat : ${juegos}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaJuegos}">
                 <div class="juego-image">
                     <img th:src="@{'/img/juegos/' + ${juego.imagen}}" alt="Imagen de Juego">
                 </div>
@@ -245,7 +244,7 @@
     </div>
 
 
-
+</div>
     <!-- <div class="cards">
         <div class="row">
             <div class="card bg-primary" onclick="showInfo('peliculas')">
