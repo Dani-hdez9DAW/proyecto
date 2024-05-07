@@ -80,6 +80,24 @@
             top: 180px;
             background: #0061ff;
         }
+        @media (max-width: 768px) {
+        .form-control {
+            width: 100%;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+    }
+    .highlight-text {
+        font-family: 'Arial', sans-serif;
+        font-size: 3em;
+        color: #B18FCF; /* Verde */
+        text-transform: uppercase;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        margin-top: 20px;
+        letter-spacing: 2px;
+    }
     </style>
 </head>
 
@@ -91,7 +109,7 @@
         Borrar
     </button>
     <div class="container mt-5">
-        <h1 class="text-center" th:text="${pelicula.titulo}"></h1>
+        <h1 class="text-center highlight-text" th:text="${pelicula.titulo}"></h1>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
@@ -171,7 +189,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Tarjeta para la imagen -->
+
             
         </div>
     </div>
