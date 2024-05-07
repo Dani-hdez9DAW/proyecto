@@ -6,6 +6,14 @@
             margin-top: 15%;
         } */
 
+        /*ANIMACIONES*/
+
+
+
+
+
+
+        /* FIN DE ANIMACIONES*/
         html,
         body {
             height: 100%;
@@ -53,67 +61,13 @@
             }
         }
 
-        .cards {
-            display: flex;
-            flex-direction: column;
-            /* Display cards in a column */
-            align-items: center;
-            /* Align cards in the center horizontally */
-        }
-
-        .card {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-            height: 100px;
-            width: 750px;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            transition: 400ms;
-            animation: fadeIn 1s ease forwards;
-            /* Apply the animation to each card */
-        }
-
-        /* Delay the animation for each card */
-        .cards .card:nth-child(1) {
-            animation-delay: 0.5s;
-        }
-
-        .cards .card:nth-child(2) {
-            animation-delay: 1s;
-        }
-
-
-        .cards .card h1.tip {
-            font-size: 1em;
-            font-weight: 700;
-        }
-
-        .cards .card h1.second-text {
-            font-size: .7em;
-        }
-
-        .cards .card:hover {
-            transform: scale(1.1, 1.1);
-        }
-
-        .cards:hover>.card:not(:hover) {
-            filter: blur(10px);
-            transform: scale(0.9, 0.9);
-        }
-
         .bsb-hero-5 {
             margin-top: -160px;
             height: 55%;
             background-image: url('/img/banner.jpg');
             background-repeat: no-repeat;
             background-size: cover;
-            /* Ajusta la imagen para cubrir todo el div */
             background-position: center;
-            /* Centra la imagen en el div */
             width: 100%;
         }
 
@@ -123,34 +77,153 @@
             line-height: 1.6;
             color: #333;
             margin-top: 30px;
-            /* Espacio entre el texto y el título */
         }
 
         .description p {
             margin-bottom: 20px;
-            /* Espacio entre párrafos */
         }
 
 
         .pelicula-image {
-        width: 100%; 
-        height: auto;  
-        margin-bottom: 20px; 
-    }
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
 
-    .pelicula-image img {
-        width: 100%;  
-        height: auto; 
-        display: block;  
-    }
+        .pelicula-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .highlight-text1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #000000;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(252, 127, 245, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+
+        .highlight-text2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+
+        /* Boton */
+
+        .btn1 {
+            --border-color: linear-gradient(-45deg, #ffae00, #7e03aa, #00fffb);
+            --border-width: 0.125em;
+            --curve-size: 0.5em;
+            --blur: 30px;
+            --bg: #080312;
+            --color: #afffff;
+            color: var(--color);
+            cursor: pointer;
+            /* use position: relative; so that BG is only for .btn */
+            position: relative;
+            isolation: isolate;
+            display: inline-grid;
+            place-content: center;
+            padding: 0.5em 1.5em;
+            font-size: 17px;
+            border: 0;
+            text-transform: uppercase;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+            clip-path: polygon(
+                    /* Top-left */
+                    0% var(--curve-size),
+                    var(--curve-size) 0,
+                    /* top-right */
+                    100% 0,
+                    100% calc(100% - var(--curve-size)),
+                    /* bottom-right 1 */
+                    calc(100% - var(--curve-size)) 100%,
+                    /* bottom-right 2 */
+                    0 100%);
+            transition: color 250ms;
+        }
+
+        .btn1::after,
+        .btn1::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+        }
+
+        .btn1::before {
+            background: var(--border-color);
+            background-size: 300% 300%;
+            animation: move-bg7234 5s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes move-bg7234 {
+            0% {
+                background-position: 31% 0%;
+            }
+
+            50% {
+                background-position: 70% 100%;
+            }
+
+            100% {
+                background-position: 31% 0%;
+            }
+        }
+
+        .btn1::after {
+            background: var(--bg);
+            z-index: -1;
+            clip-path: polygon(
+                    /* Top-left */
+                    var(--border-width) calc(var(--curve-size) + var(--border-width) * 0.5),
+                    calc(var(--curve-size) + var(--border-width) * 0.5) var(--border-width),
+                    /* top-right */
+                    calc(100% - var(--border-width)) var(--border-width),
+                    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+                    /* bottom-right 1 */
+                    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+                    /* bottom-right 2 */
+                    var(--border-width) calc(100% - var(--border-width)));
+            transition: clip-path 500ms;
+        }
+
+        .btn1:where(:hover, :focus)::after {
+            clip-path: polygon(
+                    /* Top-left */
+                    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+                    calc(100% - var(--border-width)) var(--border-width),
+                    /* top-right */
+                    calc(100% - var(--border-width)) var(--border-width),
+                    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+                    /* bottom-right 1 */
+                    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+                    /* bottom-right 2 */
+                    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)));
+            transition: 200ms;
+        }
+
+        .btn1:where(:hover, :focus) {
+            color: #fff4f4;
+        }
+
+
+        /* FIN DEL boton */
     </style>
 </head>
 
 <body class="bg-black">
 
-
-    <!-- <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css" /> -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/heroes/hero-5/assets/css/hero-5.css" /> -->
 
     <section class="bsb-hero-5 px-3 bsb-overlay">
         <div class="container">
@@ -187,7 +260,7 @@
             </a>
         </div> -->
 
-        <div class="row justify-content-center ">
+        <div class="row justify-content-center mb-4 ">
             <div class="col-md-10">
                 <div class="description text-white justify">
                     <p>
@@ -213,67 +286,50 @@
                 </div>
             </div>
         </div>
-    
-    <div style="text-align: left;">
-        <h1 class="text-black bg-secondary" style="border-radius: 10%; width: 12%;">PELÍCULAS</h1>
-        <div class="row">
-            <div th:each="pelicula, iterStat : ${peliculas}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaPeliculas}">
-                <div class="pelicula-image">
-                    <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Imagen de Película">
+
+        <div class="bg-secondary p-4 position-relative"
+            style="text-align: left; border-radius: 2%; box-shadow: #cdbed6 -2px 2px 4px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="highlight-text1" style="border-radius: 10%; width: 12%;">PELICULAS</h1>
+                <!-- Botón de "Ver más" -->
+                <a href="/pelicula/r" class="btn1">Ver más</a>
+            </div>
+            <div class="row">
+                <div th:each="pelicula, iterStat : ${peliculas}" class="col-md-3"
+                    th:if="${iterStat.index lt cantidadMaximaPeliculas}">
+                    <div class="pelicula-image">
+                        <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Imagen de Película">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mb-5">
+        </div>
+
+        <div class="bg-primary p-4 position-relative" style="text-align: right; border-radius: 2%; box-shadow: #c5c2c7 2px 2px 4px; ">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="/juego/r" class="btn1">Ver más</a>
+                <h1 class="highlight-text2" style="border-radius: 10%; width: 12%; margin-right: 80px;">JUEGOS</h1>
+            </div>
+            <div class="row">
+                <div th:each="juego, iterStat : ${juegos}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaJuegos}">
+                    <div class="juego-image">
+                        <img th:src="@{'/img/juegos/' + ${juego.imagen}}" alt="Imagen de Juego" style="max-width: 100%; height: auto;">
+                    </div>
                 </div>
             </div>
         </div>
         
-    </div>
-
-
-    <div>
-        <br><br><br>
-    </div>
-
-    <div style="text-align: right;">
-        <h1 class="text-black bg-secondary" style="border-radius: 10%; width: 12%;">JUEGOS</h1>
-        <div class="row">
-            <div th:each="juego, iterStat : ${juegos}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaJuegos}">
-                <div class="juego-image">
-                    <img th:src="@{'/img/juegos/' + ${juego.imagen}}" alt="Imagen de Juego">
-                </div>
-            </div>
-        </div>
         
-    </div>
 
 
-</div>
-    <!-- <div class="cards">
-        <div class="row">
-            <div class="card bg-primary" onclick="showInfo('peliculas')">
-                <h1 class="tip">PELICULAS</h1>
-            </div>
-            <div class="card bg-primary" onclick="showInfo('videojuegos')">
-                <h1 class="tip">VIDEOJUEGOS</h1>
-            </div>
+        <div class="mb-5 ">
         </div>
-    </div> -->
 
-    <!-- Information sections
-    <div id="peliculasInfo" style="display: none;">
-        <p>peliculas</p>
+
+
+
     </div>
-    <div id="videojuegosInfo" style="display: none;">
-        <p>juegos</p>
-    </div> -->
-
-
-    <script>
-        // JavaScript function to show information based on selected card
-        function showInfo(category) {
-            // Hide all information sections
-            document.getElementById('peliculasInfo').style.display = 'none';
-            document.getElementById('videojuegosInfo').style.display = 'none';
-
-            // Show information section based on the selected category
-            document.getElementById(category + 'Info').style.display = 'block';
-        }
-    </script>
 </body>

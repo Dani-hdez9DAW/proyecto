@@ -34,22 +34,21 @@ public class HomeController {
 	public String home(ModelMap m) {
 		List<Juego> juegos = juegoService.findAll();
 		int cantidadMaximaJuegos = 4; 
-        m.put("juegos", juegos);
+		m.put("juegos", juegos);
 		m.addAttribute("cantidadMaximaJuegos", cantidadMaximaJuegos);
-
-		
-
+	
 		List<Pelicula> peliculas = peliculaService.findAll();
 		int cantidadMaximaPeliculas = 4; 
 		m.put("peliculas", peliculas);
 		m.addAttribute("cantidadMaximaPeliculas", cantidadMaximaPeliculas);
-
-
-		// List<Pelicula> peliculasPF = peliculaService.findLastFourMovies();
-		// m.put("peliculasPF", peliculasPF);
+	
+		// Agrega las películas para el carrusel
+		m.put("carouselPeliculas", peliculas.subList(0, Math.min(4, peliculas.size())));
+	
 		m.put("view", "home/home");
 		return "_t/frame";
 	}
+	
 
 	@GetMapping("/info")
 	public String info(HttpSession s, ModelMap m) {

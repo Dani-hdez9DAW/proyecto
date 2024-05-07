@@ -127,74 +127,74 @@
 
 
 
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
 
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
 
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
 
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
 
-    
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-}
+    @media screen and (max-height: 450px) {
+        .sidenav {
+            padding-top: 15px;
+        }
 
-.sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
+        .sidenav a {
+            font-size: 18px;
+        }
+    }
 
-.sidenav a:hover {
-  color: #f1f1f1;
-}
+    .navbar {
+        background-color: transparent !important;
+        border-bottom: none !important;
+    }
 
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
+    .navbar-nav .nav-link {
+        color: white !important;
+        /* Color del texto del navbar */
+    }
 
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-
-
-.navbar {
-    background-color: transparent !important;
-    border-bottom: none !important;
-  }
-
-  .navbar-nav .nav-link {
-    color: white !important; /* Color del texto del navbar */
-  }
-
-  .navbar-nav .nav-link:hover {
-    color: rgba(255, 255, 255, 0.7) !important; /* Color del texto del navbar al pasar el mouse */
-  }
-
+    .navbar-nav .nav-link:hover {
+        color: rgba(255, 255, 255, 0.7) !important;
+        /* Color del texto del navbar al pasar el mouse */
+    }
 </style>
-
 
 <div id="mySidenav" class="sidenav" style="margin-top:80px opacity-0">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a href="/pelicula/r">Peliculas</a>
     <a href="/juego/r">Juegos</a>
     <a href="/categoria/r">Categorias</a>
+    <hr>
     <a th:if="${session.usuario!=null and session.usuario.esAdmin==true}">
+        <h4>Opciones de administrador</h4>
         <div class="dropdown">
             <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -209,28 +209,33 @@
             </div>
         </div>
     </a>
-    <a href="#">Contact</a>
+
+    <a href="#" id="personIcon" th:if="${session.usuario==null}">Identificate</a>
+    <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button
+        class="btn btn-primary" type="button">Logout</button></a>
+
 </div>
 
-  
-  
-  <script>
-  function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-  }
-  
-  function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-  }
-  </script>
+
+
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+</script>
 
 
 
 
 <nav class="navbar navbar-expand-lg  navbar-dark rounded justify-content-center navbar-scroll">
     <div class="container-fluid">
-        <span style="font-size:30px;cursor:pointer;" onclick="openNav()">&#9776;</span>
-        <a class="navbar-brand" href="/">Inicio</a>
+        <span style="font-size:30px;cursor:pointer; color: plum;" onclick="openNav()">&#9776;</span>
+        <a class="navbar-brand" href="/" style="margin-left: 30px;">Inicio</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -281,7 +286,7 @@
 
             <li class="nav-item" th:if="${session.usuario==null}">
                 <a class="nav-link" href="#" style="color: white;">
-                    <i id="personIcon" class="bi bi-person-circle  " style="font-size: 20px; cursor: pointer;"> <span
+                    <i id="personIcon" class="bi bi-person-circle " style="font-size: 20px; cursor: pointer;"> <span
                             style="margin-left: 5px;">Identificate</span></i>
                 </a>
             </li>
@@ -305,10 +310,7 @@
                     <a class="dropdown-item" href="#">Ayuda</a>
                     <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button
                             class="btn btn-primary" type="button">Logout</button></a>
-
                 </div>
-
-
             </div>
             </li>
         </ul>
@@ -351,9 +353,6 @@
                     </div>
                     <!-- <button class="button3">Forgot Password</button> -->
                 </form>
-
-
-
             </div>
         </div>
     </div>
@@ -379,7 +378,7 @@
                     </div>
                     <div class="field m-2">
                         <input autocomplete="off" placeholder="Email" class="input-field" type="text" id="id-email"
-                        name="email" required>
+                            name="email" required>
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                             fill="currentColor" viewBox="0 0 16 16">
                             <path
