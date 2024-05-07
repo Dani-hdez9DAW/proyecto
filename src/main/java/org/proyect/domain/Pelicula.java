@@ -55,7 +55,6 @@ public class Pelicula extends Elemento {
         this.imagen = imagen;
         this.trailer = trailer;
         this.url = url;
-
     }
 
     // ==================
