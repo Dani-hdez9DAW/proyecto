@@ -9,11 +9,12 @@
     <link href="styles.css" rel="stylesheet">
     <style>
         /* Estilos personalizados */
-        .movie-poster {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-right: 20px;
-        }
+        .movie-poster img {
+            width: 100%;
+            /* Hace que la imagen ocupe el 100% del ancho del contenedor */
+            height: auto;
+            /* Permite que la altura se ajuste automáticamente para mantener la proporción */
+        } 
 
         .movie-details {
             width: calc(100% - 150px);
@@ -26,6 +27,59 @@
             resize: none;
             /* Deshabilita el redimensionamiento */
         }
+
+        .card {
+            position: relative;
+            background: lightgrey;
+            box-shadow: #d11bff42 0 15px 40px -5px;
+            z-index: 1;
+            border-radius: 21px;
+            overflow: hidden;
+        }
+
+        .card__content {
+            background: linear-gradient(rgba(255, 255, 255, 0.473), rgba(150, 150, 150, 0.25));
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            border-radius: 21px;
+        }
+
+        .card .blob {
+            position: absolute;
+            z-index: -1;
+            border-radius: 5em;
+            width: 200px;
+            height: 200px;
+        }
+
+        .card .blob:nth-child(2) {
+            left: -50px;
+            top: -90px;
+            background: #ff930f;
+        }
+
+        .card .blob:nth-child(3) {
+            left: 110px;
+            top: -20px;
+            z-index: -1;
+            background: #bf0fff;
+        }
+
+        .card .blob:nth-child(4) {
+            left: -40px;
+            top: 100px;
+            background: #ff1b6b;
+        }
+
+        .card .blob:nth-child(5) {
+            left: 100px;
+            top: 180px;
+            background: #0061ff;
+        }
     </style>
 </head>
 
@@ -37,82 +91,91 @@
         Borrar
     </button>
     <div class="container mt-5">
+        <h1 class="text-center" th:text="${pelicula.titulo}"></h1>
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card__content">
+                        <div class="movie-poster">
+                            <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Poster de la película"
+                                class="img-fluid">
+                        </div>
+                    </div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                </div>
+            </div>
+            <!-- Tarjeta para la información -->
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h1 class="text-center">Detalles de la película</h1>
+                        <h1 class="text-center">Detalles</h1>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <!-- Tarjeta para la imagen -->
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="movie-poster">
-                                            <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}"
-                                                alt="Poster de la película" class="img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
+                        <form action="/pelicula/u" method="post">
+                            <div class="form-group">
+                                <label for="id-nombre">Nombre</label>
+                                <input type="text" id="id-nombre" name="nombre" class="form-control" disabled required
+                                    th:value="${pelicula.titulo}">
                             </div>
-                            <!-- Tarjeta para los detalles -->
-                            <div class="col-md-8">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <form action="/pelicula/u" method="post">
-                                            <div class="form-group">
-                                                <label for="id-nombre">Nombre</label>
-                                                <input type="text" id="id-nombre" name="nombre" class="form-control"
-                                                    disabled required th:value="${pelicula.titulo}">
-                                                <label for="id-clasificacion">Clasificación</label>
-                                                <input type="text" id="id-clasificacion" name="clasificacion"
-                                                    class="form-control" disabled required
-                                                    th:value="${pelicula.clasificacion}">
-                                                <label for="id-estado">Estado</label>
-                                                <input type="text" id="id-estado" name="estado" class="form-control"
-                                                    disabled required th:value="${pelicula.estado}">
-                                                <label for="id-fechaSalida">Fecha de estreno</label>
-                                                <input type="date" id="id-fechaSalida" name="fechaSalida"
-                                                    class="form-control" disabled required
-                                                    th:value="${pelicula.fecha_salida}">
-                                                <label for="id-duracion">Duración</label>
-                                                <input type="text" id="id-duracion" name="duracion" class="form-control"
-                                                    disabled required th:value="${pelicula.duracion}">
-                                                <label for="id-plataforma">Plataforma</label>
-                                                <input type="text" id="id-plataforma" name="plataforma"
-                                                    class="form-control" disabled required
-                                                    th:value="${pelicula.plataforma}">
-                                                <label for="id-cuentaVotos">Cuenta votos</label>
-                                                <input type="text" id="id-cuentaVotos" name="cuentaVotos"
-                                                    class="form-control" disabled required
-                                                    th:value="${pelicula.cuenta_votos}">
-                                                <label for="id-trailer">Ver trailer</label>
-                                                <a id="trailerLink" class="btn btn-secondary" name="trailer"
-                                                    th:href="${pelicula.trailer}" target="_blank">Ver trailer</a>
-
-                                                <label for="id-urlCompra">URL de compra</label>
-                                                <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
-                                                    th:href="${pelicula.url}" target="_blank">Comprar</a>
-
-                                                <label for="id-sinopsis">Sinopsis</label>
-                                                <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
-                                                    th:text="${pelicula.sinopsis}" disabled="disabled"></textarea>
-                                                <input type="hidden" id="idpelicula" name="idpelicula"
-                                                    th:value="${pelicula.idElemento}">
-                                            </div>
-                                            <button type="submit" id="btnActualizar" style="display:none"
-                                                class="btn btn-primary btn-block">Guardar</button>
-                                        </form>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="id-clasificacion">Clasificación</label>
+                                <input type="text" id="id-clasificacion" name="clasificacion" class="form-control"
+                                    disabled required th:value="${pelicula.clasificacion}">
                             </div>
-                        </div>
+                            <!-- Agrega los demás campos de detalle aquí -->
+                            <label for="id-estado">Estado</label>
+                            <input type="text" id="id-estado" name="estado" class="form-control" disabled required
+                                th:value="${pelicula.estado}">
+                            <div class="form-group">
+                                <label for="id-fechaSalida">Fecha de estreno</label>
+                                <input type="date" id="id-fechaSalida" name="fechaSalida" class="form-control" disabled
+                                    required th:value="${pelicula.fecha_salida}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id-duracion">Duración</label>
+                                <input type="text" id="id-duracion" name="duracion" class="form-control" disabled
+                                    required th:value="${pelicula.duracion}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id-plataforma">Plataforma</label>
+                                <input type="text" id="id-plataforma" name="plataforma" class="form-control" disabled
+                                    required th:value="${pelicula.plataforma}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id-cuentaVotos">Cuenta votos</label>
+                                <input type="text" id="id-cuentaVotos" name="cuentaVotos" class="form-control" disabled
+                                    required th:value="${pelicula.cuenta_votos}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id-trailer">Ver trailer</label>
+                                <a id="trailerLink" class="btn btn-secondary" name="trailer"
+                                    th:href="${pelicula.trailer}" target="_blank">Ver trailer</a>
+                            </div>
+                            <div class="form-group">
+                                <label for="id-urlCompra">URL de compra</label>
+                                <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
+                                    th:href="${pelicula.url}" target="_blank">Comprar</a>
+                            </div>
+                            <div class="form-group">
+                                <label for="id-sinopsis">Sinopsis</label>
+                                <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
+                                    th:text="${pelicula.sinopsis}" disabled="disabled"></textarea>
+                            </div>
+                            <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
+                            <button type="submit" id="btnActualizar" style="display:none"
+                                class="btn btn-primary btn-block">Guardar</button>
+                        </form>
                     </div>
                 </div>
             </div>
+            <!-- Tarjeta para la imagen -->
+            
         </div>
     </div>
+
 
 </body>
 <script>
