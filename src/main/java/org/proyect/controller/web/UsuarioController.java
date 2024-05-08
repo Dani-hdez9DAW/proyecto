@@ -60,6 +60,20 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("u")
+public String update(@RequestParam("id") String email,
+                        ModelMap m, HttpSession session) {
+    if (H.isRolOk("admin", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
+        // Si el usuario está autenticado, continúa con la lógica para cargar la vista rDetailed
+        m.put("usuario", usuarioService.findByCorreo(email));
+        System.out.println("" + usuarioService.findByCorreo(email));
+        m.put("view", "usuario/u");
+        return "_t/frame";
+    } else {
+        // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la página de inicio de sesión
+        return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
+    }
+}
     @GetMapping("c")
     public String c(ModelMap m) {
         m.put("view", "usuario/c");

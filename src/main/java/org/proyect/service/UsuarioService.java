@@ -29,7 +29,9 @@ public class UsuarioService {
     public Usuario findById(Long id_Usuario) {
         return usuarioRepository.findById(id_Usuario).get();
     }
-
+    public Usuario findByCorreo(String email) {
+        return usuarioRepository.getByCorreo(email);
+    }
     public void update(Long id_Usuario, String nombre) {
         Usuario usuario = usuarioRepository.findById(id_Usuario).get();
         usuario.setNombre(nombre);
