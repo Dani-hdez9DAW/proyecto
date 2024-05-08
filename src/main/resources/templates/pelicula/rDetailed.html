@@ -196,6 +196,8 @@
         class="btn btn-primary" onclick="cambiarDireccionForm()">
         Borrar
     </button>
+    <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" onclick="restablecerCampos();"
+        class="btn btn-secondary">Restablecer campos</button>
     <div class="container mt-5">
         <h1 class="text-center highlight-text" th:text="${pelicula.titulo}"></h1>
         <div class="heart-container" title="Like">
@@ -285,11 +287,13 @@
                                 <label for="id-trailer">Ver trailer</label>
                                 <iframe width="560" height="315" th:src="${pelicula.trailer}" frameborder="0"
                                     allowfullscreen></iframe>
+                                <input type="hidden" id="id-trailer" th:value="${pelicula.trailer}" class="form-control" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="id-urlCompra">URL de compra</label>
                                 <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
                                     th:href="${pelicula.url}" target="_blank">Comprar</a>
+                                <input type="hidden" id="id-urlCompra" th:value="${pelicula.url}" class="form-control" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="id-sinopsis">Sinopsis</label>
@@ -336,28 +340,62 @@
     }
 
     function habilitarCampos() {
-        // Obtener el valor del href de los botones de trailer y URL de compra
-        var trailerLink = document.getElementById('trailerLink').getAttribute('href');
-        var urlCompraLink = document.getElementById('urlCompraLink').getAttribute('href');
-
-        // Convertir los botones de trailer y URL de compra a campos de texto
-        var trailerCampo = document.getElementById('trailerLink');
-        trailerCampo.outerHTML = '<input type="text" id="id-trailer" name="trailer" class="form-control" required value="' + trailerLink + '">';
-
-        var urlCompraCampo = document.getElementById('urlCompraLink');
-        urlCompraCampo.outerHTML = '<input type="text" id="id-urlCompra" name="urlCompra" class="form-control" required value="' + urlCompraLink + '">';
-
-        // Obtener todos los elementos de formulario dentro del div con la clase "card-body"
-        var campos = document.querySelectorAll('.card-body input, .card-body textarea');
-
-        // Iterar sobre los elementos y habilitarlos
+        var campos = document.querySelectorAll('.form-control');
         campos.forEach(function (campo) {
             campo.removeAttribute('disabled');
+            campo.setAttribute('type', 'text');
         });
 
-        // Mostrar el botón de guardar
-        document.getElementById('btnActualizar').style.display = 'block';
+        var iframe = document.querySelector('.form-group iframe');
+        var btnActualizar = document.getElementById('btnActualizar');
+        var urlCompraLink = document.getElementById('urlCompraLink');
+
+        if (iframe) {
+            iframe.style.display = 'none';
+        }
+
+        if (btnActualizar) {
+            btnActualizar.style.display = 'none';
+        }
+
+        if (urlCompraLink) {
+            urlCompraLink.style.display = 'none';
+        }
     }
+    function restablecerCampos() {
+        var campos = document.querySelectorAll('.form-control');
+        campos.forEach(function (campo) {
+            campo.setAttribute('disabled', 'disabled');
+            campo.setAttribute('type', 'text');
+        });
+
+        var iframe = document.querySelector('.form-group iframe');
+        var btnActualizar = document.getElementById('btnActualizar');
+        var urlCompraLink = document.getElementById('urlCompraLink');
+        var urlInput = document.getElementById('id-urlCompra');
+        var trailerInput = document.getElementById('id-trailer');
+
+        if (iframe) {
+            iframe.style.display = 'block';
+        }
+
+        if (btnActualizar) {
+            btnActualizar.style.display = 'none';
+        }
+
+        if (urlCompraLink) {
+            urlCompraLink.style.display = 'block';
+        }
+
+        if (urlInput) {
+            urlInput.setAttribute("type", "hidden");
+        }
+
+        if (trailerInput) {
+            trailerInput.setAttribute("type", "hidden");
+        }
+    }
+
 </script>
 
 
