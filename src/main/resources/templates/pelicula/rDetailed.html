@@ -28,6 +28,18 @@
             /* Deshabilita el redimensionamiento */
         }
 
+        .card-small {
+            transform: scale(0.5);
+        }
+
+        .card-offset {
+            position: relative;
+            top: -200px;
+            /* Ajusta la posición hacia arriba */
+            left: 180px;
+            /* Ajusta la posición hacia la derecha */
+        }
+
         .card {
             position: relative;
             background: lightgrey;
@@ -186,6 +198,46 @@
                 display: none;
             }
         }
+
+        #svg circle {
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+            stroke: #666;
+            stroke-width: 1em;
+        }
+
+        #svg #bar {
+            stroke: #39D2C0;
+        }
+
+        #cont {
+            display: block;
+            height: 200px;
+            width: 200px;
+            margin: 2em auto;
+            box-shadow: 0 0 1em black;
+            border-radius: 100%;
+            position: relative;
+        }
+
+        #cont:after {
+            position: absolute;
+            display: block;
+            height: 160px;
+            width: 160px;
+            left: 50%;
+            top: 50%;
+            box-shadow: inset 0 0 1em black;
+            content: attr(data-pct)"";
+            margin-top: -80px;
+            margin-left: -80px;
+            border-radius: 100%;
+            line-height: 160px;
+            font-size: 4em;
+            text-align: center;
+            color: white;
+            text-shadow: 0 0 0.5em black;
+        }
     </style>
 </head>
 
@@ -227,20 +279,7 @@
         <button id="guardarBtn" style="display: none;" onclick="guardar()">Guardar</button>
         </form>
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card__content">
-                        <div class="movie-poster">
-                            <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Poster de la película"
-                                class="img-fluid">
-                        </div>
-                    </div>
-                    <div class="blob"></div>
-                    <div class="blob"></div>
-                    <div class="blob"></div>
-                    <div class="blob"></div>
-                </div>
-            </div>
+
             <!-- Tarjeta para la información -->
             <div class="col-md-6">
                 <div class="card">
@@ -287,13 +326,15 @@
                                 <label for="id-trailer">Ver trailer</label>
                                 <iframe width="560" height="315" th:src="${pelicula.trailer}" frameborder="0"
                                     allowfullscreen></iframe>
-                                <input type="hidden" id="id-trailer" th:value="${pelicula.trailer}" class="form-control" disabled>
+                                <input type="hidden" id="id-trailer" th:value="${pelicula.trailer}" class="form-control"
+                                    disabled>
                             </div>
                             <div class="form-group">
                                 <label for="id-urlCompra">URL de compra</label>
                                 <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
                                     th:href="${pelicula.url}" target="_blank">Comprar</a>
-                                <input type="hidden" id="id-urlCompra" th:value="${pelicula.url}" class="form-control" disabled>
+                                <input type="hidden" id="id-urlCompra" th:value="${pelicula.url}" class="form-control"
+                                    disabled>
                             </div>
                             <div class="form-group">
                                 <label for="id-sinopsis">Sinopsis</label>
@@ -307,7 +348,31 @@
                     </div>
                 </div>
             </div>
-
+            <div class="col-md-6">
+                <div class="card card-small card-offset">
+                    <div class="card__content">
+                        <div class="movie-poster">
+                            <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Poster de la película"
+                                class="img-fluid">
+                        </div>
+                    </div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                </div>
+                <h1 class="text-center highlight-text">PUNTUACION</h1>
+                <div id="cont" data-pct="">
+                    <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                            stroke-dashoffset="0"></circle>
+                        <circle id="bar" r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                            stroke-dashoffset="0"></circle>
+                    </svg>
+                </div>
+                <input type="hidden" id="puntuacion" th:value="${pelicula.puntuacion}">
+            </div>
 
         </div>
     </div>
@@ -315,6 +380,28 @@
 
 </body>
 <script>
+    $(document).ready(function () {
+        // Obtiene el valor inicial del elemento input
+        var val = parseInt($('#puntuacion').val());
+
+        // Verifica si el valor obtenido es un número
+        if (isNaN(val)) {
+            val = 10; // Establece un valor predeterminado si no es un número
+        } else {
+            var $circle = $('#svg #bar');
+            var r = $circle.attr('r');
+            var c = Math.PI * (r * 2);
+
+            if (val < 0) { val = 0; }
+            if (val > 10) { val = 10; }
+
+            var pct = ((10 - val) / 10) * c;
+
+            $circle.css({ strokeDashoffset: pct });
+
+            $('#cont').attr('data-pct', val);
+        }
+    });
     function mostrarBoton() {
         var checkBox = document.getElementById("Give-It-An-Id");
         var guardarBtn = document.getElementById("guardarBtn");
