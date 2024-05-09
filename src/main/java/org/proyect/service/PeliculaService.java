@@ -50,6 +50,10 @@ public class PeliculaService {
         return peliculaRepository.findByTitulo(titulo);
     }
 
+    public Pelicula getByTitulo(String titulo) {
+        return peliculaRepository.getByTitulo(titulo);
+    }
+
     public Pelicula findByIdElemento(Long elementoId) {
         return peliculaRepository.findById(elementoId).get();
     }

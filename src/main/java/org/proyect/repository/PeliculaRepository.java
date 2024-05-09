@@ -3,10 +3,6 @@ package org.proyect.repository;
 import java.util.List;
 
 import org.proyect.domain.Pelicula;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +16,9 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
     //     Page<Pelicula> page = findAll(pageable);
     //     return page.getContent();
     // }
+
+
+    public Pelicula getByTitulo(String titulo);
 
 
 }

@@ -22,6 +22,10 @@ public class UsuarioService {
         return usuarioRepository.findByNombre(nombre);
     }
 
+    public Usuario getByNombre(String nombre) {
+        return usuarioRepository.getByNombre(nombre);
+    }
+
     public Usuario save(String nombre, String passwd,String correo) {
         return usuarioRepository.save(new Usuario(nombre, (new BCryptPasswordEncoder()).encode(passwd), correo, 0));
     }
@@ -29,9 +33,11 @@ public class UsuarioService {
     public Usuario findById(Long id_Usuario) {
         return usuarioRepository.findById(id_Usuario).get();
     }
+
     public Usuario findByCorreo(String email) {
         return usuarioRepository.getByCorreo(email);
     }
+    
     public void update(Long id_Usuario, String nombre) {
         Usuario usuario = usuarioRepository.findById(id_Usuario).get();
         usuario.setNombre(nombre);
@@ -77,5 +83,9 @@ public class UsuarioService {
             // Manejar el caso en que el usuario no exista
             throw new IllegalArgumentException("El usuario con nombre " + email + " no existe");
         }
+    }
+
+    public void saveUsuarioPeliculas(Usuario usuario) {
+        usuarioRepository.save(usuario);
     }
 }
