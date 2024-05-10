@@ -16,6 +16,14 @@
             /* Permite que la altura se ajuste automáticamente para mantener la proporción */
         }
 
+        .date {
+            color: rgb(208, 255, 0);
+        }
+
+        .time {
+            color: rgb(208, 255, 0);
+        }
+
         .movie-details {
             width: calc(100% - 150px);
             /* Para dejar espacio a la imagen */
@@ -288,26 +296,27 @@
                     </div>
                     <div class="card-body">
                         <form action="/pelicula/u" method="post">
-                            <div class="form-group">
+                            <div class="form-group" style="display: none;">
                                 <label for="id-nombre">Nombre</label>
                                 <input type="text" id="id-nombre" name="nombre" class="form-control" disabled required
                                     th:value="${pelicula.titulo}">
                             </div>
-                            <div class="form-group">
+                            <div id="clasificacion" class="form-group" style="display: none;">
                                 <label for="id-clasificacion">Clasificación</label>
                                 <input type="text" id="id-clasificacion" name="clasificacion" class="form-control"
                                     disabled required th:value="${pelicula.clasificacion}">
                             </div>
-                            <!-- Agrega los demás campos de detalle aquí -->
-                            <label for="id-estado">Estado</label>
-                            <input type="text" id="id-estado" name="estado" class="form-control" disabled required
-                                th:value="${pelicula.estado}">
-                            <div class="form-group">
+                            <div id="estado" class="form-group" style="display: none;">
+                                <label for="id-estado">Estado</label>
+                                <input type="text" id="id-estado" name="estado" class="form-control" disabled required
+                                    th:value="${pelicula.estado}">
+                            </div>
+                            <div id="fechaEstreno" class="form-group" style="display: none;">
                                 <label for="id-fechaSalida">Fecha de estreno</label>
                                 <input type="date" id="id-fechaSalida" name="fechaSalida" class="form-control" disabled
                                     required th:value="${pelicula.fecha_salida}">
                             </div>
-                            <div class="form-group">
+                            <div id="peliDuracion" class="form-group" style="display: none;">
                                 <label for="id-duracion">Duración</label>
                                 <input type="text" id="id-duracion" name="duracion" class="form-control" disabled
                                     required th:value="${pelicula.duracion}">
@@ -361,8 +370,14 @@
                     <div class="blob"></div>
                     <div class="blob"></div>
                 </div>
-                <h1 class="text-center highlight-text">PUNTUACION</h1>
-                <div id="cont" data-pct="">
+                <p class="card-text card-offset"><span th:utext="'
+                     ' + |${pelicula.clasificacion} m.|"></span></p>
+                <p class="card-text card-offset time"><span th:utext="'
+                    <i class=\'bi bi-alarm\'></i>  ' + |${pelicula.duracion}|"></span></p>
+                <p class="text-center card-offset date"><span th:utext="'
+                    <i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span></p>
+                <h1 class="text-center card-small card-offset highlight-text">PUNTUACION</h1>
+                <div id="cont" class="card-small card-offset" data-pct="">
                     <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
                         xmlns="http://www.w3.org/2000/svg">
                         <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
@@ -425,7 +440,17 @@
         borrarButton.classList.remove('btn-primary');
         borrarButton.classList.add('btn-danger');
     }
-
+    function obtenerCamposOcultos() {
+        var camposOcultos = [];
+        var campos = document.querySelectorAll('.form-control');
+        campos.forEach(function (campo) {
+            var estilo = window.getComputedStyle(campo);
+            if (estilo.display === 'none') {
+                camposOcultos.push(campo);
+            }
+        });
+        return camposOcultos;
+    }
     function habilitarCampos() {
         var campos = document.querySelectorAll('.form-control');
         campos.forEach(function (campo) {
@@ -436,6 +461,12 @@
         var iframe = document.querySelector('.form-group iframe');
         var btnActualizar = document.getElementById('btnActualizar');
         var urlCompraLink = document.getElementById('urlCompraLink');
+        var estado = document.getElementById('estado');
+        var duracion = document.getElementById('duracion');
+        var fechaEstreno = document.getElementById('fechaEstreno');
+        var duracion = document.getElementById('peliDuracion');
+
+
 
         if (iframe) {
             iframe.style.display = 'none';
@@ -448,6 +479,19 @@
         if (urlCompraLink) {
             urlCompraLink.style.display = 'none';
         }
+        if (estado) {
+            estado.style.display = 'inline';
+        }
+        if (duracion) {
+            duracion.style.display = 'inline';
+        }
+        if (fechaEstreno) {
+            fechaEstreno.style.display = 'inline';
+        }
+        if (duracion) {
+            duracion.style.display = 'inline';
+        }
+
     }
     function restablecerCampos() {
         var campos = document.querySelectorAll('.form-control');
