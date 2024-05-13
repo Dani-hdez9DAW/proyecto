@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 public class Juego extends Elemento {
 
     @Column
-    private Long id_juego;
-    @Column
     private String plataforma;
 
     @ManyToMany(mappedBy = "juegosFav")
@@ -25,8 +23,7 @@ public class Juego extends Elemento {
     @ManyToMany(mappedBy = "categoriaJuegos")
     private List<Categoria> categorias;
 
-    public Juego(Long id_juego, String plataforma) {
-        this.id_juego = id_juego;
+    public Juego(String plataforma) {
         this.plataforma = plataforma;
         this.usuarios = new ArrayList<>();
     }

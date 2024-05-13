@@ -18,7 +18,7 @@ public class JuegoService {
     }
 
     public void save(String nombre) {
-        Juego Juego = new Juego(null, nombre);
+        Juego Juego = new Juego(nombre);
         juegoRepository.save(Juego);
     }
 
