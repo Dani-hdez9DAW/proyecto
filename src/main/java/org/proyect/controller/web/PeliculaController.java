@@ -10,11 +10,13 @@ import java.util.List;
 
 import org.proyect.domain.Categoria;
 import org.proyect.domain.Pelicula;
+import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
 import org.proyect.service.PeliculaService;
+import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,7 +34,9 @@ public class PeliculaController {
     @Autowired
     private PeliculaService peliculaService;
     @Autowired
-    private CategoriaService categoriaServiceService;
+    private CategoriaService categoriaService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("r")
     public String r(ModelMap m) {
@@ -61,7 +65,7 @@ public class PeliculaController {
     @GetMapping("c")
     public String c(ModelMap m, HttpSession session) {
         if (H.isRolOk("admin", session)) { // Verifica si el usuario está autenticado
-            List<Categoria> categorias = categoriaServiceService.findAll();
+            List<Categoria> categorias = categoriaService.findAll();
             m.put("categorias", categorias);
             m.put("view", "pelicula/c");
 
@@ -118,43 +122,73 @@ public class PeliculaController {
         return "redirect:/pelicula/r";
     }
 
-   @GetMapping("rDetailed")
-public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
-                        ModelMap m, HttpSession session) {
-    if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
-        // Si el usuario está autenticado, continúa con la lógica para cargar la vista rDetailed
-        m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
-        m.put("view", "pelicula/rDetailed");
-        return "_t/frame";
-    } else {
-        // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la página de inicio de sesión
-        return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
+    @GetMapping("rDetailed")
+    public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
+            ModelMap m, HttpSession session) {
+        if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
+            // Si el usuario está autenticado, continúa con la lógica para cargar la vista
+            // rDetailed
+            m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
+            m.put("view", "pelicula/rDetailed");
+            return "_t/frame";
+        } else {
+            // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la
+            // página de inicio de sesión
+            return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
+        }
     }
-}
 
     @PostMapping("u")
     public String updatePost(
-        @RequestParam("idpelicula") Long idPelicula,
-        @RequestParam("nombre") String titulo,
-        @RequestParam("clasificacion") String clasificacion,
-        @RequestParam("duracion") Integer duracion,
-        @RequestParam("estado") String estado,
-        @RequestParam("plataforma") String plataforma,
-        @RequestParam("sinopsis") String sinopsis,
-        @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
-        @RequestParam("cuentaVotos") Integer cuentaVotos,
-        @RequestParam("trailer") String trailer,
-        @RequestParam("urlCompra") String url) throws DangerException {
+            @RequestParam("idpelicula") Long idPelicula,
+            @RequestParam("nombre") String titulo,
+            @RequestParam("clasificacion") String clasificacion,
+            @RequestParam("duracion") Integer duracion,
+            @RequestParam("estado") String estado,
+            @RequestParam("plataforma") String plataforma,
+            @RequestParam("sinopsis") String sinopsis,
+            @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
+            @RequestParam("cuentaVotos") Integer cuentaVotos,
+            @RequestParam("trailer") String trailer,
+            @RequestParam("urlCompra") String url) throws DangerException {
         try {
-            peliculaService.update(idPelicula,titulo, clasificacion, duracion, estado, plataforma, sinopsis,
-                    fechaLanzamiento,cuentaVotos, trailer, url);
+            peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, sinopsis,
+                    fechaLanzamiento, cuentaVotos, trailer, url);
             PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
         } catch (Exception e) {
             PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/r");
         }
         return "redirect:/pelicula/r";
     }
-    
+
+    @PostMapping("rDetailed")
+    public String checklist(
+            @RequestParam("idPelicula") Long idPelicula,
+            HttpSession session,
+            ModelMap m) throws DangerException {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
+
+        List<Pelicula> peliculasFav = usuario.getPeliculasFav();
+
+        if (!peliculasFav.contains(pelicula)) {
+            usuarioService.saveUsuarioPeliculas(usuario, pelicula);
+        }
+
+        // System.out.println("ID de la película: " + pelicula.getIdElemento());
+        // System.out.println("Título de la película: " + pelicula.getTitulo());
+
+        m.put("pelicula", pelicula);
+
+        return "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento();
+    }
+
     @PostMapping("d")
     public String delete(
             @RequestParam("idpelicula") Long idPelicula) throws DangerException {
@@ -166,5 +200,3 @@ public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
         return "redirect:/pelicula/r";
     }
 }
-    
-

@@ -4,10 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.proyect.domain.Juego;
+import org.proyect.domain.Pelicula;
+import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.JuegoService;
+import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +26,8 @@ import jakarta.servlet.http.HttpSession;
 public class JuegoController {
     @Autowired
     private JuegoService juegoService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("r")
     public String r(ModelMap m) {
@@ -104,6 +109,32 @@ public class JuegoController {
         }
         return "redirect:/juego/r";
     }
+
+    @PostMapping("rDetailed")
+    public String checklist(
+            @RequestParam("idJuego") Long idJuego,
+            HttpSession session,
+            ModelMap m) throws DangerException {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        Juego juego = juegoService.findByIdElemento(idJuego);
+        System.out.println("JUUEGOI" + juego.getTitulo());
+        List<Juego> juegosFav = usuario.getJuegosFav();
+
+        if (!juegosFav.contains(juego)) {
+            usuarioService.saveUsuarioJuegos(usuario, juego);
+        }
+
+
+        m.put("juego", juego);
+        return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
+    }
+
     @PostMapping("d")
     public String delete(
             @RequestParam("idJuego") Long idJuego) throws DangerException {

@@ -5,6 +5,9 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
@@ -19,10 +22,18 @@ public class Usuario extends Persona {
     private Long descuento;
     
 
-    @ManyToMany(mappedBy = "usuarios")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "usuario_pelicula",
+        joinColumns = @JoinColumn(name = "usuario_idPersona"),
+        inverseJoinColumns = @JoinColumn(name = "pelicula_idElemento"))
     private List<Pelicula> peliculasFav;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "usuario_pelicula",
+        joinColumns = @JoinColumn(name = "usuario_idPersona"),
+        inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
     private List<Juego> juegosFav;
 
     @Column
@@ -37,6 +48,7 @@ public class Usuario extends Persona {
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
     }
+
 
     public Usuario(String nombre, String passwd,String correo,Integer puntos) {
         super.setNombre(nombre); // Usar el setter heredado de Persona
