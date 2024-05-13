@@ -29,7 +29,11 @@ public class Usuario extends Persona {
         inverseJoinColumns = @JoinColumn(name = "pelicula_idElemento"))
     private List<Pelicula> peliculasFav;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "usuario_pelicula",
+        joinColumns = @JoinColumn(name = "usuario_idPersona"),
+        inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
     private List<Juego> juegosFav;
 
     @Column

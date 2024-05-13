@@ -2,6 +2,7 @@ package org.proyect.service;
 
 import java.util.List;
 
+import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.repository.UsuarioRepository;
@@ -92,14 +93,17 @@ public class UsuarioService {
         List<Pelicula> peliculasFav = usuario.getPeliculasFav();
 
         peliculasFav.add(pelicula);
-        // System.out.println("AAAAAAA" + pelicula.getTitulo());
-
         usuario.setPeliculasFav(peliculasFav);
-        // System.out.println("BBBBB" + usuario.getNombre());
 
-        // for (Pelicula peli : peliculasFav) {
-        //     System.out.println("Nombre de la película: " + peli.getTitulo());
-        // }
+        return usuarioRepository.save(usuario);
+    }
+
+    public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
+        List<Juego> juegosFav = usuario.getJuegosFav();
+
+        juegosFav.add(juego);
+        System.out.println("AAAAAA" + juego.getTitulo());
+        usuario.setJuegosFav(juegosFav);
 
         return usuarioRepository.save(usuario);
     }
