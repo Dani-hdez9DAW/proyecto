@@ -30,10 +30,10 @@ public class Usuario extends Persona {
     private List<Pelicula> peliculasFav;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "usuario_pelicula",
-        joinColumns = @JoinColumn(name = "usuario_idPersona"),
-        inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
+    // @JoinTable(
+    //     name = "usuario_pelicula",
+    //     joinColumns = @JoinColumn(name = "usuario_idPersona"),
+    //     inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
     private List<Juego> juegosFav;
 
     @Column

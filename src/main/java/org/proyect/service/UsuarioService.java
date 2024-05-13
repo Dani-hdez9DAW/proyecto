@@ -98,14 +98,14 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
-        List<Juego> juegosFav = usuario.getJuegosFav();
+    // public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
+    //     List<Juego> juegosFav = usuario.getJuegosFav();
 
-        juegosFav.add(juego);
-        System.out.println("AAAAAA" + juego.getTitulo());
-        usuario.setJuegosFav(juegosFav);
+    //     juegosFav.add(juego);
+    //     System.out.println("AAAAAA" + juego.getTitulo());
+    //     usuario.setJuegosFav(juegosFav);
 
-        return usuarioRepository.save(usuario);
-    }
+    //     return usuarioRepository.save(usuario);
+    // }
 
 }

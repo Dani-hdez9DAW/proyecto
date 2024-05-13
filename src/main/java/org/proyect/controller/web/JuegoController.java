@@ -110,30 +110,30 @@ public class JuegoController {
         return "redirect:/juego/r";
     }
 
-    @PostMapping("rDetailed")
-    public String checklist(
-            @RequestParam("idJuego") Long idJuego,
-            HttpSession session,
-            ModelMap m) throws DangerException {
+    // @PostMapping("rDetailed")
+    // public String checklist(
+    //         @RequestParam("idJuego") Long idJuego,
+    //         HttpSession session,
+    //         ModelMap m) throws DangerException {
 
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+    //     Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        if (usuario == null) {
-            return "redirect:/login";
-        }
+    //     if (usuario == null) {
+    //         return "redirect:/login";
+    //     }
 
-        Juego juego = juegoService.findByIdElemento(idJuego);
-        System.out.println("JUUEGOI" + juego.getTitulo());
-        List<Juego> juegosFav = usuario.getJuegosFav();
+    //     Juego juego = juegoService.findByIdElemento(idJuego);
+    //     System.out.println("JUUEGOI" + juego.getTitulo());
+    //     List<Juego> juegosFav = usuario.getJuegosFav();
 
-        if (!juegosFav.contains(juego)) {
-            usuarioService.saveUsuarioJuegos(usuario, juego);
-        }
+    //     // if (!juegosFav.contains(juego)) {
+    //     //     usuarioService.saveUsuarioJuegos(usuario, juego);
+    //     // }
 
 
-        m.put("juego", juego);
-        return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
-    }
+    //     m.put("juego", juego);
+    //     return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
+    // }
 
     @PostMapping("d")
     public String delete(
