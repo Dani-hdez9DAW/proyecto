@@ -180,8 +180,8 @@ public class PeliculaController {
         }
         System.out.println("ID de la película: " + pelicula.getIdElemento());
 
-        m.put("pelicula", peliculaService.findByIdElemento(pelicula.getIdElemento()));
-        m.put("view", "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento());
+        // m.put("pelicula", peliculaService.findByIdElemento(pelicula.getIdElemento()));
+        // m.put("view", "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento());
         return "_t/frame";
     }
 
