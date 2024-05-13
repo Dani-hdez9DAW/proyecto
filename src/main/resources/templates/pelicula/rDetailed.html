@@ -37,15 +37,29 @@
         }
 
         .card-small {
-            transform: scale(0.5);
+            transform: scale(0.6);
+        }
+
+        .circuloSmall {
+            transform: scale(0.9);
         }
 
         .card-offset {
             position: relative;
-            top: -200px;
+            top: -150px;
             /* Ajusta la posición hacia arriba */
-            left: 180px;
+            left: 150px;
             /* Ajusta la posición hacia la derecha */
+        }
+
+        .contenidoArriba {
+            position: relative;
+            left: 150px;
+            top: -280px;
+        }
+        .cardArriba {
+            position: relative;
+            top: -100px;
         }
 
         .card {
@@ -291,9 +305,6 @@
             <!-- Tarjeta para la información -->
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h1 class="text-center">Detalles</h1>
-                    </div>
                     <div class="card-body">
                         <form action="/pelicula/u" method="post">
                             <div class="form-group" style="display: none;">
@@ -321,15 +332,22 @@
                                 <input type="text" id="id-duracion" name="duracion" class="form-control" disabled
                                     required th:value="${pelicula.duracion}">
                             </div>
-                            <div class="form-group">
-                                <label for="id-plataforma">Plataforma</label>
-                                <input type="text" id="id-plataforma" name="plataforma" class="form-control" disabled
-                                    required th:value="${pelicula.plataforma}">
+                            <div>
+                                <span>
+                                    <h3>Sinopsis</h3>
+                                    <p id="id-sinopsis" name="sinopsis" class=""
+                                        th:text="${pelicula.sinopsis}" disabled="disabled"></p>
+                                </span>
                             </div>
-                            <div class="form-group">
-                                <label for="id-cuentaVotos">Cuenta votos</label>
-                                <input type="text" id="id-cuentaVotos" name="cuentaVotos" class="form-control" disabled
-                                    required th:value="${pelicula.cuenta_votos}">
+                            <div class="" >
+                                <h3 style="display: none;">Plataforma</h3>
+                                <p style="display: none;" id="id-plataforma" name="plataforma"  disabled
+                                    th:text="${pelicula.plataforma}"></p>
+                            </div>
+                            <div class="">
+                                <h3 style="display: none;">Cuenta votos</h3>
+                                <p style="display: none;" id="id-cuentaVotos" name="cuentaVotos"  disabled
+                                    th:text="${pelicula.cuenta_votos}"></p>
                             </div>
                             <div class="form-group">
                                 <label for="id-trailer">Ver trailer</label>
@@ -345,11 +363,8 @@
                                 <input type="hidden" id="id-urlCompra" th:value="${pelicula.url}" class="form-control"
                                     disabled>
                             </div>
-                            <div class="form-group">
-                                <label for="id-sinopsis">Sinopsis</label>
-                                <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
-                                    th:text="${pelicula.sinopsis}" disabled="disabled"></textarea>
-                            </div>
+
+
                             <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
                             <button type="submit" id="btnActualizar" style="display:none"
                                 class="btn btn-primary btn-block">Guardar</button>
@@ -370,14 +385,8 @@
                     <div class="blob"></div>
                     <div class="blob"></div>
                 </div>
-                <p class="card-text card-offset"><span th:utext="'
-                     ' + |${pelicula.clasificacion} m.|"></span></p>
-                <p class="card-text card-offset time"><span th:utext="'
-                    <i class=\'bi bi-alarm\'></i>  ' + |${pelicula.duracion}|"></span></p>
-                <p class="text-center card-offset date"><span th:utext="'
-                    <i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span></p>
-                <h1 class="text-center card-small card-offset highlight-text">PUNTUACION</h1>
-                <div id="cont" class="card-small card-offset" data-pct="">
+                <h1 class="text-center card-small contenidoArriba highlight-text">PUNTUACION</h1>
+                <div id="cont" class="circuloSmall contenidoArriba" data-pct="">
                     <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
                         xmlns="http://www.w3.org/2000/svg">
                         <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
@@ -390,6 +399,42 @@
             </div>
 
         </div>
+        <div class="row">
+            <div class="card cardArriba">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="text-center">Detalles</h1>
+                </div>
+                <div class="card-body">
+                    <h2>Información respecto a la película</h2>
+                    <ul>
+                        <li>
+                            <h3>Estado</h3>
+                            <p class="card-text"><span th:utext="${pelicula.estado}"></span></p>
+                        </li>
+                        <li>
+                            <h3>Clasificación</h3>
+                            <p class="card-text"><span th:utext="${pelicula.clasificacion}"></span></p>
+                        </li>
+                        <li>
+                            <h3>Duración</h3>
+                            <p class="card-text"><span th:utext="'<i class=\'bi bi-alarm\'></i> ' + ${pelicula.duracion} + ' m.'"></span></p>
+                        </li>
+                        <li>
+                            <h3>Fecha de salida</h3>
+                            <p class="card-text"><span th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span></p>
+                        </li>
+                        <li>
+                            <h3 style="display: none;">Cuenta votos</h3>
+                            <p class="card-text"><span th:utext="${pelicula.cuenta_votos}"></span></p>
+                        </li>
+                        <li>
+                            <h3 style="display: none;">Plataforma</h3>
+                            <p class="card-text"><span th:utext="${pelicula.plataforma}"></span></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>        
     </div>
 
 
@@ -456,6 +501,7 @@
         campos.forEach(function (campo) {
             campo.removeAttribute('disabled');
             campo.setAttribute('type', 'text');
+            campo.classList.add('form-control');
         });
 
         var iframe = document.querySelector('.form-group iframe');
