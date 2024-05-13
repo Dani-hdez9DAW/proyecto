@@ -4,12 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +19,7 @@ public class Pelicula extends Elemento {
     @ManyToMany(mappedBy = "peliculas")
     private List<Actor> actores;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "peliculasFav")
     private List<Usuario> usuarios;
 
     @ManyToMany(mappedBy = "categoriaPelis")

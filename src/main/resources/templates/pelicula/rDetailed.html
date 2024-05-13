@@ -255,8 +255,7 @@
         <h1 class="text-center highlight-text" th:text="${pelicula.titulo}"></h1>
         <div class="heart-container" title="Like">
             <form id="checklistForm" action="/pelicula/rDetailed" method="POST">
-                <input type="hidden" name="tituloPelicula" th:value="${pelicula.titulo}">
-                <input type="hidden" name="nombreUsuario" th:value="${session.usuario.nombre}">
+                <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
                 <input type="checkbox" class="checkbox" name="favourite" id="Give-It-An-Id"
                     onclick="handleCheckboxClick()">
                 <div class="svg-container">

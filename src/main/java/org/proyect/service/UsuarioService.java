@@ -2,6 +2,7 @@ package org.proyect.service;
 
 import java.util.List;
 
+import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UsuarioService {
         return usuarioRepository.getByNombre(nombre);
     }
 
-    public Usuario save(String nombre, String passwd,String correo) {
+    public Usuario save(String nombre, String passwd, String correo) {
         return usuarioRepository.save(new Usuario(nombre, (new BCryptPasswordEncoder()).encode(passwd), correo, 0));
     }
 
@@ -37,7 +38,7 @@ public class UsuarioService {
     public Usuario findByCorreo(String email) {
         return usuarioRepository.getByCorreo(email);
     }
-    
+
     public void update(Long id_Usuario, String nombre) {
         Usuario usuario = usuarioRepository.findById(id_Usuario).get();
         usuario.setNombre(nombre);
@@ -64,6 +65,7 @@ public class UsuarioService {
         }
         return usuario;
     }
+
     public void setRegistro(String email) {
         Usuario usuario = usuarioRepository.getByCorreo(email);
         if (usuario != null) {
@@ -74,6 +76,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("El usuario con nombre " + email + " no existe");
         }
     }
+
     public void setLogout(String email) {
         Usuario usuario = usuarioRepository.getByCorreo(email);
         if (usuario != null) {
@@ -85,7 +88,20 @@ public class UsuarioService {
         }
     }
 
-    public void saveUsuarioPeliculas(Usuario usuario) {
-        usuarioRepository.save(usuario);
+    public Usuario saveUsuarioPeliculas(Usuario usuario, Pelicula pelicula) {
+        List<Pelicula> peliculasFav = usuario.getPeliculasFav();
+
+        peliculasFav.add(pelicula);
+        // System.out.println("AAAAAAA" + pelicula.getTitulo());
+
+        usuario.setPeliculasFav(peliculasFav);
+        // System.out.println("BBBBB" + usuario.getNombre());
+
+        // for (Pelicula peli : peliculasFav) {
+        //     System.out.println("Nombre de la película: " + peli.getTitulo());
+        // }
+
+        return usuarioRepository.save(usuario);
     }
+
 }

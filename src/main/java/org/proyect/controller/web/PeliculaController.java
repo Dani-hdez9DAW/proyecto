@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.servlet.http.HttpSession;
 
 @RequestMapping("/pelicula/")
@@ -161,28 +163,32 @@ public class PeliculaController {
         return "redirect:/pelicula/r";
     }
 
-    @PostMapping("/rDetailed")
+    @PostMapping("rDetailed")
     public String checklist(
-            @RequestParam("tituloPelicula") String nombrePelicula,
-            @RequestParam("nombreUsuario") String nombreUsuario,
+            @RequestParam("idPelicula") Long idPelicula,
             HttpSession session,
             ModelMap m) throws DangerException {
 
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        Usuario usuario = usuarioService.getByNombre(nombreUsuario);
-        Pelicula pelicula = peliculaService.getByTitulo(nombrePelicula);
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
 
         List<Pelicula> peliculasFav = usuario.getPeliculasFav();
 
         if (!peliculasFav.contains(pelicula)) {
-            peliculasFav.add(pelicula);
-            usuarioService.saveUsuarioPeliculas(usuario);
+            usuarioService.saveUsuarioPeliculas(usuario, pelicula);
         }
-        System.out.println("ID de la película: " + pelicula.getIdElemento());
 
-        // m.put("pelicula", peliculaService.findByIdElemento(pelicula.getIdElemento()));
-        // m.put("view", "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento());
-        return "_t/frame";
+        // System.out.println("ID de la película: " + pelicula.getIdElemento());
+        // System.out.println("Título de la película: " + pelicula.getTitulo());
+
+        m.put("pelicula", pelicula);
+
+        return "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento();
     }
 
     @PostMapping("d")
