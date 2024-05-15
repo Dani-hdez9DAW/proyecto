@@ -59,7 +59,8 @@ public class PeliculaService {
     }
 
     public void update(Long idPelicula, String titulo, String clasificacion, Integer duracion,
-            String estado, String plataforma, String sinopsis, LocalDate fechaLanzamiento, Integer cuentaVotos,
+            String estado, String plataforma, Integer puntuacion, List<Long> idsCategoria, String sinopsis,
+            LocalDate fechaLanzamiento, Integer cuentaVotos,
             String trailer, String url) {
         Pelicula pelicula = peliculaRepository.findById(idPelicula).get();
         pelicula.setTitulo(titulo);
@@ -72,12 +73,21 @@ public class PeliculaService {
         pelicula.setCuenta_votos(cuentaVotos);
         pelicula.setTrailer(trailer);
         pelicula.setUrl(url);
-        pelicula.setCategorias(null);
+        pelicula.setPuntuacion(puntuacion);
+
+        idsCategoria = (idsCategoria == null) ? new ArrayList<Long>() : idsCategoria;
+        pelicula.getCategorias().clear();
+        List<Categoria> nuevosCategorias = new ArrayList<Categoria>();
+        for (Long idCategoria : idsCategoria) {
+            Categoria categoria = categoriaRepository.findById(idCategoria).get();
+            nuevosCategorias.add(categoria);
+        }
+        pelicula.setCategorias(nuevosCategorias);
         peliculaRepository.save(pelicula);
     }
 
     public void delete(Long idPelicula) {
         peliculaRepository.delete(peliculaRepository.getReferenceById(idPelicula));
     }
-    
+
 }

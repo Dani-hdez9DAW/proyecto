@@ -128,6 +128,7 @@ public class PeliculaController {
         if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
             // Si el usuario está autenticado, continúa con la lógica para cargar la vista
             // rDetailed
+            m.put("categorias",categoriaService.findAll());
             m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
             m.put("view", "pelicula/rDetailed");
             return "_t/frame";
@@ -146,13 +147,15 @@ public class PeliculaController {
             @RequestParam("duracion") Integer duracion,
             @RequestParam("estado") String estado,
             @RequestParam("plataforma") String plataforma,
+            @RequestParam("puntuacion") Integer puntuacion,
+            @RequestParam(value = "categoriaId[]", required = false) List<Long> idsCategoria,
             @RequestParam("sinopsis") String sinopsis,
             @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
             @RequestParam("cuentaVotos") Integer cuentaVotos,
             @RequestParam("trailer") String trailer,
             @RequestParam("urlCompra") String url) throws DangerException {
         try {
-            peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, sinopsis,
+            peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma,puntuacion,idsCategoria, sinopsis,
                     fechaLanzamiento, cuentaVotos, trailer, url);
             PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
         } catch (Exception e) {

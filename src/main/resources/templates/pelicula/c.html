@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/css/peliculas/peliculas.css">
     <style>
         .container {
-            background-color: #ffffff;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -150,71 +149,63 @@
 </head>
 
 <body>
+
     <div class="container">
-        <h1 class="my-4">Nueva Película</h1>
-        <form id="peliculaForm" action="/pelicula/c" method="post" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-6">
+        <h1 class="h2" style="text-align: center;">Nueva Película</h1>
+        <div class="row">
+            <div class="col-6">
+                <form id="peliculaForm" action="/pelicula/c" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="titulo">Titulo</label>
-                        <input class="input form-control" name="titulo" type="text" placeholder="Nombre de la película">
+                        <label for="titulo">Título</label>
+                        <input class="form-control" name="titulo" type="text" placeholder="Nombre de la película">
                     </div>
                     <div class="form-group">
                         <label for="categoria">Categoría</label>
-                        <span class="custom-dropdown ">
-                            <select name="categoria[]" id="categoria" multiple="multiple" class="form-control">
-                                <option th:each="categoria : ${categorias}" th:text="${categoria.nombre}"
-                                    th:value="${categoria.id_categoria}"></option>
+                        <span class="custom-dropdown">
+                            <select name="categoria[]" id="categoria" multiple class="form-control">
+                                <option th:each="categoria : ${categorias}" th:text="${categoria.nombre}" th:value="${categoria.idCategoria}"></option>
                             </select>
                         </span>
                     </div>
-
                     <div class="form-group">
                         <label for="clasificacion">Clasificación</label>
-                        <input class="input form-control" name="clasificacion" type="text"
-                            placeholder="Clasificación de la película">
+                        <input class="form-control" name="clasificacion" type="text" placeholder="Clasificación de la película">
                     </div>
                     <div class="form-group">
                         <label for="duracion">Duración</label>
-                        <input class="input form-control" name="duracion" type="text"
-                            placeholder="Duración de la película">
+                        <input class="form-control" name="duracion" type="text" placeholder="Duración de la película">
                     </div>
                     <div class="form-group">
                         <label for="plataforma">Plataforma</label>
-                        <input type="text" class="input form-control" name="plataforma"
-                            placeholder="Plataforma de la película">
+                        <input type="text" class="form-control" name="plataforma" placeholder="Plataforma de la película">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="estado">Estado</label>
-                        <input class="input form-control" name="estado" type="text" placeholder="Estado de la película">
+                        <input class="form-control" name="estado" type="text" placeholder="Estado de la película">
                     </div>
                     <div class="form-group">
                         <label for="sinopsis">Sinopsis</label>
-                        <textarea class="input form-control" name="sinopsis" placeholder="Sinopsis de la película"
-                            rows="5" cols="4"></textarea>
+                        <textarea class="form-control" name="sinopsis" placeholder="Sinopsis de la película" rows="5" cols="4"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="fecha_lanzamiento">Fecha de salida</label>
-                        <input type="date" class="input form-control" id="fecha_lanzamiento" name="fechaLanzamiento"
-                            placeholder="Fecha de lanzamiento">
+                        <input type="date" class="form-control" id="fecha_lanzamiento" name="fechaLanzamiento" placeholder="Fecha de lanzamiento">
                     </div>
                     <div class="form-group">
                         <label for="imagen">Imagen</label>
-                        <input class="input form-control" name="imagen" id="imagen" type="file"
-                            onchange="previewImage(event)">
+                        <input class="form-control" name="imagen" id="imagen" type="file" onchange="previewImage(event)">
                         <!-- Contenedor para la previsualización de la imagen -->
                         <div id="image-preview-container" style="margin-top: 10px;"></div>
                     </div>
                     <div class="form-group">
                         <label for="trailer">Tráiler</label>
-                        <input class="input form-control" name="trailer" type="text" placeholder="URL del tráiler">
+                        <input class="form-control" name="trailer" type="text" placeholder="URL del tráiler">
                     </div>
                     <div class="form-group">
                         <label for="url">URL</label>
-                        <input class="input form-control" name="url" type="text"
-                            placeholder="URL de compra de la película">
+                        <input class="form-control" name="url" type="text" placeholder="URL de compra de la película">
                     </div>
                 </div>
             </div>
@@ -226,25 +217,25 @@
             <button onclick="window.location.href='/pelicula/r'">Volver</button>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script>
-        // Función para previsualizar la imagen seleccionada
-        function previewImage(event) {
-            var input = event.target;
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    var imagePreviewContainer = document.getElementById('image-preview-container');
-                    imagePreviewContainer.innerHTML = '<img src="' + e.target.result + '" class="img-fluid" alt="Vista previa de la imagen">';
-                };
-
-                reader.readAsDataURL(input.files[0]); // Lee el contenido de la imagen como una URL
-            }
-        }
-    </script>
+    
+       
 </body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+    // Función para previsualizar la imagen seleccionada
+    function previewImage(event) {
+        var input = event.target;
 
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var imagePreviewContainer = document.getElementById('image-preview-container');
+                imagePreviewContainer.innerHTML = '<img src="' + e.target.result + '" class="img-fluid" alt="Vista previa de la imagen">';
+            };
+
+            reader.readAsDataURL(input.files[0]); // Lee el contenido de la imagen como una URL
+        }
+    }
+</script>
 </html>
