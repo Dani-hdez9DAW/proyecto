@@ -123,18 +123,28 @@ public class JuegoController {
         }
 
         Juego juego = juegoService.findByIdElemento(idJuego);
-
         List<Juego> juegosFav = usuario.getJuegosFav();
 
         if (!juegosFav.contains(juego)) {
             usuarioService.saveUsuarioJuegos(usuario, juego);
         }
 
-        // System.out.println("ID de la película: " + pelicula.getIdElemento());
-        // System.out.println("Título de la película: " + pelicula.getTitulo());
-
         m.put("juego", juego);
 
+        return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
+    }
+
+    @PostMapping("rDetailedRating")
+    public String puntuacion(
+            @RequestParam("idJuego") Long idJuego,
+            @RequestParam("rating") Long puntos,
+            HttpSession session,
+            ModelMap m) throws DangerException {
+
+        Juego juego = juegoService.findByIdElemento(idJuego);
+
+        m.put("juego", juego);
+        m.put("calificacion", juegoService.setCalificacion(juego, puntos));
         return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
     }
 
