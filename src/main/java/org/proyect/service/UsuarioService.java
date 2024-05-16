@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UsuarioService {
 
@@ -98,14 +100,16 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    // public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
-    //     List<Juego> juegosFav = usuario.getJuegosFav();
+    @Transactional
+    public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
+        List<Juego> juegosFav = usuario.getJuegosFav();
 
-    //     juegosFav.add(juego);
-    //     System.out.println("AAAAAA" + juego.getTitulo());
-    //     usuario.setJuegosFav(juegosFav);
+        juegosFav.add(juego);
+        usuario.setJuegosFav(juegosFav);
 
-    //     return usuarioRepository.save(usuario);
-    // }
+        return usuarioRepository.save(usuario);
+    }
+
+   
 
 }

@@ -30,11 +30,12 @@ public class Usuario extends Persona {
     private List<Pelicula> peliculasFav;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    // @JoinTable(
-    //     name = "usuario_pelicula",
-    //     joinColumns = @JoinColumn(name = "usuario_idPersona"),
-    //     inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
+    @JoinTable(
+        name = "usuario_juego",
+        joinColumns = @JoinColumn(name = "usuario_idPersona"),
+        inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
     private List<Juego> juegosFav;
+    
 
     @Column
     private Boolean estaRegistrado;
@@ -51,7 +52,7 @@ public class Usuario extends Persona {
 
 
     public Usuario(String nombre, String passwd,String correo,Integer puntos) {
-        super.setNombre(nombre); // Usar el setter heredado de Persona
+        super.setNombre(nombre); 
         super.setContraseña(passwd);
         super.setCorreo(correo);
         this.puntos = puntos;
@@ -67,8 +68,7 @@ public class Usuario extends Persona {
         this.juegosFav = new ArrayList<>();
     }
     public Boolean getEsAdmin() {
-        // Manejo del caso en el que esAdmin sea nulo
-        return esAdmin != null ? esAdmin : false; // Devuelve false si esAdmin es nulo
+        return esAdmin != null ? esAdmin : false; 
     }
 
 }

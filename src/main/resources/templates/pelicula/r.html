@@ -201,7 +201,8 @@
                                     <i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span></p>
                             <p class="card-text time"><span th:utext="'
                                         <i class=\'bi bi-alarm\'></i>  ' + |${pelicula.duracion} m.|"></span></p>
-                            <a th:onclick="|window.location.href='/pelicula/rDetailed?id_elemento=${pelicula.idElemento}'|" class="btn btn-info" data-toggle="modal" data-target="#authModal">
+                            <a th:onclick="|window.location.href='/pelicula/rDetailed?id_elemento=${pelicula.idElemento}'|"
+                                class="btn btn-info" data-toggle="modal" data-target="#authModal">
                                 Ver más
                             </a>
                         </div>
@@ -211,25 +212,26 @@
         </div>
     </div>
 
-    <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="authModalLabel">¡Autenticación requerida!</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">¡Autenticación requerida!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Por favor, inicia sesión para acceder a esta funcionalidad.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Iniciar Sesión</button>
+                </div>
             </div>
-            <div class="modal-body">
-              Por favor, inicia sesión para acceder a esta funcionalidad.
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary">Iniciar Sesión</button>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 
 
     <div class="container bg-primary mt-4 text-primary" id="table-view-container" style="display: none;">

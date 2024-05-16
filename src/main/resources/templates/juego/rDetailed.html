@@ -127,7 +127,7 @@
 
     <div class="container mt-5">
         <div class="heart-container" title="Like">
-            <form id="checklistForm" action="/juego/r" method="POST">
+            <form id="checklistForm" action="/juego/rDetailed" method="POST">
                 <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
                 <input type="checkbox" class="checkbox" name="favourite" id="Give-It-An-Id"
                     onclick="handleCheckboxClick()">
@@ -222,6 +222,14 @@
         borrarButton.classList.remove('btn-primary');
         borrarButton.classList.add('btn-danger');
     }
+
+    function handleCheckboxClick() {
+        var checkbox = document.getElementById("Give-It-An-Id");
+        if (checkbox.checked) {
+            document.getElementById("checklistForm").submit();
+        }
+    }
+
 
     function habilitarCampos() {
         // Obtener el valor del href de los botones de trailer y URL de compra
