@@ -223,6 +223,14 @@
         borrarButton.classList.add('btn-danger');
     }
 
+    function handleCheckboxClick() {
+        var checkbox = document.getElementById("Give-It-An-Id");
+        if (checkbox.checked) {
+            document.getElementById("checklistForm").submit();
+        }
+    }
+
+
     function habilitarCampos() {
         // Obtener el valor del href de los botones de trailer y URL de compra
         var trailerLink = document.getElementById('trailerLink').getAttribute('href');
