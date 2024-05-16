@@ -11,13 +11,6 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
     public List<Pelicula> findByTitulo(String titulo);
     public List<Pelicula> findByIdElemento(Long idElemento);
 
-    // default List<Pelicula> findLastFourMovies() {
-    //     Pageable pageable = PageRequest.of(0, 4, Sort.by(Sort.Direction.DESC, "fecha_salida"));
-    //     Page<Pelicula> page = findAll(pageable);
-    //     return page.getContent();
-    // }
-
-
     public Pelicula getByTitulo(String titulo);
 
 

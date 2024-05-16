@@ -128,7 +128,7 @@ public class PeliculaController {
         if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
             // Si el usuario está autenticado, continúa con la lógica para cargar la vista
             // rDetailed
-            m.put("categorias",categoriaService.findAll());
+            m.put("categorias", categoriaService.findAll());
             m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
             m.put("view", "pelicula/rDetailed");
             return "_t/frame";
@@ -155,7 +155,8 @@ public class PeliculaController {
             @RequestParam("trailer") String trailer,
             @RequestParam("urlCompra") String url) throws DangerException {
         try {
-            peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma,puntuacion,idsCategoria, sinopsis,
+            peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                    idsCategoria, sinopsis,
                     fechaLanzamiento, cuentaVotos, trailer, url);
             PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
         } catch (Exception e) {
@@ -175,11 +176,8 @@ public class PeliculaController {
         if (usuario == null) {
             return "redirect:/login";
         }
-
         Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
-
         List<Pelicula> peliculasFav = usuario.getPeliculasFav();
-
         if (!peliculasFav.contains(pelicula)) {
             usuarioService.saveUsuarioPeliculas(usuario, pelicula);
         }
@@ -189,6 +187,20 @@ public class PeliculaController {
 
         m.put("pelicula", pelicula);
 
+        return "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento();
+    }
+
+    @PostMapping("rDetailedRating")
+    public String puntuacion(
+            @RequestParam("idPelicula") Long idPelicula,
+            @RequestParam("rating") Long puntos,
+            HttpSession session,
+            ModelMap m) throws DangerException {
+
+        Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
+
+        m.put("pelicula", pelicula);
+        m.put("calificacion", peliculaService.setCalificacion(pelicula, puntos));
         return "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento();
     }
 
