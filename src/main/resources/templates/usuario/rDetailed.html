@@ -1,0 +1,414 @@
+<link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+	/* Imagen de Spiderman */
+	body {
+		background-image: url(https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700481705.jpg);
+	}
+
+	.container {
+		margin-right: 50px;
+	}
+
+	.footer {
+		clear: both;
+		/* Limpia los flotadores */
+		position: relative;
+		/* Cambia la posición a relativa */
+		z-index: 1;
+		/* Asegura que el footer esté encima del contenido */
+		width: 100%;
+		background-color: #24262b;
+		padding: 70px 0;
+	}
+
+	.header-container {
+		position: relative;
+	}
+
+	.header {
+		color: #fff;
+		padding: 15px;
+		height: 300px;
+	}
+
+
+	.container-usu {
+		box-shadow: 0 0 50px rgba(0, 0, 0, .3);
+		margin-top: -10px;
+		margin-right: 30px;
+		/* Cambiado a un valor mayor */
+		/* Aplica un margen negativo para compensar el margen derecho del contenedor principal */
+		overflow: hidden;
+		width: 700px;
+		/* Aumentado el ancho */
+		background-color: rgba(255, 255, 255, 0.8);
+		border-radius: 10px;
+		box-sizing: border-box;
+		padding: 20px;
+		float: right;
+		/* Flota el contenedor a la derecha */
+		position: relative;
+	}
+
+
+	.main-heading {
+		color: #fff;
+		font-size: 26px;
+		font-weight: 300;
+		margin-bottom: 12px;
+	}
+
+	.tag {
+		background-color: rgba(255, 255, 255, .35);
+		border-radius: 20px;
+		font-size: 11px;
+		margin-right: 8px;
+		padding: 4px 10px;
+		text-transform: uppercase;
+	}
+
+	.stats {
+		margin-top: 35px;
+	}
+
+	.stat-module {
+		display: inline-block;
+		font-size: 12px;
+		margin-right: 20px;
+		text-transform: uppercase;
+	}
+
+	.stat-number {
+		display: inline-block;
+		font-weight: 600;
+		margin-left: 4px;
+	}
+
+	.overlay-header {
+		background-color: #eee;
+		height: 100px;
+		margin: -50px 0 0 -25%;
+		transform: rotate(-10deg);
+		width: 150%;
+		z-index: 0;
+	}
+
+	.body {
+		background-color: #eee;
+		color: #555;
+		margin-top: -50px;
+		padding: 0 15px 15px;
+		position: relative;
+	}
+
+	.body-image {
+		border-radius: 100%;
+		box-shadow: 5px 10px 75px rgba(0, 0, 0, .4);
+		float: left;
+		margin: -90px 0 20px;
+		position: relative;
+		z-index: 2;
+	}
+
+	.body-stats {
+		display: inline-block;
+		font-size: 12px;
+		font-weight: 700;
+		float: left;
+		margin: -14px 0 0 30px;
+		position: relative;
+		text-transform: uppercase;
+		width: 20%;
+	}
+
+	.body-stats>span {
+		display: inline-block;
+		font-weight: 900;
+		margin-top: 8px;
+	}
+
+	.body-info {
+		clear: left;
+		position: relative;
+		max-height: 100px;
+		overflow: hidden;
+		transition: all 600ms ease-out;
+	}
+
+	.body-more {
+		background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(238, 238, 238, 1) 100%);
+		background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(238, 238, 238, 1) 100%);
+		background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(238, 238, 238, 1) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#eeeeee', GradientType=0);
+		cursor: pointer;
+		margin: -57px auto 0px;
+		padding: 20px 0 20px;
+		position: relative;
+		text-align: center;
+	}
+
+	.body-more span {
+		background-color: #fff;
+		border-radius: 50%;
+		box-shadow: 1px 1px 5px rgba(0, 0, 0, .3);
+		display: inline-block;
+		height: 6px;
+		margin-right: 2px;
+		width: 6px;
+	}
+
+	.card {
+		background: #fff;
+		border-radius: 2px;
+		box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+		margin-top: 15px;
+		padding: 10px;
+	}
+
+	.card-heading {
+		font-size: 12px;
+		text-transform: uppercase;
+	}
+
+	.card-list {
+		list-style-type: none;
+		margin: 10px 0 0;
+		overflow-x: scroll;
+		padding: 0;
+		white-space: nowrap;
+	}
+
+	.card-list::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+		border-radius: 2px;
+		background-color: #F5F5F5;
+	}
+
+	.card-list::-webkit-scrollbar {
+		height: 3px;
+		background-color: #F5F5F5;
+	}
+
+	.card-list::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .2);
+		background-color: #ddd;
+	}
+
+	.card-list li {
+		display: inline;
+		margin-left: 10px;
+	}
+
+	.card-list li:first-child {
+		margin-left: 0;
+	}
+
+	/* Cambio de cursor */
+	#puntos {
+		cursor: pointer;
+		/* Cambia el cursor predeterminado a un dedo */
+	}
+
+	/* Div que salen las películas */
+	.card.u-clearfix {
+		overflow-y: auto;
+		max-height: 300px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		padding: 10px;
+		background-color: #f9f9f9;
+	}
+
+	.card-heading {
+		display: block;
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+
+	.card-list {
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	.card-list li {
+		width: calc(33.33% - 20px);
+		margin-bottom: 20px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		overflow: hidden;
+	}
+
+	.card-list li img {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.body-info {
+		background-color: #f9f9f9;
+		border-radius: 5px;
+		padding: 20px;
+		margin-bottom: 20px;
+	}
+
+	.body-info p {
+		margin-bottom: 15px;
+		line-height: 1.6;
+	}
+
+	.body-more {
+		text-align: center;
+	}
+
+	.body-more span {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background-color: #ccc;
+		margin: 0 5px;
+		cursor: pointer;
+	}
+
+	.body-more span.active {
+		background-color: #555;
+	}
+
+	.edit-icon,
+	.accept-btn,
+	.cancel-btn {
+		cursor: pointer;
+	}
+</style>
+
+
+</head>
+
+<body>
+	<div class="container-usu">
+		<div class="header-container">
+			<div class="header">
+				<h1 class="main-heading" th:text="${session.usuario.nombre}"></h1>
+				<span class="tag">Actor</span>
+				<span class="tag" id="puntos">Puntos</span>
+				<div class="stats">
+					<span class="stat-module">Películas <span class="stat-number">N</span></span>
+					<!-- Esto es para que muestre la cantidad de peliculas -->
+					<!-- <span class="stat-module">Películas <span class="stat-number" th:text="${cantidadPeliculasFavoritas}">N</span></span> -->
+					<span class="stat-module">Videojuegos <span class="stat-number">N</span></span>
+				</div>
+			</div> <!-- END header -->
+		</div>
+
+		<div class="overlay-header"></div>
+
+		<div class="body">
+			<img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" />
+			<div class="body-stats">Seguidores <span>3.5k</span></div>
+			<div class="body-stats">Siguiendo <span>1.9k</span></div>
+			<div class="u-clearfix"></div>
+			<div id="description" class="body-info">
+				<!-- Ícono de editar -->
+				<span id="edit-icon" class="edit-icon" onclick="updateDescription()">✎</span>
+				<!-- Descripción -->
+				<p id="user-description" th:text="${session.usuario.descripcion}"></p>
+
+			</div>
+
+
+		</div>
+		
+		<div id="peliculas" class="card u-clearfix">
+			<span class="card-heading">Movies</span>
+			<ul class="card-list">
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+			</ul>
+		</div>
+
+		<div id="juegos" class="card u-clearfix">
+			<span class="card-heading">VIDEOJUEGOS</span>
+			<ul class="card-list">
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
+				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
+				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+			</ul>
+		</div>
+	</div>
+
+	</div>
+</body>
+
+
+<script>
+	// //// //// //// FUNCIÓN DE LOS PUNTOS//// //// //// //// //
+	$(document).ready(function () {
+		// Agrega un evento de clic al span de puntos
+		$("#puntos").click(function () {
+			// Hacer una solicitud HTTP GET al backend para obtener los puntos del usuario
+			$.get("obtenerPuntos", function (data) {
+				// Actualizar el contenido del span de puntos con los datos recibidos
+				$("#puntos").text("Puntos: " + data.puntos);
+			});
+		});
+	});
+
+	// //// //// //// FUNCIÓN DE LOS BOTONES DE EDITAR//// //// //// //// //
+	function updateDescription() {
+		// Obtener la descripción actual del usuario
+		var description = document.getElementById('user-description').innerText;
+
+		// Enviar la descripción al servidor
+		function updateDescription() {
+			// Obtener la descripción actual del usuario del elemento <p>
+			var description = document.getElementById('user-description').innerText;
+
+			// Enviar la descripción al servidor
+			$.ajax({
+				type: "POST",
+				url: "/usuario/actualizarDescripcion",
+				data: { nuevaDescripcion: descripcion }, // Asegúrate de usar el mismo nombre de parámetro aquí
+				success: function (response) {
+					console.log('Descripción actualizada correctamente');
+				},
+				error: function (xhr, status, error) {
+					console.error('Error al actualizar la descripción:', error);
+				}
+			});
+		}
+
+	}
+
+
+</script>
+
+
+
+</html>

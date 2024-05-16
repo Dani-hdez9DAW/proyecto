@@ -98,6 +98,24 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    public int obtenerPuntos(String nombreUsuario) throws Exception {
+        // Buscar el usuario por su nombre en la base de datos
+        List<Usuario> usuarios = usuarioRepository.findByNombre(nombreUsuario);
+
+        // Verificar si el usuario existe
+        if (!usuarios.isEmpty()) {
+            // Obtener el primer usuario de la lista (asumiendo que el nombre de usuario es
+            // único)
+            Usuario usuario = usuarios.get(0);
+            // Obtener los puntos del usuario y devolverlos
+            return usuario.getPuntos();
+        } else {
+            // Manejar el caso en el que el usuario no exista
+            throw new Exception("El usuario no existe: " + nombreUsuario);
+        }
+    }
+
+
     // public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
     //     List<Juego> juegosFav = usuario.getJuegosFav();
 
