@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -59,6 +60,12 @@ public abstract class Elemento {
 
     @ManyToMany
     private List<Categoria> categorias;
+
+    @Column
+    protected Long calificacion;
+
+    @ElementCollection
+    private List<Long> calificaciones;
 
     // ==================
 

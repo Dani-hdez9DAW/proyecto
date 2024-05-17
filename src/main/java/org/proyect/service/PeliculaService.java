@@ -18,6 +18,13 @@ public class PeliculaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    private List<Long> calificaciones;
+
+    public PeliculaService() {
+        this.calificaciones = new ArrayList<>();
+    }
+
+
     public List<Pelicula> findAll() {
         return peliculaRepository.findAll();
     }
@@ -88,6 +95,36 @@ public class PeliculaService {
 
     public void delete(Long idPelicula) {
         peliculaRepository.delete(peliculaRepository.getReferenceById(idPelicula));
+    }
+
+    public Long setCalificacion(Pelicula pelicula, Long puntos) {
+        if (puntos != null) {
+            // Agregar la calificación a la lista de la película específica
+            pelicula.getCalificaciones().add(puntos);
+            int conteoVotos = pelicula.getCalificaciones().size();
+            Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
+            pelicula.setCalificacion(cali);
+            peliculaRepository.save(pelicula);
+            return cali;
+        } else {
+            puntos = 0L;
+            // Agregar la calificación a la lista de la película específica
+            pelicula.getCalificaciones().add(puntos);
+            int conteoVotos = pelicula.getCalificaciones().size();
+            Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
+            pelicula.setCalificacion(cali);
+            peliculaRepository.save(pelicula);
+            return cali;
+        }
+    }
+    
+
+    private double calcularCalificacion(List<Long> calificaciones, int conteoVotos) {
+        long sumaCalificaciones = 0;
+        for (Long calificacion : calificaciones) {
+            sumaCalificaciones += calificacion;
+        }
+        return (double) sumaCalificaciones / conteoVotos;
     }
 
 }
