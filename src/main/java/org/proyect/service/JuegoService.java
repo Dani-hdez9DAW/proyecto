@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.proyect.domain.Juego;
-import org.proyect.domain.Pelicula;
 import org.proyect.repository.JuegoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,11 @@ public class JuegoService {
     public List<Juego> findAll() {
         return juegoRepository.findAll();
     }
+    
+    public Page<Juego> findAll(Pageable pageable) {
+        return juegoRepository.findAll(pageable);
+    }
+
 
     public void save(String nombre) {
         Juego Juego = new Juego(nombre);

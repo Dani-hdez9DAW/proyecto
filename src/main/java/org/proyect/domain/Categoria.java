@@ -10,11 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class Categoria {
 
     @Id
@@ -32,6 +30,11 @@ public class Categoria {
     private List<Juego> categoriaJuegos;
 
     // ==================
+
+    public Categoria() {
+        this.categoriaJuegos = new ArrayList<>();
+        this.categoriaPelis = new ArrayList<>();
+    }
 
     public Categoria(String nombre) {
         this.nombre = nombre;
