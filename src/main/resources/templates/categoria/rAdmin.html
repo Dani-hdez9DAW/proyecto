@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de categorias</title>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.2/css/uikit.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css"  href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
     <style>
         /* Estilos personalizados */
         .bg-warning {
@@ -61,189 +60,65 @@
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="btn-group">
-                    <!-- Botón de creación de categoría -->
-                    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary btn-sm"
-                        style="font-size: larger;" onclick="window.location.href='/categoria/c'">Crear categoría</button>
-                </div>
-                
-                <h1>Gestión de categorías</h1>
-            </div>
-        </div>
-        <!-- <table class="table table-striped text-center mt-3">
-            <thead>
+
+    <div class="container btn-group">
+        <!-- Botón de creación de categoría -->
+        <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary btn-sm"
+            style="font-size: larger;" onclick="window.location.href='/categoria/c'">Crear categoría</button>
+    </div>
+    <div class=" container bg-white mt-4 text-primary" id="table-view-container">
+        <h1 class="mt-4">CATEGORIAS</h1>
+        <table id="categoriasTable" class="table table-striped table-bordered">
+            <thead class="thead-dark">
                 <tr>
                     <th>Nombre</th>
-                    <th>Acciones</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Renderiza los datos directamente aquí -->
                 <tr th:each="categoria : ${categorias}">
-                    <td class="bg-warning text-dark" th:text="${categoria.nombre}"></td>
-                    <td class="bg-info">
-                        <div class="btn-group">
-                            <button class="btn btn-warning"
-                                th:onclick="|window.location.href='/categoria/u?id=${categoria.id_categoria}'|">Editar</button>
-                            <form action="/categoria/d" method="post">
-                                <input type="hidden" name="id" th:value="${categoria.idCategoria}">
-                                <button type="submit" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></button>
-                            </form>
-                        </div>
+                    <td th:text="${categoria.nombre}"></td>
+                    <td>
+                        <a href="#" id="edbo" th:href="@{'/categoria/u?id=' + ${categoria.idCategoria}}">
+                            <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}">
+                            <i class="bi bi-pen-fill"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" id="edbo" th:href="@{'/categoria/d?id=' + ${categoria.idCategoria}}">
+                            <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>
-        </table> -->
-
-        <th:block th:with="contador=0">
-    <table id="example" class="uk-table uk-table-hover bg-white text-black " style="width:100%">
-        <thead>
-            <tr>
-                <th class="unaLinea">Nombre</th>
-                <th class="unaLinea">Editar</th>
-                <th class="unaLinea">Borrar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="categoria, iterStatus : ${categorias}">
-                <td th:text="${categoria.nombre}"></td>
-                <td>
-                    <a href="#" id="edbo" th:href="@{'/categoria/u?id=' + ${categoria.idCategoria}}">
-                        <i class="bi bi-pen-fill"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="#" id="edbo" th:href="@{'/categoria/u?id=' + ${categoria.idCategoria}}">
-                        <i class="bi bi-trash3-fill"></i>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        </table>
 
     </div>
+
+    <!-- Carga de jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Carga de DataTables -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        // Función para inicializar DataTables
+        $(document).ready(function () {
+            $('#categoriasTable').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                },
+            });
+            $('#categoriasTable').on('click', '#editarCategoria', function () {
+                var categoriaId = $(this).closest('tr').find('td:first').text(); // Obtener el ID de la película
+                window.location.href = '/categoria/u?id=' + categoriaId;
+            });
+        });
+
+    </script>
+
 </body>
 
 </html>
-
-
-<!-- SCRIPTS -->
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-
-<script>
-    // Para el botón de volver atrás
-    function goBack() {
-        window.history.back();
-    }
-
-    // Función para eliminar usuario
-    function eliminarCategoria(id) {
-        if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
-            // Creamos un formulario temporal
-            var form = document.createElement('form');
-            form.setAttribute('method', 'post');
-            form.setAttribute('action', '/categoria/d');
-
-            // Creamos un campo de entrada oculto para el ID del usuario
-            var input = document.createElement('input');
-            input.setAttribute('type', 'hidden');
-            input.setAttribute('name', 'id');
-            input.setAttribute('value', id);
-
-            // Agregamos el campo de entrada al formulario
-            form.appendChild(input);
-
-            // Agregamos el formulario al cuerpo del documento
-            document.body.appendChild(form);
-
-            // Enviamos el formulario
-            form.submit();
-        }
-    }
-
-    // Inicializamos DataTables
-    $(document).ready(function () {
-        $('#example').DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            },
-            layout: {
-                topStart: 'pageLength',
-                topEnd: 'search',
-                bottomStart: 'info',
-                bottomEnd: 'paging'
-            }
-        });
-
-    });
-</script>
-
-
-</div>
-
-
-
-
-<!-- SCRIPTS -->
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-
-<script>
-    // Para el botón de volver atrás
-    function goBack() {
-        window.history.back();
-    }
-
-    // Función para eliminar usuario
-    function eliminarUsuario(id) {
-        if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-            // Creamos un formulario temporal
-            var form = document.createElement('form');
-            form.setAttribute('method', 'post');
-            form.setAttribute('action', '/usuario/d');
-
-            // Creamos un campo de entrada oculto para el ID del usuario
-            var input = document.createElement('input');
-            input.setAttribute('type', 'hidden');
-            input.setAttribute('name', 'id');
-            input.setAttribute('value', id);
-
-            // Agregamos el campo de entrada al formulario
-            form.appendChild(input);
-
-            // Agregamos el formulario al cuerpo del documento
-            document.body.appendChild(form);
-
-            // Enviamos el formulario
-            form.submit();
-        }
-    }
-
-    // Inicializamos DataTables
-    $(document).ready(function () {
-        $('#example').DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            },
-            layout: {
-                topStart: 'pageLength',
-                topEnd: 'search',
-                bottomStart: 'info',
-                bottomEnd: 'paging'
-            }
-        });
-
-    });
-</script>
-
-
-</div>

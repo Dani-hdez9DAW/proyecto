@@ -377,7 +377,22 @@
 
 
     <div class="container  mt-4 grid-view" id="list-view-container" style="border-radius:5%">
+        <nav style="padding: 20px;" aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/juego/r(page=0)}">Primera</a>
+                </li>
+                <!-- Mostrar números de página -->
+                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                    th:classappend="${pageNumber == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/juego/r(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                </li>
 
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/juego/r(page=${totalPages - 1})}">Última</a>
+                </li>
+            </ul>
+        </nav>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div th:each="juego : ${juegos}" class="col">
                 <div class="card bg-secondary carta">
@@ -404,6 +419,22 @@
                 </div>
             </div>
         </div>
+        <nav style="padding: 20px;" aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/juego/r(page=0)}">Primera</a>
+                </li>
+                <!-- Mostrar números de página -->
+                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                    th:classappend="${pageNumber == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/juego/r(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/juego/r(page=${totalPages - 1})}">Última</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
 

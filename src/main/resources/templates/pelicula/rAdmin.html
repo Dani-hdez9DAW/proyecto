@@ -44,14 +44,12 @@
                     <td th:text="${pelicula.duracion}"></td>
 
                     <td>
-                        <a href="#" id="edbo" th:href="@{'/pelicula/u?id=' + ${pelicula.idElemento}}">
-                            <input type="hidden" name="idpelicula" th:value="${pelicula.idElemento}">
+                        <a href="#" id="edbo" th:href="|window.location.href='/pelicula/u?id=${pelicula.idElemento}'|">
                             <i class="bi bi-pen-fill"></i>
                         </a>
                     </td>
                     <td>
                         <a href="#" id="edbo" th:href="@{'/pelicula/d?id=' + ${pelicula.idElemento}}">
-                            <input type="hidden" name="idpelicula" th:value="${pelicula.idElemento}">
                             <i class="bi bi-trash3-fill"></i>
                         </a>
                     </td>
