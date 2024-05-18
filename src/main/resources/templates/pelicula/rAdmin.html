@@ -42,9 +42,8 @@
                     <td th:text="${pelicula.fecha_salida}"></td>
                     <td th:text="${pelicula.estado}"></td>
                     <td th:text="${pelicula.duracion}"></td>
-
                     <td>
-                        <a href="#" id="edbo" th:href="|window.location.href='/pelicula/u?id=${pelicula.idElemento}'|">
+                        <a href="#" class="edit-button" th:data-id="${pelicula.idElemento}" data-toggle="modal" data-target="#modal-edit">
                             <i class="bi bi-pen-fill"></i>
                         </a>
                     </td>
@@ -56,7 +55,103 @@
                 </tr>
             </tbody>
         </table>
+    </div>
 
+    <div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="modal-edit-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between">
+                    <h1 style="text-align: right;">Modificacion de datos de la pelicula</h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-form" action="/pelicula/u" method="post">
+                        <div class="form-group row">
+                            <label for="id-nombre" class="col-sm-4 col-form-label"><h4>Nombre</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-nombre" class="form-control" name="nombre" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-clasificacion" class="col-sm-4 col-form-label"><h4>Edad</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-clasificacion" class="form-control" name="clasificacion" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-estado" class="col-sm-4 col-form-label"><h4>Estado</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-estado" class="form-control" name="estado" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-fechaSalida" class="col-sm-4 col-form-label"><h4>Fecha</h4></label>
+                            <div class="col-sm-8">
+                                <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-duracion" class="col-sm-4 col-form-label"><h4>Duración</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-duracion" class="form-control" name="duracion" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-plataforma" class="col-sm-4 col-form-label"><h4>Plataforma</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-plataforma" class="form-control" name="plataforma">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-puntuacion" class="col-sm-4 col-form-label"><h4>Puntuación</h4></label>
+                            <div class="col-sm-8">
+                                <input type="number" id="id-puntuacion" class="form-control" name="puntuacion">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-cuentaVotos" class="col-sm-4 col-form-label"><h4>Votos</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-trailer" class="col-sm-4 col-form-label"><h4>Trailer</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-trailer" class="form-control" name="trailer">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id-urlCompra" class="col-sm-4 col-form-label"><h4>URL</h4></label>
+                            <div class="col-sm-8">
+                                <input type="text" id="id-urlCompra" class="form-control" name="urlCompra">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="id-sinopsis"><h4>Sinopsis</h4></label>
+                            <textarea id="id-sinopsis" class="form-control" name="sinopsis"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label><h4>Categorías</h4></label>
+                            <br>
+                            <th:block th:each="categoria : ${categorias}">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="categoriaId[]" class="form-check-input"
+                                        th:id="|idCategoria-${categoria.idCategoria}|" th:value="${categoria.idCategoria}"
+                                        th:checked="${pelicula.categorias.contains(categoria)}">
+                                    <label class="form-check-label" th:for="|idCategoria-${categoria.idCategoria}|"
+                                        th:text="${categoria.nombre}"></label>
+                                </div>
+                            </th:block>
+                        </div>
+                        <input type="hidden" id="idpelicula" name="idpelicula">
+                        <button type="submit" id="btnActualizar" class="btn btn-primary btn-block" style="margin-top:20px;">Guardar</button>
+                    </form>
+                    <button class="btn btn-danger btn-block" data-dismiss="modal" style="margin-top:10px;">Cerrar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Carga de jQuery -->
@@ -65,21 +160,55 @@
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script>
-        // Función para inicializar DataTables
         $(document).ready(function () {
             $('#peliculasTable').DataTable({
                 language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            },
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                }
             });
-            $('#peliculasTable').on('click', '#editarPelicula', function () {
-                var peliculaId = $(this).closest('tr').find('td:first').text(); // Obtener el ID de la película
-                window.location.href = '/pelicula/u?id=' + peliculaId;
+
+            $('.edit-button').on('click', function () {
+                var peliculaId = $(this).data('id');
+                // Hacer una solicitud AJAX para obtener los datos de la película por ID
+                $.ajax({
+                    url: '/pelicula/get/' + peliculaId,
+                    method: 'GET',
+                    success: function (data) {
+                        $('#id-nombre').val(data.titulo);
+                        $('#id-clasificacion').val(data.clasificacion);
+                        $('#id-estado').val(data.estado);
+                        $('#id-fechaSalida').val(data.fecha_salida);
+                        $('#id-duracion').val(data.duracion);
+                        $('#id-plataforma').val(data.plataforma);
+                        $('#id-puntuacion').val(data.puntuacion);
+                        $('#id-cuentaVotos').val(data.cuenta_votos);
+                        $('#id-trailer').val(data.trailer);
+                        $('#id-urlCompra').val(data.url);
+                        $('#id-sinopsis').val(data.sinopsis);
+                        $('#idpelicula').val(data.idElemento);
+                        
+                        // Marcar las categorías
+                        $('input[name="categoriaId[]"]').each(function () {
+                            var categoriaId = $(this).val();
+                            if (data.categorias.includes(parseInt(categoriaId))) {
+                                $(this).prop('checked', true);
+                            } else {
+                                $(this).prop('checked', false);
+                            }
+                        });
+
+                        $('#modal-edit').modal('show');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
             });
         });
-
     </script>
 
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
