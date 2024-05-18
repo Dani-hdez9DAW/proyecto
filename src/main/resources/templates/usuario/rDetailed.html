@@ -1,6 +1,11 @@
 <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 <style>
 	/* Imagen de Spiderman */
 	body {
@@ -293,7 +298,7 @@
 </head>
 
 <body>
-	<div class="container-usu">
+	<div class="m-3 container-usu">
 		<div class="header-container">
 			<div class="header">
 				<h1 class="main-heading" th:text="${session.usuario.nombre}"></h1>
@@ -316,33 +321,58 @@
 			<div class="body-stats">Siguiendo <span>1.9k</span></div>
 			<div class="u-clearfix"></div>
 			<div id="description" class="body-info">
-				<!-- Ícono de editar -->
-				<span id="edit-icon" class="edit-icon" onclick="updateDescription()">✎</span>
 				<!-- Descripción -->
 				<p id="user-description" th:text="${session.usuario.descripcion}"></p>
+				<!-- Ícono de editar -->
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarDescripcionModal">
+					✎
+				</button>
+				<!-- Modal para editar la descripción -->
+				<div class="modal fade" id="editarDescripcionModal" tabindex="-1" role="dialog"
+					aria-labelledby="editarDescripcionModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="editarDescripcionModalLabel">Editar descripción</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form id="editarDescripcionForm">
+									<div class="form-group">
+										<label for="nuevaDescripcion">Nueva descripción:</label>
+										<textarea class="form-control" id="nuevaDescripcion"
+											name="nuevaDescripcion"></textarea>
+									</div>
+									<button type="submit" class="btn btn-primary">Guardar cambios</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 
 			</div>
 
 
 		</div>
-		
+
 		<div id="peliculas" class="card u-clearfix">
-			<span class="card-heading">Movies</span>
+			<span class="card-heading">Películas favoritas</span>
 			<ul class="card-list">
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<!-- Itera sobre las películas favoritas del usuario y muestra cada una -->
+				<li th:each="pelicula : ${peliculasFavoritas}">
+					<!-- Muestra la imagen de la película -->
+					<img th:src="${pelicula.imagen}" alt="" />
+					<!-- Muestra el título de la película -->
+					<span th:text="${pelicula.titulo}"></span>
+					<!-- Muestra la sinopsis de la película -->
+					<span th:text="${pelicula.sinopsis}"></span>
+
+				</li>
 			</ul>
 		</div>
+
 
 		<div id="juegos" class="card u-clearfix">
 			<span class="card-heading">VIDEOJUEGOS</span>
@@ -380,31 +410,34 @@
 		});
 	});
 
-	// //// //// //// FUNCIÓN DE LOS BOTONES DE EDITAR//// //// //// //// //
-	function updateDescription() {
-		// Obtener la descripción actual del usuario
-		var description = document.getElementById('user-description').innerText;
+	// FUNCIÓN PARA MANDAR LOS DATOS EDITADOS DE LA DESCRIPCIÓN
+		$(document).ready(function() {
+			$('#editarDescripcionForm').submit(function (event) {
+				event.preventDefault(); // Evitar que el formulario se envíe automáticamente
 
-		// Enviar la descripción al servidor
-		function updateDescription() {
-			// Obtener la descripción actual del usuario del elemento <p>
-			var description = document.getElementById('user-description').innerText;
+				// Obtener la nueva descripción del usuario del campo de texto
+				var nuevaDescripcion = $('#nuevaDescripcion').val();
 
-			// Enviar la descripción al servidor
-			$.ajax({
-				type: "POST",
-				url: "/usuario/actualizarDescripcion",
-				data: { nuevaDescripcion: descripcion }, // Asegúrate de usar el mismo nombre de parámetro aquí
-				success: function (response) {
-					console.log('Descripción actualizada correctamente');
-				},
-				error: function (xhr, status, error) {
-					console.error('Error al actualizar la descripción:', error);
-				}
+				// Enviar la nueva descripción al servidor usando AJAX
+				$.ajax({
+					type: 'POST',
+					url: '/usuario/actualizarDescripcion',
+					data: { nuevaDescripcion: nuevaDescripcion }, // Datos a enviar al servidor
+					success: function (response) {
+						// Manejar la respuesta del servidor (opcional)
+						console.log('Descripción actualizada correctamente');
+
+						// Cerrar el modal después de actualizar la descripción
+						$('#editarDescripcionModal').modal('hide');
+					},
+					error: function (xhr, status, error) {
+						// Manejar errores de AJAX (opcional)
+						console.error('Error al actualizar la descripción:', error);
+					}
+				});
 			});
-		}
-
-	}
+  });
+</script>
 
 
 </script>

@@ -7,6 +7,7 @@ import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -114,6 +115,24 @@ public class UsuarioService {
             throw new Exception("El usuario no existe: " + nombreUsuario);
         }
     }
+
+    public void actualizarDescripcion(String correoUsuario, String nuevaDescripcion) {
+        // Buscar el usuario por su correo en la base de datos
+        Usuario usuario = usuarioRepository.getByCorreo(correoUsuario);
+    
+        // Verificar si se encontró el usuario
+        if (usuario != null) {
+            // Actualizar la descripción del usuario con la nueva descripción proporcionada
+            usuario.setDescripcion(nuevaDescripcion);
+    
+            // Guardar los cambios en la base de datos
+            usuarioRepository.save(usuario);
+        } else {
+            // Manejar el caso en el que no se encuentre el usuario
+            throw new UsernameNotFoundException("Usuario no encontrado: " + correoUsuario);
+        }
+    }
+    
 
 
     // public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {

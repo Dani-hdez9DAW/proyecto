@@ -69,13 +69,20 @@ public class UsuarioController {
 
     @GetMapping("rDetailed")
     public String rDetailed(ModelMap m, HttpSession session) {
-        String nombreUsuario = (String) session.getAttribute("nombre");
-        // Esta función debería obtener la cantidad de películas favoritas para el
-        // usuario actual
-        // int cantidadPeliculasFavoritas =
-        // usuarioService.obtenerCantidadPeliculasFavoritas(nombreUsuario);
+        // Obtener el usuario actual desde el servicio
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        m.put("nombre", nombreUsuario);
+        // Verificar si el usuario existe y tiene películas favoritas
+        if (usuario != null && usuario.getPeliculasFav() != null && !usuario.getPeliculasFav().isEmpty()) {
+            // Obtener la lista de películas favoritas del usuario
+            List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
+
+            // Poner la lista de películas favoritas en el modelo para que esté disponible
+            // en la vista
+            m.put("peliculasFavoritas", peliculasFavoritas);
+        }
+
+        m.put("usuario", usuario);
         // m.put("cantidadPeliculasFavoritas", cantidadPeliculasFavoritas);
         m.put("view", "usuario/rDetailed");
         return "_t/frame";
@@ -97,6 +104,38 @@ public class UsuarioController {
         response.put("puntos", puntos);
 
         return ResponseEntity.ok(response);
+    }
+
+    // EDITAR LA DESCRIPCIÓN
+    @PostMapping("actualizarDescripcion")
+    public ResponseEntity<String> actualizarDescripcion(@RequestParam("nuevaDescripcion") String nuevaDescripcion,
+            HttpSession session) {
+        // Obtener el nombre de usuario de la sesión
+        String nombreUsuario = (String) session.getAttribute("nombre");
+
+        // Verificar si el nombre de usuario está presente en la sesión
+        if (nombreUsuario != null) {
+            // Buscar el usuario en la base de datos por su nombre de usuario
+            Usuario usuario = usuarioService.findByCorreo(nombreUsuario);
+
+            // Verificar si se encontró el usuario en la base de datos
+            if (usuario != null) {
+                // Actualizar la descripción del usuario con la nueva descripción proporcionada
+                usuario.setDescripcion(nuevaDescripcion);
+
+                // Guardar los cambios en la base de datos
+                usuarioService.actualizarDescripcion(nombreUsuario, nuevaDescripcion);
+
+                // Devolver una respuesta exitosa
+                return ResponseEntity.ok("Descripción actualizada correctamente");
+            } else {
+                // Si no se encuentra el usuario, devolver un error
+                return ResponseEntity.badRequest().body("Usuario no encontrado");
+            }
+        } else {
+            // Si no se encuentra el nombre de usuario en la sesión, devolver un error
+            return ResponseEntity.badRequest().body("Usuario no autenticado");
+        }
     }
 
     // ----------------------------------------------------------------
