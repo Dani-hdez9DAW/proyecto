@@ -4,97 +4,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de categorias</title>
-    <style>
-        /* Estilos personalizados */
-        .bg-warning {
-            background-color: #ffc107 !important;
-            color: #343a40 !important;
-        }
-
-        .bg-success {
-            background-color: #28a745 !important;
-            color: #fff !important;
-        }
-
-        .bg-info {
-            background-color: #17a2b8 !important;
-            color: #fff !important;
-        }
-
-        .table th,
-        .table td {
-            vertical-align: middle;
-        }
-
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .container {
-            animation: fadeIn 1s ease;
-        }
-
-        /* Alinear botones */
-        .btn-group {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-        }
-
-        .btn-group .btn {
-            margin-left: 5px;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-        }
-    </style>
+    <title>Administrar usuarios</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.2/css/uikit.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/categorias/rAdmin.css">
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="btn-group">
-                    <!-- Botón de creación de categoría -->
-                    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary"
-                        onclick="window.location.href='/categoria/c'">Crear categoria</button>
-                </div>
-                <h1>Gestion de categorias</h1>
-            </div>
-        </div>
-        <table class="table table-striped text-center mt-3">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="categoria : ${categorias}">
-                    <td class="bg-warning text-dark" th:text="${categoria.nombre}"></td>
-                    <td class="bg-info">
-                        <!-- Botones de edición y eliminación -->
-                        <div class="btn-group">
-                            <button class="btn btn-warning"
-                                th:onclick="|window.location.href='/categoria/u?id=${categoria.id_categoria}'|">Editar</button>
-                            <form action="/categoria/d" method="post">
-                                <button class="btn btn-danger">Eliminar</button>
-                                <input type="hidden" name="id" th:value="${categoria.id_categoria}">
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="container">
+        <!--Botón volver atrás-->
+        <a href="#" onclick="goBack()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5" />
+            </svg>
+        </a>
 
+
+        <h1>Lista de Categorias</h1>
+        <th:block th:with="contador=0">
+            <table id="example" class="uk-table uk-table-hover " style="width:100%">
+                <thead>
+                    <tr>
+                        <th class="unaLinea">Nombre</th>
+                        <th class="unaLinea">Nº de peliculas</th>
+                        <th class="unaLinea">Editar</th>
+                        <th class="unaLinea">Borrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="categoria, iterStatus : ${categorias}">
+                        <td th:text="${categoria.nombre}"></td>
+                        <td th:text="${categoria.categoriaPelis.size()}"></td>
+                        <td>
+                            <a th:onclick="|window.location.href='/categoria/u?id_elemento=${categoria.idCategoria}'|"
+                                class="btn btn-success">
+                                <i class="bi bi-pen-fill"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <form action="/categoria/d" method="post">
+                                <input type="hidden" name="id" th:value="${categoria.idCategoria}">
+                                <button type="submit" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+    </div>
 </body>
 
 </html>
+
+
+<!-- SCRIPTS -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+<script>
+    // Para el botón de volver atrás
+    function goBack() {
+        window.history.back();
+    }
+
+    // Función para eliminar usuario
+    function eliminarUsuario(id) {
+        if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+            // Creamos un formulario temporal
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', '/usuario/d');
+
+            // Creamos un campo de entrada oculto para el ID del usuario
+            var input = document.createElement('input');
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'id');
+            input.setAttribute('value', id);
+
+            // Agregamos el campo de entrada al formulario
+            form.appendChild(input);
+
+            // Agregamos el formulario al cuerpo del documento
+            document.body.appendChild(form);
+
+            // Enviamos el formulario
+            form.submit();
+        }
+    }
+
+    // Inicializamos DataTables
+    $(document).ready(function () {
+        $('#example').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            layout: {
+                topStart: 'pageLength',
+                topEnd: 'search',
+                bottomStart: 'info',
+                bottomEnd: 'paging'
+            }
+        });
+
+    });
+</script>
+
+
+</div>

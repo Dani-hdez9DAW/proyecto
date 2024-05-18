@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UsuarioService {
 
@@ -99,50 +101,16 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public int obtenerPuntos(String nombreUsuario) throws Exception {
-        // Buscar el usuario por su nombre en la base de datos
-        List<Usuario> usuarios = usuarioRepository.findByNombre(nombreUsuario);
+    @Transactional
+    public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
+        List<Juego> juegosFav = usuario.getJuegosFav();
 
-        // Verificar si el usuario existe
-        if (!usuarios.isEmpty()) {
-            // Obtener el primer usuario de la lista (asumiendo que el nombre de usuario es
-            // único)
-            Usuario usuario = usuarios.get(0);
-            // Obtener los puntos del usuario y devolverlos
-            return usuario.getPuntos();
-        } else {
-            // Manejar el caso en el que el usuario no exista
-            throw new Exception("El usuario no existe: " + nombreUsuario);
-        }
+        juegosFav.add(juego);
+        usuario.setJuegosFav(juegosFav);
+
+        return usuarioRepository.save(usuario);
     }
 
-    public void actualizarDescripcion(String correoUsuario, String nuevaDescripcion) {
-        // Buscar el usuario por su correo en la base de datos
-        Usuario usuario = usuarioRepository.getByCorreo(correoUsuario);
-    
-        // Verificar si se encontró el usuario
-        if (usuario != null) {
-            // Actualizar la descripción del usuario con la nueva descripción proporcionada
-            usuario.setDescripcion(nuevaDescripcion);
-    
-            // Guardar los cambios en la base de datos
-            usuarioRepository.save(usuario);
-        } else {
-            // Manejar el caso en el que no se encuentre el usuario
-            throw new UsernameNotFoundException("Usuario no encontrado: " + correoUsuario);
-        }
-    }
-    
-
-
-    // public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
-    //     List<Juego> juegosFav = usuario.getJuegosFav();
-
-    //     juegosFav.add(juego);
-    //     System.out.println("AAAAAA" + juego.getTitulo());
-    //     usuario.setJuegosFav(juegosFav);
-
-    //     return usuarioRepository.save(usuario);
-    // }
+   
 
 }
