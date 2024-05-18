@@ -45,110 +45,113 @@
     <div class="modal" id="modal-name">
         <div class="modal-sandbox"></div>
         <div class="modal-box">
-            <div class="modal-header">
+            <div class="modal-header d-flex justify-content-between">
+                <h1 style="text-align: right;">Modificacion de datos de la pelicula</h1>
                 <div class="close-modal">&#10006;</div>
-                <h1 style="text-align: center;">Modificacion de datos de la pelicula</h1>
             </div>
             <div class="modal-body">
-                <form action="/pelicula/u" method="post">
-                    <div class="form-group">
-                        <label for="id-nombre">
-                            <h4>Nombre</h4>
-                        </label>
-                        <input type="text" id="id-nombre" name="nombre" class="form-control" required
-                            th:value="${pelicula.titulo}">
+                <div class="row">
+                    <div class="col-6">
+                        <form action="/pelicula/u" method="post">
+                            <div class="form-group row">
+                                <label for="id-nombre" class="col-sm-4 col-form-label"><h4>Nombre</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-nombre" class="form-control" name="nombre" required th:value="${pelicula.titulo}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-clasificacion" class="col-sm-4 col-form-label"><h4>Edad</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-clasificacion" class="form-control" name="clasificacion" required th:value="${pelicula.clasificacion}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-estado" class="col-sm-4 col-form-label"><h4>Estado</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-estado" class="form-control" name="estado" required th:value="${pelicula.estado}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-fechaSalida" class="col-sm-4 col-form-label"><h4>Fecha</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida" required th:value="${pelicula.fecha_salida}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-duracion" class="col-sm-4 col-form-label"><h4>Duración</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-duracion" class="form-control" name="duracion" required th:value="${pelicula.duracion}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-plataforma" class="col-sm-4 col-form-label"><h4>Plataforma</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-plataforma" class="form-control" name="plataforma" th:value="${pelicula.plataforma}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-puntuacion" class="col-sm-4 col-form-label"><h4>Puntuación</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="id-puntuacion" class="form-control" name="puntuacion" th:value="${pelicula.puntuacion}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-cuentaVotos" class="col-sm-4 col-form-label"><h4>Votos</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos" th:value="${pelicula.cuenta_votos}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-trailer" class="col-sm-4 col-form-label"><h4>Trailer</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-trailer" class="form-control" name="trailer" th:value="${pelicula.trailer}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-urlCompra" class="col-sm-4 col-form-label"><h4>URL</h4></label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-urlCompra" class="form-control" name="urlCompra" th:value="${pelicula.url}">
+                                </div>
+                            </div>
                     </div>
-                    <div id="clasificacion" class="form-group">
-                        <label for="id-clasificacion">
-                            <h4>Clasificación</h4>
-                        </label>
-                        <input type="text" id="id-clasificacion" name="clasificacion" class="form-control" required
-                            th:value="${pelicula.clasificacion}">
+                    <div class="col-6">
+                            <div class="form-group">
+                                <label for="id-sinopsis"><h4>Sinopsis</h4></label>
+                                <textarea id="id-sinopsis" class="form-control" name="sinopsis" th:text="${pelicula.sinopsis}"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label><h4>Categorías</h4></label>
+                                <br>
+                                <th:block th:each="categoria : ${categorias}">
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox" name="categoriaId[]" class="form-check-input"
+                                            th:id="|idCategoria-${categoria.idCategoria}|" th:value="${categoria.idCategoria}"
+                                            th:checked="${pelicula.categorias.contains(categoria)}">
+                                        <label class="form-check-label" th:for="|idCategoria-${categoria.idCategoria}|"
+                                            th:text="${categoria.nombre}"></label>
+                                    </div>
+                                </th:block>
+                            </div>
+                            <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
+                            <button type="submit" id="btnActualizar" class="btn btn-primary btn-block" style="margin-top:20px;">Guardar</button>
+                        </form>
+                        <button class="btn btn-danger btn-block close-modal" style="margin-top:10px;">Cerrar</button>
                     </div>
-                    <div id="estado" class="form-group">
-                        <label for="id-estado">
-                            <h4>Estado</h4>
-                        </label>
-                        <input type="text" id="id-estado" name="estado" class="form-control" required
-                            th:value="${pelicula.estado}">
-                    </div>
-                    <div id="fechaEstreno" class="form-group">
-                        <label for="id-fechaSalida">
-                            <h4>Fecha de estreno</h4>
-                        </label>
-                        <input type="date" id="id-fechaSalida" name="fechaSalida" class="form-control" required
-                            th:value="${pelicula.fecha_salida}">
-                    </div>
-                    <div id="peliDuracion" class="form-group">
-                        <label for="id-duracion">
-                            <h4>Duración</h4>
-                        </label>
-                        <input type="text" id="id-duracion" name="duracion" class="form-control" required
-                            th:value="${pelicula.duracion}">
-                    </div>
-                    <div class="form-group">
-                        <h4>Plataforma</h4>
-                        <input type="text" id="id-plataforma" name="plataforma" class="form-control"
-                            th:value="${pelicula.plataforma}" />
-                    </div>
-                    <div class="form-group">
-                        <label for="id-puntuacion">
-                            <h4>Puntuacion</h4>
-                        </label>
-                        <input type="number" id="id-puntuacion" name="puntuacion" th:value="${pelicula.puntuacion}"
-                            class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <h4>Cuenta votos</h4>
-                        <input type="text" id="id-cuentaVotos" name="cuentaVotos" class="form-control"
-                            th:value="${pelicula.cuenta_votos}" />
-                    </div>
-                    <div class="form-group">
-                        <label for="id-trailer">
-                            <h4>Ver trailer</h4>
-                        </label>
-                        <input type="text" id="id-trailer" name="trailer" th:value="${pelicula.trailer}"
-                            class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="id-urlCompra">
-                            <h4>URL de compra</h4>
-                        </label>
-                        <input type="text" id="id-urlCompra" name="urlCompra" th:value="${pelicula.url}"
-                            class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <span>
-                            <h4>Sinopsis</h4>
-                            <textarea id="id-sinopsis" name="sinopsis" class="form-control"
-                                th:text="${pelicula.sinopsis}"></textarea>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <h4>Categorias</h4>
-                        <th:block th:each="categoria : ${categorias}">
-                            <input type="checkbox" name="categoriaId[]" class="option-input checkbox"
-                                th:id="|idCategoria-${categoria.idCategoria}|" th:value="${categoria.idCategoria}"
-                                th:checked="${pelicula.categorias.contains(categoria)}" />
-                            <label th:for="|idCategoria-${categoria.idCategoria}|" th:text="${categoria.nombre}"
-                                th:value="${categoria.idCategoria}"></label>
-                        </th:block>
-                    </div>
-                    <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
-                    <button type="submit" id="btnActualizar" class="btn btn-primary btn-block"
-                        style="display: block; margin: 0 auto; margin-top:20px;">Guardar</button>
-
-                </form>
-                <button class="btn btn-danger close-modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
+    
     <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary modal-trigger "
         data-modal="modal-name"> <i class="bi bi-pen-fill"></i></button>
-    <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" id="borrarButton"
-        class="btn btn-primary">
-        Borrar
-    </button>
+    <form action="/pelicula/d" method="POST">
+        <input type="hidden" name="idpelicula" th:value="${pelicula.idElemento}">
+        <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" id="borrarButton"
+            class="btn btn-primary">
+            Borrar
+        </button>
+    </form>
+
     <div class="container mt-5">
         <h1 class="text-center highlight-text" th:text="${pelicula.titulo}"></h1>
         <div class="heart-container" title="Like">
@@ -278,15 +281,34 @@
                             </p>
                         </li>
                         <li>
-                            <h3 style="display: none;">Cuenta votos</h3>
+                            <h3>Cuenta votos</h3>
                             <p class="card-text"><span th:utext="${pelicula.cuenta_votos}"></span></p>
                         </li>
                         <li>
-                            <h3 style="display: none;">Plataforma</h3>
+                            <h3>Plataforma</h3>
                             <p class="card-text"><span th:utext="${pelicula.plataforma}"></span></p>
                         </li>
+
                     </ul>
+                    <div>
+                        <div th:if="${pelicula.clasificacion == '3'}">
+                            <img th:src="@{/img/peliculas/edades/Apto.png}" class="imagengrande" alt="Apto">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '7'}">
+                            <img th:src="@{/img/peliculas/edades/7.png}" class="imagengrande" alt="7">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'PG-13'}">
+                            <img th:src="@{/img/peliculas/edades/12.png}" class="imagengrande" alt="12">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '16'}">
+                            <img th:src="@{/img/peliculas/edades/16.png}" class="imagengrande" alt="16">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'R'}">
+                            <img th:src="@{/img/peliculas/edades/18.png}" class="imagengrande" alt="+18">
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>

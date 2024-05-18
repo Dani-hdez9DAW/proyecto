@@ -44,14 +44,15 @@
                     <td th:text="${pelicula.duracion}"></td>
 
                     <td>
-                        <a href="#" id="edbo" th:onclick="|window.location.href='/pelicula/u?id_elemento=${pelicula.idElemento}'|">
-                            <i class="bi bi-pen-fill"></i>
+                        <a th:onclick="|window.location.href='/pelicula/rDetailed?id_elemento=${pelicula.idElemento}'|" class="btn btn-info">
+                            Editar
                         </a>
                     </td>
                     <td>
-                        <a href="#" id="edbo" th:href="@{'/pelicula/d?id=' + ${pelicula.idElemento}}">
-                            <i class="bi bi-trash3-fill"></i>
-                        </a>
+                        <form action="/pelicula/d" method="post">
+                            <input type="hidden" name="idpelicula" th:value="${pelicula.idElemento}">
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></button>
+                        </form>
                     </td>
                 </tr>
             </tbody>

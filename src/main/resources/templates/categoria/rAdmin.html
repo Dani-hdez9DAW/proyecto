@@ -88,8 +88,8 @@
                             <button class="btn btn-warning"
                                 th:onclick="|window.location.href='/categoria/u?id=${categoria.id_categoria}'|">Editar</button>
                             <form action="/categoria/d" method="post">
-                                <button class="btn btn-danger">Eliminar</button>
-                                <input type="hidden" name="id" th:value="${categoria.id_categoria}">
+                                <input type="hidden" name="id" th:value="${categoria.idCategoria}">
+                                <button type="submit" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></button>
                             </form>
                         </div>
                     </td>
@@ -124,7 +124,6 @@
     </table>
 
     </div>
-
 </body>
 
 </html>
@@ -150,6 +149,67 @@
             var form = document.createElement('form');
             form.setAttribute('method', 'post');
             form.setAttribute('action', '/categoria/d');
+
+            // Creamos un campo de entrada oculto para el ID del usuario
+            var input = document.createElement('input');
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'id');
+            input.setAttribute('value', id);
+
+            // Agregamos el campo de entrada al formulario
+            form.appendChild(input);
+
+            // Agregamos el formulario al cuerpo del documento
+            document.body.appendChild(form);
+
+            // Enviamos el formulario
+            form.submit();
+        }
+    }
+
+    // Inicializamos DataTables
+    $(document).ready(function () {
+        $('#example').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            layout: {
+                topStart: 'pageLength',
+                topEnd: 'search',
+                bottomStart: 'info',
+                bottomEnd: 'paging'
+            }
+        });
+
+    });
+</script>
+
+
+</div>
+
+
+
+
+<!-- SCRIPTS -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+<script>
+    // Para el botón de volver atrás
+    function goBack() {
+        window.history.back();
+    }
+
+    // Función para eliminar usuario
+    function eliminarUsuario(id) {
+        if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+            // Creamos un formulario temporal
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', '/usuario/d');
 
             // Creamos un campo de entrada oculto para el ID del usuario
             var input = document.createElement('input');

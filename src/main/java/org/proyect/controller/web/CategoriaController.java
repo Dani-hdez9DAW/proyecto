@@ -75,7 +75,7 @@ public class CategoriaController {
 
     @PostMapping("u")
     public String updatePost(
-            @RequestParam("idcategoria") Long idCategoria,
+            @RequestParam("id") Long idCategoria,
             @RequestParam("nombre") String nombre) throws DangerException {
         try {
             categoriaService.update(idCategoria, nombre);
