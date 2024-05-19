@@ -36,8 +36,6 @@ public class CategoriaController {
                     m.put("view", "categoria/rAdmin");
                     return "_t/frame";
                 } else {
-                    // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
-                    // de sesión u otra página apropiada.
                     return "/"; // Redirige a la página de inicio de sesión
                 }
     }
@@ -50,8 +48,6 @@ public class CategoriaController {
                     m.put("view", "categoria/c");
                     return "_t/frame";
                 } else {
-                    // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
-                    // de sesión u otra página apropiada.
                     return "/"; // Redirige a la página de inicio de sesión
                 }
     }

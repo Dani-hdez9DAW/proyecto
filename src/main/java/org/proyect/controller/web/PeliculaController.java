@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.proyect.domain.Categoria;
@@ -18,6 +20,9 @@ import org.proyect.service.CategoriaService;
 import org.proyect.service.PeliculaService;
 import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,16 +43,35 @@ public class PeliculaController {
     @Autowired
     private UsuarioService usuarioService;
 
+    // @GetMapping("r")
+    // public String r(ModelMap m) {
+
+    // List<Pelicula> peliculas = peliculaService.findAll();
+    // List<Categoria> categorias = categoriaService.findAll();
+    // List<String> clasificaciones = Arrays.asList("G", "PG", "R13", "R15", "M",
+    // "R16", "RP16");
+
+    // m.put("peliculas", peliculas);
+    // m.put("categorias",categorias);
+    // m.put("clasificaciones",clasificaciones);
+    // m.put("view", "/pelicula/r");
+    // return "_t/frame";
+    // }
     @GetMapping("r")
-    public String r(ModelMap m) {
-
-        List<Pelicula> peliculas = peliculaService.findAll();
-
+    public String r(@RequestParam(defaultValue = "0") int page, ModelMap m) {
+        Pageable pageable = PageRequest.of(page, 12); // 10 películas por página
+        Page<Pelicula> peliculasPage = peliculaService.findAll(pageable);
+        List<Categoria> categorias = categoriaService.findAll();
+        List<String> clasificaciones = Arrays.asList("R","PG-13","PG-16","PG-17");
+        List<Pelicula> peliculas = peliculasPage.getContent();
         m.put("peliculas", peliculas);
+        m.put("currentPage", page);
+        m.put("categorias", categorias);
+        m.put("clasificaciones", clasificaciones);
+        m.put("totalPages", peliculasPage.getTotalPages());
         m.put("view", "/pelicula/r");
         return "_t/frame";
     }
-
     @GetMapping("rAdmin")
     public String rAdmin(
             ModelMap m, HttpSession s) {
@@ -214,4 +238,105 @@ public class PeliculaController {
         }
         return "redirect:/pelicula/r";
     }
+
+    // @GetMapping("filtrarPorCategoria")
+    // public String filtrarPorCategoria(@RequestParam(name = "idCategoria",
+    // required = false) Long idCategoria,
+    // ModelMap m) {
+    // List<Pelicula> peliculasFiltradas;
+    // List<Pelicula> peliculas = peliculaService.findAll();
+    // Categoria categoria = null;
+
+    // if (idCategoria != null) {
+    // categoria = categoriaService.findById(idCategoria);
+    // }
+
+    // if (categoria != null) {
+    // peliculasFiltradas = new ArrayList<>();
+    // for (Pelicula pelicula : peliculas) {
+    // for (Categoria cat : pelicula.getCategorias()) {
+    // if (cat.getIdCategoria().equals(categoria.getIdCategoria())) {
+    // peliculasFiltradas.add(pelicula);
+    // break;
+    // }
+    // }
+    // }
+    // } else {
+    // peliculasFiltradas = peliculas;
+    // }
+
+    // m.put("peliculas", peliculasFiltradas);
+    // m.put("categorias", categoriaService.findAll());
+    // m.put("categoria", categoria);
+    // m.put("view", "pelicula/r");
+    // return "_t/frame";
+    // }
+
+    // @GetMapping("filtrarPorClasificacion")
+    // public String filtrarPorClasificacion(@RequestParam(name = "clasificacion",
+    // required = false) String clasificacion,
+    // ModelMap m) {
+    // List<Pelicula> peliculasFiltradas = new ArrayList<Pelicula>();
+    // List<Pelicula> peliculas = peliculaService.findAll();
+    // List<String> clasificaciones = Arrays.asList("G", "PG", "R13", "R15", "M",
+    // "R16", "RP16");
+
+    // for(Pelicula pelicula : peliculas){
+    // if(pelicula.getClasificacion() == clasificacion){
+    // peliculasFiltradas.add(pelicula);
+    // }
+    // }
+    // if(clasificacion==null){
+    // peliculasFiltradas = peliculas;
+    // }
+
+    // m.put("peliculas", peliculasFiltradas);
+    // m.put("categorias", categoriaService.findAll());
+    // m.put("clasificaciones",clasificaciones);
+    // m.put("view", "pelicula/r");
+    // return "_t/frame";
+    // }
+
+    @GetMapping("filtrar")
+    public String filtrar(@RequestParam(name = "idCategoria", required = false) Long idCategoria,
+            @RequestParam(name = "clasificacion", required = false) String clasificacion,
+            ModelMap m) {
+        List<Pelicula> peliculasFiltradas;
+        List<Pelicula> peliculas = peliculaService.findAll();
+        List<String> clasificaciones = Arrays.asList("G", "PG", "R13", "R15", "M", "R16", "RP16");
+        Categoria categoria = null;
+
+        if (idCategoria != null) {
+            categoria = categoriaService.findById(idCategoria);
+        }
+
+        if (idCategoria != null) { 
+            peliculasFiltradas = new ArrayList<>();
+            for (Pelicula pelicula : peliculas) {
+                for (Categoria cat : pelicula.getCategorias()) {
+                    if (cat.getIdCategoria().equals(idCategoria)) {
+                        peliculasFiltradas.add(pelicula);
+                        break;
+                    }
+                }
+            }
+        } else if (clasificacion != null) { 
+            peliculasFiltradas = new ArrayList<>();
+            for (Pelicula pelicula : peliculas) {
+                if (pelicula.getClasificacion().equals(clasificacion)) {
+                    peliculasFiltradas.add(pelicula);
+                }
+            }
+        } else { 
+            peliculasFiltradas = peliculas;
+        }
+
+        m.put("peliculas", peliculasFiltradas);
+        m.put("categorias", categoriaService.findAll());
+        m.put("clasificaciones", clasificaciones);
+        m.put("categoria", categoria);
+        m.put("view", "pelicula/r");
+        return "_t/frame";
+    }
+
 }
