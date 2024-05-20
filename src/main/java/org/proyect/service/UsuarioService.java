@@ -7,6 +7,7 @@ import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -110,6 +111,73 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-   
+    public int obtenerPuntos(String nombreUsuario) throws Exception {
+        // Buscar el usuario por su nombre en la base de datos
+        List<Usuario> usuarios = usuarioRepository.findByNombre(nombreUsuario);
 
+        // Verificar si el usuario existe
+        if (!usuarios.isEmpty()) {
+            // Obtener el primer usuario de la lista (asumiendo que el nombre de usuario es
+            // único)
+            Usuario usuario = usuarios.get(0);
+            // Obtener los puntos del usuario y devolverlos
+            return usuario.getPuntos();
+        } else {
+            // Manejar el caso en el que el usuario no exista
+            throw new Exception("El usuario no existe: " + nombreUsuario);
+        }
+    }
+
+    public void actualizarDescripcion(String correoUsuario, String nuevaDescripcion) {
+        // Buscar el usuario por su correo en la base de datos
+        Usuario usuario = usuarioRepository.getByCorreo(correoUsuario);
+
+        // Verificar si se encontró el usuario
+        if (usuario != null) {
+            // Actualizar la descripción del usuario con la nueva descripción proporcionada
+            usuario.setDescripcion(nuevaDescripcion);
+
+            // Guardar los cambios en la base de datos
+            usuarioRepository.save(usuario);
+        } else {
+            // Manejar el caso en el que no se encuentre el usuario
+            throw new UsernameNotFoundException("Usuario no encontrado: " + correoUsuario);
+        }
+    }
+
+    // Método para mostrar las películas
+    public int obtenerCantidadPeliculasFavoritas(String nombreUsuario) {
+        // Buscar al usuario por su nombre en la base de datos
+        Usuario usuario = usuarioRepository.getByNombre(nombreUsuario);
+
+        // Verificar si se encontró el usuario
+        if (usuario != null) {
+            // Obtener la lista de películas favoritas del usuario
+            List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
+
+            // Devolver el tamaño de la lista de películas favoritas
+            return peliculasFavoritas.size();
+        } else {
+            // Manejar el caso en que el usuario no se encuentre
+            throw new UsernameNotFoundException("Usuario no encontrado: " + nombreUsuario);
+        }
+    }
+
+    // Método para mostrar los videojuegos
+    public int obtenerCantidadJuegosFavoritos(String nombreUsuario) {
+        // Buscar al usuario por su nombre en la base de datos
+        Usuario usuario = usuarioRepository.getByNombre(nombreUsuario);
+
+        // Verificar si se encontró el usuario
+        if (usuario != null) {
+            // Obtener la lista de películas favoritas del usuario
+            List<Juego> juegosFavoritos = usuario.getJuegosFav();
+
+            // Devolver el tamaño de la lista de películas favoritas
+            return juegosFavoritos.size();
+        } else {
+            // Manejar el caso en que el usuario no se encuentre
+            throw new UsernameNotFoundException("Usuario no encontrado: " + nombreUsuario);
+        }
+    }
 }
