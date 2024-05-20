@@ -383,7 +383,7 @@
 
                     <hr class="dropdown-divider" />
 
-                    <a class="dropdown-item" href="#">Mi cuenta</a>
+                    <a class="dropdown-item" href="/usuario/rDetailed">Mi cuenta</a>
                     <a class="dropdown-item" href="#">Ayuda</a>
                     <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button
                             class="btn btn-primary" type="button">Logout</button></a>
@@ -420,7 +420,7 @@
                                 d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                             </path>
                         </svg>
-                        <input placeholder="Contraseña" name="pass" id="id-password" class="input-field"
+                        <input placeholder="Contraseña" name="pass" id="id-password" class="input-field" required
                             type="password">
                     </div>
                     <div class="btn">
@@ -473,7 +473,7 @@
                                 d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                             </path>
                         </svg>
-                        <input placeholder="Contraseña" id="id-pass" name="pass" class="input-field" type="password">
+                        <input placeholder="Contraseña" id="id-pass" name="pass" class="input-field" type="password" required>
                     </div>
                     <div class="btn">
                         <button class="button1"

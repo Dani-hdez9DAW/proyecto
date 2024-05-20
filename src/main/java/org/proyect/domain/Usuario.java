@@ -20,6 +20,9 @@ public class Usuario extends Persona {
 
     @Column
     private Long descuento;
+
+    @Column
+    private String descripcion;
     
 
     @ManyToMany(fetch = FetchType.EAGER)

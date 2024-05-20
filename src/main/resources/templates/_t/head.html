@@ -5,5 +5,16 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	<title>TFG</title>
 </head>
-<body class="bg-dark">
-<br>
+<style>
+	.admin-bg {
+		background-color:#9a9595 ;
+
+		/*Azul MArino:#000080
+		Marrón:#654321
+		Gris oscuro:#333333*/
+		
+	}
+</style>
+
+<body th:class="${session.usuario != null and session.usuario.esAdmin == true} ? 'admin-bg' : 'bg-dark'">
+	<br>
