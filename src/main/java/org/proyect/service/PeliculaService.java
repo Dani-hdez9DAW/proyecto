@@ -9,6 +9,8 @@ import org.proyect.domain.Pelicula;
 import org.proyect.repository.CategoriaRepository;
 import org.proyect.repository.PeliculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +24,10 @@ public class PeliculaService {
 
     public PeliculaService() {
         this.calificaciones = new ArrayList<>();
+    }
+
+    public Page<Pelicula> findAll(Pageable pageable) {
+        return peliculaRepository.findAll(pageable);
     }
 
 

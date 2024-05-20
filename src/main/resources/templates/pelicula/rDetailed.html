@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
 
 <head>
     <meta charset="UTF-8">
@@ -37,6 +37,34 @@
             color: #6f00ff;
             transition: color 0.3s;
         }
+
+        #clockdiv {
+            font-family: sans-serif;
+            color: #fff;
+            display: inline-block;
+            font-weight: 100;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        #clockdiv>div {
+            padding: 10px;
+            border-radius: 3px;
+            background: #ff8a80;
+            display: inline-block;
+        }
+
+        #clockdiv div>span {
+            padding: 15px;
+            border-radius: 3px;
+            background: #f44336;
+            display: inline-block;
+        }
+
+        .smalltext {
+            padding-top: 5px;
+            font-size: 16px;
+        }
     </style>
 </head>
 
@@ -54,86 +82,123 @@
                     <div class="col-6">
                         <form action="/pelicula/u" method="post">
                             <div class="form-group row">
-                                <label for="id-nombre" class="col-sm-4 col-form-label"><h4>Nombre</h4></label>
+                                <label for="id-nombre" class="col-sm-4 col-form-label">
+                                    <h4>Nombre</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-nombre" class="form-control" name="nombre" required th:value="${pelicula.titulo}">
+                                    <input type="text" id="id-nombre" class="form-control" name="nombre" required
+                                        th:value="${pelicula.titulo}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-clasificacion" class="col-sm-4 col-form-label"><h4>Edad</h4></label>
+                                <label for="id-clasificacion" class="col-sm-4 col-form-label">
+                                    <h4>Edad</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-clasificacion" class="form-control" name="clasificacion" required th:value="${pelicula.clasificacion}">
+                                    <input type="text" id="id-clasificacion" class="form-control" name="clasificacion"
+                                        required th:value="${pelicula.clasificacion}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-estado" class="col-sm-4 col-form-label"><h4>Estado</h4></label>
+                                <label for="id-estado" class="col-sm-4 col-form-label">
+                                    <h4>Estado</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-estado" class="form-control" name="estado" required th:value="${pelicula.estado}">
+                                    <input type="text" id="id-estado" class="form-control" name="estado" required
+                                        th:value="${pelicula.estado}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-fechaSalida" class="col-sm-4 col-form-label"><h4>Fecha</h4></label>
+                                <label for="id-fechaSalida" class="col-sm-4 col-form-label">
+                                    <h4>Fecha</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida" required th:value="${pelicula.fecha_salida}">
+                                    <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida"
+                                        required th:value="${pelicula.fecha_salida}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-duracion" class="col-sm-4 col-form-label"><h4>Duración</h4></label>
+                                <label for="id-duracion" class="col-sm-4 col-form-label">
+                                    <h4>Duración</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-duracion" class="form-control" name="duracion" required th:value="${pelicula.duracion}">
+                                    <input type="text" id="id-duracion" class="form-control" name="duracion" required
+                                        th:value="${pelicula.duracion}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-plataforma" class="col-sm-4 col-form-label"><h4>Plataforma</h4></label>
+                                <label for="id-plataforma" class="col-sm-4 col-form-label">
+                                    <h4>Plataforma</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-plataforma" class="form-control" name="plataforma" th:value="${pelicula.plataforma}">
+                                    <input type="text" id="id-plataforma" class="form-control" name="plataforma"
+                                        th:value="${pelicula.plataforma}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-puntuacion" class="col-sm-4 col-form-label"><h4>Puntuación</h4></label>
+                                <label for="id-puntuacion" class="col-sm-4 col-form-label">
+                                    <h4>Puntuación</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="id-puntuacion" class="form-control" name="puntuacion" th:value="${pelicula.puntuacion}">
+                                    <input type="number" id="id-puntuacion" class="form-control" name="puntuacion"
+                                        th:value="${pelicula.puntuacion}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-cuentaVotos" class="col-sm-4 col-form-label"><h4>Votos</h4></label>
+                                <label for="id-cuentaVotos" class="col-sm-4 col-form-label">
+                                    <h4>Votos</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos" th:value="${pelicula.cuenta_votos}">
+                                    <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos"
+                                        th:value="${pelicula.cuenta_votos}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-trailer" class="col-sm-4 col-form-label"><h4>Trailer</h4></label>
+                                <label for="id-trailer" class="col-sm-4 col-form-label">
+                                    <h4>Trailer</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-trailer" class="form-control" name="trailer" th:value="${pelicula.trailer}">
+                                    <input type="text" id="id-trailer" class="form-control" name="trailer"
+                                        th:value="${pelicula.trailer}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-urlCompra" class="col-sm-4 col-form-label"><h4>URL</h4></label>
+                                <label for="id-urlCompra" class="col-sm-4 col-form-label">
+                                    <h4>URL</h4>
+                                </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-urlCompra" class="form-control" name="urlCompra" th:value="${pelicula.url}">
+                                    <input type="text" id="id-urlCompra" class="form-control" name="urlCompra"
+                                        th:value="${pelicula.url}">
                                 </div>
                             </div>
                     </div>
                     <div class="col-6">
-                            <div class="form-group">
-                                <label for="id-sinopsis"><h4>Sinopsis</h4></label>
-                                <textarea id="id-sinopsis" class="form-control" name="sinopsis" th:text="${pelicula.sinopsis}"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label><h4>Categorías</h4></label>
-                                <br>
-                                <th:block th:each="categoria : ${categorias}">
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" name="categoriaId[]" class="form-check-input"
-                                            th:id="|idCategoria-${categoria.idCategoria}|" th:value="${categoria.idCategoria}"
-                                            th:checked="${pelicula.categorias.contains(categoria)}">
-                                        <label class="form-check-label" th:for="|idCategoria-${categoria.idCategoria}|"
-                                            th:text="${categoria.nombre}"></label>
-                                    </div>
-                                </th:block>
-                            </div>
-                            <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
-                            <button type="submit" id="btnActualizar" class="btn btn-primary btn-block" style="margin-top:20px;">Guardar</button>
+                        <div class="form-group">
+                            <label for="id-sinopsis">
+                                <h4>Sinopsis</h4>
+                            </label>
+                            <textarea id="id-sinopsis" class="form-control" name="sinopsis"
+                                th:text="${pelicula.sinopsis}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <h4>Categorías</h4>
+                            </label>
+                            <br>
+                            <th:block th:each="categoria : ${categorias}">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="categoriaId[]" class="form-check-input"
+                                        th:id="|idCategoria-${categoria.idCategoria}|"
+                                        th:value="${categoria.idCategoria}"
+                                        th:checked="${pelicula.categorias.contains(categoria)}">
+                                    <label class="form-check-label" th:for="|idCategoria-${categoria.idCategoria}|"
+                                        th:text="${categoria.nombre}"></label>
+                                </div>
+                            </th:block>
+                        </div>
+                        <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
+                        <button type="submit" id="btnActualizar" class="btn btn-primary btn-block"
+                            style="margin-top:20px;">Guardar</button>
                         </form>
                         <button class="btn btn-danger btn-block close-modal" style="margin-top:10px;">Cerrar</button>
                     </div>
@@ -141,7 +206,7 @@
             </div>
         </div>
     </div>
-    
+
     <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary modal-trigger "
         data-modal="modal-name"> <i class="bi bi-pen-fill"></i></button>
     <form action="/pelicula/d" method="POST">
@@ -151,6 +216,31 @@
             Borrar
         </button>
     </form>
+    <div th:if="${pelicula.estado == 'Unreleased'}">
+        <h1
+            th:text="'Espera hasta el día ' + ${#temporals.format(pelicula.fecha_salida, 'd')} + ' de ' + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(pelicula.fecha_salida, 'yyyy')}">
+        </h1>
+        <div id="clockdiv">
+            <div>
+                <span class="days"></span>
+                <div class="smalltext">Dias</div>
+            </div>
+            <div>
+                <span class="hours"></span>
+                <div class="smalltext">Horas</div>
+            </div>
+            <div>
+                <span class="minutes"></span>
+                <div class="smalltext">Minutos</div>
+            </div>
+            <div>
+                <span class="seconds"></span>
+                <div class="smalltext">Segundos</div>
+            </div>
+            <br>
+        </div>
+    </div>
+    <div id="deadline" th:value="${pelicula.fecha_salida}"></div>
 
     <div class="container mt-5">
         <h1 class="text-center highlight-text" th:text="${pelicula.titulo}"></h1>
@@ -368,6 +458,58 @@
         // Mostrar el botón de guardar
         document.getElementById('btnActualizar').style.display = 'block';
     }
+    function initializeClock(id, endtime) {
+        var clock = document.getElementById(id);
+        var daysSpan = clock.querySelector('.days');
+        var hoursSpan = clock.querySelector('.hours');
+        var minutesSpan = clock.querySelector('.minutes');
+        var secondsSpan = clock.querySelector('.seconds');
+
+        function updateClock() {
+            var t = getTimeRemaining(endtime);
+
+            daysSpan.innerHTML = t.days;
+            hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+            minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+            secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+            if (t.total <= 0) {
+                clearInterval(timeinterval);
+            }
+        }
+
+        updateClock();
+        var timeinterval = setInterval(updateClock, 1000);
+    }
+
+    function getTimeRemaining(endtime) {
+        var t = Date.parse(endtime) - Date.now();
+        var seconds = Math.floor((t / 1000) % 60);
+        var minutes = Math.floor((t / 1000 / 60) % 60);
+        var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+        var days = Math.floor(t / (1000 * 60 * 60 * 24));
+        return {
+            'total': t,
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        };
+    }
+    var fechaSalida = document.getElementById('deadline').getAttribute('th:value');
+
+    // Convertir la cadena de fecha en un objeto de fecha
+    var fechaSalidaDate = new Date(fechaSalida);
+
+    // Obtener el día y el mes de la fecha de salida de la película
+    var dia = fechaSalidaDate.getDate();
+    var mes = fechaSalidaDate.toLocaleString('en-US', { month: 'long' });
+    var currentYear = new Date().getFullYear();
+    console.log(dia);
+    console.log(mes);
+    var deadline = new Date(mes + ' 28', + currentYear + ' 00:00:00');
+    initializeClock('clockdiv', deadline);
+
 </script>
 
 
