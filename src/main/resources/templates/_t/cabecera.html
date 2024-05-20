@@ -185,7 +185,27 @@
 
     .navbar-nav .nav-link:hover {
         color: rgba(255, 255, 255, 0.7) !important;
-        /* Color del texto del navbar al pasar el mouse */
+    }
+
+
+    .dropdown-menu li {
+        position: relative;
+    }
+
+    .dropdown-menu .dropdown-submenu {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: -7px;
+    }
+
+    .dropdown-menu .dropdown-submenu-left {
+        right: 100%;
+        left: auto;
+    }
+
+    .dropdown-menu>li:hover>.dropdown-submenu {
+        display: block;
     }
 </style>
 
@@ -258,7 +278,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/categoria/r">Categorias</a>
                 </li> -->
-                <li th:if="${session.usuario!=null and session.usuario.esAdmin==true}">
+                <!-- <li th:if="${session.usuario!=null and session.usuario.esAdmin==true}">
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
@@ -272,7 +292,62 @@
                             <a class="dropdown-item" href="/usuario/rAdmin">Usuarios</a>
                         </div>
                     </div>
-                </li>
+                </li> -->
+
+
+                <div th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="">
+                    <div class="container-fluid">
+                        <ul class="navbar-nav">
+                            <!-- Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a data-mdb-dropdown-init class="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <li>
+                                        <a class="dropdown-item" href="/pelicula/rAdmin">
+                                            Películas &raquo;
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-submenu">
+                                            <li>
+                                                <a class="dropdown-item" href="/pelicula/rAdmin">Ver</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/pelicula/c">Agregar</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/juego/rAdmin">
+                                            Juegos &raquo;
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-submenu">
+                                            <li>
+                                                <a class="dropdown-item" href="/juego/rAdmin">Ver</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/juego/c">Agregar</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/usuario/rAdmin">
+                                            Usuarios &raquo;
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-submenu">
+                                            <li>
+                                                <a class="dropdown-item" href="/usuario/rAdmin">Ver</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+
+
             </ul>
             <div class="d-flex justify-content-center"></div>
             <form class="d-flex input-group w-auto">
@@ -348,8 +423,11 @@
                         <input placeholder="Contraseña" name="pass" id="id-password" class="input-field"
                             type="password">
                     </div>
-                    <button
-                        class="btn button1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    <div class="btn">
+                        <button
+                            class="btn button1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <!-- <button class="button3">Forgot Password</button> -->
                 </form>
                 <button class="btn button2" id="registerModalButton">Registrarse</button>
 
@@ -427,6 +505,37 @@
         $('.navbar-nav #personIcon').click(function () {
             $('#personModal').modal('show');
         });
+
+
+        if (window.innerWidth < 992) {
+
+            // close all inner dropdowns when parent is closed
+            document.querySelectorAll('.navbar .dropdown').forEach(function (everydropdown) {
+                everydropdown.addEventListener('hidden.bs.dropdown', function () {
+                    // after dropdown is hidden, then find all submenus
+                    this.querySelectorAll('.submenu').forEach(function (everysubmenu) {
+                        // hide every submenu as well
+                        everysubmenu.style.display = 'none';
+                    });
+                })
+            });
+
+            document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
+                element.addEventListener('click', function (e) {
+                    let nextEl = this.nextElementSibling;
+                    if (nextEl && nextEl.classList.contains('submenu')) {
+                        // prevent opening link if link needs to open dropdown
+                        e.preventDefault();
+                        if (nextEl.style.display == 'block') {
+                            nextEl.style.display = 'none';
+                        } else {
+                            nextEl.style.display = 'block';
+                        }
+
+                    }
+                });
+            })
+        }
     });
 </script>
 <div class="container mt-5"> <!-- Cambiado el margen superior a 50px -->
