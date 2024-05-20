@@ -7,6 +7,7 @@
     <title>Administrar películas</title>
     <!-- Carga de estilos de DataTables -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link href="/css/peliculas/rDetailed.css" rel="stylesheet">
     <style>
         .dataTables_wrapper {
             font-size: 14px;
@@ -43,7 +44,8 @@
                     <td th:text="${pelicula.estado}"></td>
                     <td th:text="${pelicula.duracion}"></td>
                     <td>
-                        <a href="#" class="edit-button" th:data-id="${pelicula.idElemento}" data-toggle="modal" data-target="#modal-edit">
+                        <a th:onclick="|window.location.href='/pelicula/rDetailed?id_elemento=${pelicula.idElemento}'|"
+                            data-toggle="modal" data-target="#authModal">
                             <i class="bi bi-pen-fill"></i>
                         </a>
                     </td>
@@ -57,98 +59,138 @@
         </table>
     </div>
 
-    <div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="modal-edit-label" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-between">
-                    <h1 style="text-align: right;">Modificacion de datos de la pelicula</h1>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="edit-form" action="/pelicula/u" method="post">
-                        <div class="form-group row">
-                            <label for="id-nombre" class="col-sm-4 col-form-label"><h4>Nombre</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-nombre" class="form-control" name="nombre" required>
+    <div class="modal" id="modal-name">
+        <div class="modal-sandbox"></div>
+        <div class="modal-box">
+            <div class="modal-header d-flex justify-content-between">
+                <h1 style="text-align: right;">Modificacion de datos de la pelicula</h1>
+                <div class="close-modal">&#10006;</div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <form action="/pelicula/u" method="post">
+                            <div class="form-group row">
+                                <label for="id-nombre" class="col-sm-4 col-form-label">
+                                    <h4>Nombre</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-nombre" class="form-control" name="nombre" required
+                                        th:value="${pelicula.titulo}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-clasificacion" class="col-sm-4 col-form-label"><h4>Edad</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-clasificacion" class="form-control" name="clasificacion" required>
+                            <div class="form-group row">
+                                <label for="id-clasificacion" class="col-sm-4 col-form-label">
+                                    <h4>Edad</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-clasificacion" class="form-control" name="clasificacion"
+                                        required th:value="${pelicula.clasificacion}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-estado" class="col-sm-4 col-form-label"><h4>Estado</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-estado" class="form-control" name="estado" required>
+                            <div class="form-group row">
+                                <label for="id-estado" class="col-sm-4 col-form-label">
+                                    <h4>Estado</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-estado" class="form-control" name="estado" required
+                                        th:value="${pelicula.estado}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-fechaSalida" class="col-sm-4 col-form-label"><h4>Fecha</h4></label>
-                            <div class="col-sm-8">
-                                <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida" required>
+                            <div class="form-group row">
+                                <label for="id-fechaSalida" class="col-sm-4 col-form-label">
+                                    <h4>Fecha</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida"
+                                        required th:value="${pelicula.fecha_salida}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-duracion" class="col-sm-4 col-form-label"><h4>Duración</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-duracion" class="form-control" name="duracion" required>
+                            <div class="form-group row">
+                                <label for="id-duracion" class="col-sm-4 col-form-label">
+                                    <h4>Duración</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-duracion" class="form-control" name="duracion" required
+                                        th:value="${pelicula.duracion}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-plataforma" class="col-sm-4 col-form-label"><h4>Plataforma</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-plataforma" class="form-control" name="plataforma">
+                            <div class="form-group row">
+                                <label for="id-plataforma" class="col-sm-4 col-form-label">
+                                    <h4>Plataforma</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-plataforma" class="form-control" name="plataforma"
+                                        th:value="${pelicula.plataforma}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-puntuacion" class="col-sm-4 col-form-label"><h4>Puntuación</h4></label>
-                            <div class="col-sm-8">
-                                <input type="number" id="id-puntuacion" class="form-control" name="puntuacion">
+                            <div class="form-group row">
+                                <label for="id-puntuacion" class="col-sm-4 col-form-label">
+                                    <h4>Puntuación</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="id-puntuacion" class="form-control" name="puntuacion"
+                                        th:value="${pelicula.puntuacion}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-cuentaVotos" class="col-sm-4 col-form-label"><h4>Votos</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos">
+                            <div class="form-group row">
+                                <label for="id-cuentaVotos" class="col-sm-4 col-form-label">
+                                    <h4>Votos</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos"
+                                        th:value="${pelicula.cuenta_votos}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-trailer" class="col-sm-4 col-form-label"><h4>Trailer</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-trailer" class="form-control" name="trailer">
+                            <div class="form-group row">
+                                <label for="id-trailer" class="col-sm-4 col-form-label">
+                                    <h4>Trailer</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-trailer" class="form-control" name="trailer"
+                                        th:value="${pelicula.trailer}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="id-urlCompra" class="col-sm-4 col-form-label"><h4>URL</h4></label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id-urlCompra" class="form-control" name="urlCompra">
+                            <div class="form-group row">
+                                <label for="id-urlCompra" class="col-sm-4 col-form-label">
+                                    <h4>URL</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-urlCompra" class="form-control" name="urlCompra"
+                                        th:value="${pelicula.url}">
+                                </div>
                             </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="id-sinopsis">
+                                <h4>Sinopsis</h4>
+                            </label>
+                            <textarea id="id-sinopsis" class="form-control" name="sinopsis"
+                                th:text="${pelicula.sinopsis}"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="id-sinopsis"><h4>Sinopsis</h4></label>
-                            <textarea id="id-sinopsis" class="form-control" name="sinopsis"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label><h4>Categorías</h4></label>
+                            <label>
+                                <h4>Categorías</h4>
+                            </label>
                             <br>
                             <th:block th:each="categoria : ${categorias}">
                                 <div class="form-check form-check-inline">
                                     <input type="checkbox" name="categoriaId[]" class="form-check-input"
-                                        th:id="|idCategoria-${categoria.idCategoria}|" th:value="${categoria.idCategoria}"
+                                        th:id="|idCategoria-${categoria.idCategoria}|"
+                                        th:value="${categoria.idCategoria}"
                                         th:checked="${pelicula.categorias.contains(categoria)}">
                                     <label class="form-check-label" th:for="|idCategoria-${categoria.idCategoria}|"
                                         th:text="${categoria.nombre}"></label>
                                 </div>
                             </th:block>
                         </div>
-                        <input type="hidden" id="idpelicula" name="idpelicula">
-                        <button type="submit" id="btnActualizar" class="btn btn-primary btn-block" style="margin-top:20px;">Guardar</button>
-                    </form>
-                    <button class="btn btn-danger btn-block" data-dismiss="modal" style="margin-top:10px;">Cerrar</button>
+                        <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
+                        <button type="submit" id="btnActualizar" class="btn btn-primary btn-block"
+                            style="margin-top:20px;">Guardar</button>
+                        </form>
+                        <button class="btn btn-danger btn-block close-modal" style="margin-top:10px;">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,6 +201,7 @@
     <!-- Carga de DataTables -->
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script src="/js/peliculas/rDetailed.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
             $('#peliculasTable').DataTable({
@@ -186,7 +229,7 @@
                         $('#id-urlCompra').val(data.url);
                         $('#id-sinopsis').val(data.sinopsis);
                         $('#idpelicula').val(data.idElemento);
-                        
+
                         // Marcar las categorías
                         $('input[name="categoriaId[]"]').each(function () {
                             var categoriaId = $(this).val();
