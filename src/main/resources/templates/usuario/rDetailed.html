@@ -5,6 +5,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
 
 <style>
 	/* Imagen de Spiderman */
@@ -334,6 +342,8 @@
 								</button>
 							</div>
 							<div class="modal-body">
+								 <!-- Aquí se mostrará el mensaje -->
+								 <div id="modalMensaje" style="display: none; margin-bottom: 10px;" class="alert"></div>
 								<form id="editarDescripcionForm">
 									<div class="form-group">
 										<label for="nuevaDescripcion">Nueva descripción:</label>
@@ -358,7 +368,7 @@
 				<!-- Itera sobre las películas favoritas del usuario y muestra cada una -->
 				<li th:each="pelicula : ${peliculasFavoritas}">
 					<!-- Muestra la imagen de la película -->
-					<img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}"/>
+					<img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" />
 					<!-- Muestra el título de la película -->
 					<!-- <span th:text="${pelicula.titulo}"></span> -->
 
@@ -368,20 +378,16 @@
 
 
 		<div id="juegos" class="card u-clearfix">
-			<span class="card-heading">VIDEOJUEGOS</span>
+			<span class="card-heading">Juegos favoritos</span>
 			<ul class="card-list">
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
-				<li><img src="https://s12.postimg.cc/c0ryp65lp/m1f.jpg" alt="" /></li>
-				<li><img src="https://s14.postimg.cc/6ts0it3xt/m2f.jpg" alt="" /></li>
-				<li><img src="https://s13.postimg.cc/ri499o2zr/m3f.jpg" alt="" /></li>
+				<!-- Itera sobre los juegos favoritos del usuario y muestra cada uno -->
+				<li th:each="juego : ${juegosFavoritos}">
+					<!-- Muestra la imagen del juego -->
+					<img th:src="@{'/img/juegos/' + ${juego.imagen}}" />
+					<!-- Muestra el título de la película -->
+					<!-- <span th:text="${juego.titulo}"></span> -->
+
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -420,15 +426,21 @@
 					// Manejar la respuesta del servidor (opcional)
 					console.log('Descripción actualizada correctamente');
 
-					// Cerrar el modal después de actualizar la descripción
-					$('#editarDescripcionModal').modal('hide');
+					// Mostrar mensaje de éxito en el modal
+					$('#modalMensaje').removeClass('alert-danger').addClass('alert-success').text('Descripción actualizada correctamente.Los datos se mostrarán en el siguiente login.').show();
+
+					// Opcional: Cerrar el modal después de un tiempo
+					setTimeout(function () {
+						$('#editarDescripcionModal').modal('hide');
+						$('#modalMensaje').hide();
+					}, 3000);
 				},
 				error: function (xhr, status, error) {
 					// Manejar errores de AJAX (opcional)
 					console.error('Error al actualizar la descripción:', error);
 				}
 			});
-		});
+	});
 	});
 
 	//Función para obtener al número de películas favoritas 

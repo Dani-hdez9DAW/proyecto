@@ -69,25 +69,24 @@ public class UsuarioController {
     }
 
     @GetMapping("rDetailed")
-    public String rDetailed(ModelMap m, HttpSession session) {
-        // Obtener el usuario actual desde el servicio
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+public String rDetailed(ModelMap m, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    
+    if (usuario != null) {
+        // Añadir películas favoritas al modelo
+        List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
+        m.put("peliculasFavoritas", peliculasFavoritas);
 
-        // Verificar si el usuario existe y tiene películas favoritas
-        if (usuario != null && usuario.getPeliculasFav() != null && !usuario.getPeliculasFav().isEmpty()) {
-            // Obtener la lista de películas favoritas del usuario
-            List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
-
-            // Poner la lista de películas favoritas en el modelo para que esté disponible
-            // en la vista
-            m.put("peliculasFavoritas", peliculasFavoritas);
-        }
-
-        m.put("usuario", usuario);
-        // m.put("cantidadPeliculasFavoritas", cantidadPeliculasFavoritas);
-        m.put("view", "usuario/rDetailed");
-        return "_t/frame";
+        // Añadir videojuegos favoritos al modelo
+        List<Juego> juegosFavoritos = usuario.getJuegosFav();
+        m.put("juegosFavoritos", juegosFavoritos);
     }
+    
+    m.put("usuario", usuario);
+    m.put("view", "usuario/rDetailed");
+    return "_t/frame";
+}
+
 
     @GetMapping("obtenerPuntos")
     @ResponseBody
@@ -219,3 +218,4 @@ public class UsuarioController {
         return "redirect:/";
     }
 }
+

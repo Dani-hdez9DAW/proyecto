@@ -126,36 +126,37 @@
     <br>
     <br>
 
-        <h1>Lista de Usuarios</h1>
-        <th:block th:with="contador=0">
-            <table id="example" class="uk-table uk-table-hover " style="width:100%">
-                <thead>
-                    <tr>
-                        <th class="unaLinea">Nombre</th>
-                        <th class="unaLinea">Correo</th>
-                        <th class="unaLinea">Puntos</th>
-                        <th class="unaLinea">Editar</th>
-                        <th class="unaLinea">Borrar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="usuario, iterStatus : ${usuarios}">
-                        <td th:text="${usuario.nombre}"></td>
-                        <td th:text="${usuario.correo}"></td>
-                        <td th:text="${usuario.puntos}"></td>
-                        <td>
-                            <a href="#" id="edbo" th:href="@{'/usuario/u?id=' + ${usuario.correo}}">
-                                <i class="bi bi-pen-fill"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#" id="edbo" th:href="@{'/usuario/u?id=' + ${usuario.correo}}">
-                                <i class="bi bi-trash3-fill"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <h1>Lista de Usuarios</h1>
+    <table id="example" class="uk-table uk-table-hover " style="width:100%">
+        <thead>
+            <tr>
+                <th class="unaLinea">Nombre</th>
+                <th class="unaLinea">Correo</th>
+                <th class="unaLinea">Puntos</th>
+                <th class="unaLinea">Editar</th>
+                <th class="unaLinea">Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.nombre}"></td>
+                <td th:text="${usuario.correo}"></td>
+                <td class="puntos" th:text="${usuario.puntos}"></td>
+
+                <td>
+                    <a href="#" id="edbo" th:href="@{'/usuario/u?id=' + ${usuario.correo}}">
+                        <i class="bi bi-pen-fill"></i>
+
+                    </a>
+                </td>
+                <td>
+                    <a href="#" id="edbo" th:href="@{'/usuario/u?id=' + ${usuario.correo}}">
+                        <i class="bi bi-trash3-fill"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
 </div>
 
