@@ -98,7 +98,6 @@ public class HomeController {
 
 		} catch (Exception e) {
 			PRG.error("Usuario o contraseña incorrectos");
-			
 		}
 		return "redirect:/";
 	}

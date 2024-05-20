@@ -1,6 +1,7 @@
 package org.proyect.controller.web;
 
 import org.proyect.exception.DangerException;
+import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
@@ -28,40 +29,44 @@ public class CategoriaController {
         m.put("view", "categoria/r");
         return "_t/frame";
     }
+
     @GetMapping("rAdmin")
     public String rAdmin(
-            ModelMap m,HttpSession s) {
-                if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
-                    m.put("categorias", categoriaService.findAll());
-                    m.put("view", "categoria/rAdmin");
-                    return "_t/frame";
-                } else {
-                    return "/"; // Redirige a la página de inicio de sesión
-                }
+            ModelMap m, HttpSession s) {
+        if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("categorias", categoriaService.findAll());
+            m.put("view", "categoria/rAdmin");
+            return "_t/frame";
+        } else {
+            return "/"; // Redirige a la página de inicio de sesión
+        }
     }
 
     @GetMapping("c")
     public String c(
             ModelMap m,
             HttpSession s) {
-                if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
-                    m.put("view", "categoria/c");
-                    return "_t/frame";
-                } else {
-                    return "/"; // Redirige a la página de inicio de sesión
-                }
+        if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("view", "categoria/c");
+            return "_t/frame";
+        } else {
+            return "/"; // Redirige a la página de inicio de sesión
+        }
     }
 
     @PostMapping("c")
     public String cPost(
-            @RequestParam("nombre") String nombre, HttpSession s) throws Exception {
- 
+            @RequestParam("nombre") String nombre, HttpSession s) throws Exception, DangerException, InfoException {
+        Boolean creado = false;
         try {
             categoriaService.save(nombre);
         } catch (Exception e) {
             PRG.error("El país " + nombre + " ya existe", "/categoria/c");
         }
-        return "redirect:/categoria/r";
+        if (creado) {
+            PRG.info("El país " + nombre + " se ha creado", "/categoria/rAdmin");
+        }
+        return "redirect:/categoria/rAdmin";
     }
 
     @GetMapping("u")
@@ -76,22 +81,32 @@ public class CategoriaController {
     @PostMapping("u")
     public String updatePost(
             @RequestParam("id") Long idCategoria,
-            @RequestParam("nombre") String nombre) throws DangerException {
+            @RequestParam("nombre") String nombre) throws DangerException, InfoException  {
+                Boolean creado = false;
+
         try {
             categoriaService.update(idCategoria, nombre);
         } catch (Exception e) {
             PRG.error("La categoria no pudo ser actualizada", "/categoria/r");
+        }
+        if (creado) {
+            PRG.info("La categoria se ha actualizado", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }
 
     @PostMapping("d")
     public String delete(
-            @RequestParam("id") Long id_Bean) throws DangerException {
+            @RequestParam("id") Long id_Bean) throws DangerException, InfoException  {
+                Boolean creado = false;
+
         try {
             categoriaService.delete(id_Bean);
         } catch (Exception e) {
-            PRG.error("No se puede borrar un país que tenga algún nacido/residente", "/categoria/r");
+            PRG.error("Se ha eliminado la categoria", "/categoria/r");
+        }
+        if (creado) {
+            PRG.info("Se ha eliminado la categoria", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }

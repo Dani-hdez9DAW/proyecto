@@ -6,6 +6,7 @@ import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
+import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.repository.JuegoRepository;
@@ -40,7 +41,7 @@ public class UsuarioController {
 
         m.put("peliculas", pelicula);
         m.put("juegos", juego);
-      
+
         m.put("view", "usuario/r");
         return "_t/frame";
     }
@@ -55,25 +56,29 @@ public class UsuarioController {
             m.put("view", "usuario/rAdmin");
             return "_t/frame"; // Retorna la vista para mostrar la lista de usuarios
         } else {
-            // Si el usuario no está autenticado como administrador, redirige a la página de inicio
+            // Si el usuario no está autenticado como administrador, redirige a la página de
+            // inicio
             return "redirect:/"; // Redirige a la página de inicio
         }
     }
 
     @GetMapping("u")
-public String update(@RequestParam("id") String email,
-                        ModelMap m, HttpSession session) {
-    if (H.isRolOk("admin", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
-        // Si el usuario está autenticado, continúa con la lógica para cargar la vista rDetailed
-        m.put("usuario", usuarioService.findByCorreo(email));
-        System.out.println("" + usuarioService.findByCorreo(email));
-        m.put("view", "usuario/u");
-        return "_t/frame";
-    } else {
-        // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la página de inicio de sesión
-        return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
+    public String update(@RequestParam("id") String email,
+            ModelMap m, HttpSession session) {
+        if (H.isRolOk("admin", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
+            // Si el usuario está autenticado, continúa con la lógica para cargar la vista
+            // rDetailed
+            m.put("usuario", usuarioService.findByCorreo(email));
+            System.out.println("" + usuarioService.findByCorreo(email));
+            m.put("view", "usuario/u");
+            return "_t/frame";
+        } else {
+            // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la
+            // página de inicio de sesión
+            return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
+        }
     }
-}
+
     @GetMapping("c")
     public String c(ModelMap m) {
         m.put("view", "usuario/c");
@@ -84,13 +89,25 @@ public String update(@RequestParam("id") String email,
     public String cPost(
             @RequestParam("nombre") String nombre,
             @RequestParam("pass") String password,
-            @RequestParam("email") String correo ) throws DangerException {
+            @RequestParam("email") String correo) throws DangerException, InfoException {
+        String mensaje = "El usuario con el nombre " + nombre;
+        Boolean creado = false;
         try {
-            usuarioService.save(nombre, password,correo);
-            PRG.info("El usuario  con el nombre " + nombre + " ha sido creado", "/");
+            if (usuarioService.findByCorreo(correo) != null) {
+                PRG.error("El correo electrónico " + correo + " ya está registrado", "/");
+                return "redirect:/";
+            }
+            usuarioService.save(nombre, password, correo);
+            creado = true;
         } catch (Exception e) {
-            PRG.error("El usuario  con el nombre " + nombre + " ya existe", "/");
+            PRG.error("Error al crear el usuario", "/");
         }
+
+        if (creado) {
+            PRG.info(mensaje + " ha sido creado", "/");
+        }
+
         return "redirect:/";
     }
+
 }

@@ -161,21 +161,22 @@
     }
 
     .spaced-container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 50px;
-        margin-bottom: 1150px;
-        /* Espacio en la parte inferior */
-    }
+    max-width: 600px;
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    margin-bottom: 20px; 
+}
+
 </style>
 
 <body>
     <h1 class="highlight-text">Nueva Categoría</h1>
-    <div class="container spaced-container">
+    <div class="container spaced-container ">
         <form id="categoriaForm" action="/categoria/c" method="post">
             <div class="form-group">
                 <div class="group">
@@ -187,15 +188,15 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-6">
-                        <button type="submit" class="btn btn-brown">Crear</button>
+                    <div class="col-md-6 mb-3">
+                        <button type="submit" class="btn btn-brown btn-block">Crear</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-brown btn-block" onclick="window.location.href='/categoria/rAdmin'">Volver</button>
                     </div>
                 </div>
             </div>
         </form>
-        <div class="col-6">
-            <button class="btn btn-brown" onclick="window.location.href='/categoria/r'">Volver</button>
-        </div>
     </div>
     
 

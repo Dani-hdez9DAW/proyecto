@@ -14,6 +14,7 @@ import org.proyect.domain.Categoria;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
+import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
@@ -113,8 +114,10 @@ public class PeliculaController {
             @RequestParam("fechaLanzamiento") LocalDate fechaLanzamiento,
             @RequestParam("imagen") MultipartFile imagen,
             @RequestParam("trailer") String trailer,
-            @RequestParam("url") String url) throws DangerException {
+            @RequestParam("url") String url) throws DangerException, InfoException {
+                Boolean creado = false;
         try {
+            
             String nombreImagen = null; // variable para guardar el nombre de la imagen
             if (!imagen.isEmpty()) {
                 String directorioImagenes = "src//main//resources//static/img/peliculas";
@@ -139,9 +142,12 @@ public class PeliculaController {
             }
             peliculaService.save(titulo, categoria, clasificacion, duracion, estado, plataforma, sinopsis,
                     fechaLanzamiento, nombreImagen, trailer, url);
-            PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
+            // PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
         } catch (Exception e) {
             PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
+        }
+        if (creado) {
+            PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
         }
         return "redirect:/pelicula/r";
     }
@@ -177,14 +183,18 @@ public class PeliculaController {
             @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
             @RequestParam("cuentaVotos") Integer cuentaVotos,
             @RequestParam("trailer") String trailer,
-            @RequestParam("urlCompra") String url) throws DangerException {
+            @RequestParam("urlCompra") String url) throws DangerException,InfoException {
+                Boolean creado = false;
+
         try {
             peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
                     idsCategoria, sinopsis,
                     fechaLanzamiento, cuentaVotos, trailer, url);
-            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
         } catch (Exception e) {
             PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/r");
+        }
+        if (creado) {
+            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
         }
         return "redirect:/pelicula/r";
     }

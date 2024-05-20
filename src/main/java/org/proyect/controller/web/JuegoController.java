@@ -9,6 +9,7 @@ import org.proyect.domain.Categoria;
 import org.proyect.domain.Juego;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
+import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
@@ -89,12 +90,16 @@ public class JuegoController {
 
     @PostMapping("c")
     public String cPost(
-            @RequestParam("nombre") String nombre) throws DangerException {
+            @RequestParam("nombre") String nombre) throws DangerException,InfoException {
+                Boolean creado = false;
+
         try {
             juegoService.save(nombre);
-            PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
         } catch (Exception e) {
             PRG.error("El juego con el nombre " + nombre + " ya existe", "/juego/c");
+        }
+        if (creado) {
+            PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
         }
         return "redirect:/juego/r";
     }
@@ -136,13 +141,17 @@ public class JuegoController {
             @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
             @RequestParam("cuentaVotos") Integer cuentaVotos,
             @RequestParam("trailer") String trailer,
-            @RequestParam("urlCompra") String url) throws DangerException {
+            @RequestParam("urlCompra") String url) throws DangerException,InfoException {
+                Boolean creado = false;
+
         try {
             juegoService.update(idJuego, titulo, clasificacion, duracion, estado, plataforma, sinopsis,
                     fechaLanzamiento, cuentaVotos, trailer, url);
-            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/juego/r");
         } catch (Exception e) {
             PRG.error("Error al crear la película: " + e.getMessage(), "/juego/r");
+        }
+        if (creado) {
+            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/juego/r");
         }
         return "redirect:/juego/r";
     }

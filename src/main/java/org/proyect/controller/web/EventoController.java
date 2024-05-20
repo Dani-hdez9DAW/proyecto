@@ -1,6 +1,7 @@
 package org.proyect.controller.web;
 
 import org.proyect.exception.DangerException;
+import org.proyect.exception.InfoException;
 import org.proyect.helper.PRG;
 import org.proyect.service.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,15 @@ public class EventoController {
 
     @PostMapping("c")
     public String cPost(
-            @RequestParam("nombre") String nombre, HttpSession s) throws Exception {
- 
+            @RequestParam("nombre") String nombre, HttpSession s) throws Exception, DangerException, InfoException {
+                Boolean creado = false;
         try {
             eventoService.save(nombre);
         } catch (Exception e) {
             PRG.error("El país " + nombre + " ya existe", "/categoria/c");
+        }
+        if (creado) {
+            PRG.info("El país " + nombre + " se ha creado", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }
@@ -58,22 +62,31 @@ public class EventoController {
     @PostMapping("u")
     public String updatePost(
             @RequestParam("id_Bean") Long id_Bean,
-            @RequestParam("nombre") String nombre) throws DangerException {
+            @RequestParam("nombre") String nombre) throws DangerException, InfoException {
+                Boolean creado = false;
         try {
             eventoService.update(id_Bean, nombre);
         } catch (Exception e) {
             PRG.error("El país no pudo ser actualizado", "/categoria/r");
+        }
+        if (creado) {
+            PRG.info("El país se ha actualizado", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }
 
     @PostMapping("d")
     public String delete(
-            @RequestParam("id") Long id_Bean) throws DangerException {
+            @RequestParam("id") Long id_Bean) throws DangerException, InfoException {
+                Boolean creado = false;
+
         try {
             eventoService.delete(id_Bean);
         } catch (Exception e) {
             PRG.error("No se puede borrar un país que tenga algún nacido/residente", "/categoria/r");
+        }
+        if (creado) {
+            PRG.info("Se ha borrado", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }

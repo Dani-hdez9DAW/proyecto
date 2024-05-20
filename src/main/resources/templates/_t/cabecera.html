@@ -113,7 +113,7 @@
 
     .modal-content {
         background-color: white;
-        color:black;
+        color: black;
         border-radius: 25px;
         width: 80%;
         margin: auto;
@@ -213,8 +213,8 @@
     </a>
 
     <a href="#" id="personIcon" th:if="${session.usuario==null}">Identificate</a>
-    <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button
-        class="btn btn-primary" type="button">Logout</button></a>
+    <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button class="btn btn-primary"
+            type="button">Logout</button></a>
 
 </div>
 
@@ -348,13 +348,11 @@
                         <input placeholder="Contraseña" name="pass" id="id-password" class="input-field"
                             type="password">
                     </div>
-                    <div class="btn">
-                        <button
-                            class="button1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                        <button class="button2" id="registerModalButton">Registrarse</button>
-                    </div>
-                    <!-- <button class="button3">Forgot Password</button> -->
+                    <button
+                        class="btn button1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entrar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
                 </form>
+                <button class="btn button2" id="registerModalButton">Registrarse</button>
+
             </div>
         </div>
     </div>
@@ -369,17 +367,18 @@
                 <form id="usuarioForm" action="/usuario/c" method="post">
                     <p id="heading" class="m-4">Registro</p>
                     <div class="field m-2">
-                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            viewBox="0 0 16 16">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" viewBox="0 0 16 16">
                             <path
                                 d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a5.48 5.48 0 0 0-3.757 1.457 7 7 0 0 0 7.514 0A5.48 5.48 0 0 0 8 9z">
                             </path>
                         </svg>
-                        <input autocomplete="off" placeholder="Nombre" class="input-field" type="text" id="id-nombre" name="nombre" required>
+                        <input autocomplete="off" placeholder="Nombre" class="input-field" type="text" id="id-nombre"
+                            name="nombre" required>
                     </div>
-                    
+
                     <div class="field m-2">
-                       
+
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                             fill="currentColor" viewBox="0 0 16 16">
                             <path
@@ -387,7 +386,7 @@
                             </path>
                         </svg>
                         <input autocomplete="off" placeholder="Email" class="input-field" type="text" id="id-email"
-                        name="email" required>
+                            name="email" required>
                     </div>
                     <div class="field m-2">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -426,8 +425,8 @@
         });
 
         $('.navbar-nav #personIcon').click(function () {
-        $('#personModal').modal('show');
-    });
+            $('#personModal').modal('show');
+        });
     });
 </script>
 <div class="container mt-5"> <!-- Cambiado el margen superior a 50px -->
