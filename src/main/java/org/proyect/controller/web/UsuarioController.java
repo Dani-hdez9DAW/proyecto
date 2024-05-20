@@ -14,6 +14,7 @@ import org.proyect.repository.JuegoRepository;
 import org.proyect.repository.PeliculaRepository;
 import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -138,6 +139,47 @@ public class UsuarioController {
         }
     }
 
+    // Mostrar el número de películas
+    @GetMapping("cantidadPeliculasFavoritas")
+    @ResponseBody
+    public ResponseEntity<Integer> getCantidadPeliculasFavoritas(HttpSession session) {
+        // Obtener el nombre de usuario de la sesión
+        String nombreUsuario = (String) session.getAttribute("nombre");
+
+        // Verificar si el nombre de usuario está presente en la sesión
+        if (nombreUsuario != null) {
+            // Llamar al servicio para obtener la cantidad de películas favoritas del
+            // usuario
+            int cantidadPeliculasFavoritas = usuarioService.obtenerCantidadPeliculasFavoritas(nombreUsuario);
+
+            // Devolver el número de películas favoritas del usuario
+            return ResponseEntity.ok(cantidadPeliculasFavoritas);
+        }
+
+        // Si no se puede obtener el número de películas favoritas, devolver un error
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
+    // Mostrar el número de juegos
+    @GetMapping("cantidadJuegosFavoritos")
+    @ResponseBody
+    public ResponseEntity<Integer> getCantidadJuegosFavoritos(HttpSession session) {
+        // Obtener el nombre de usuario de la sesión
+        String nombreUsuario = (String) session.getAttribute("nombre");
+
+        // Verificar si el nombre de usuario está presente en la sesión
+        if (nombreUsuario != null) {
+            // Llamar al servicio para obtener la cantidad de películas favoritas del
+            // usuario
+            int cantidadJuegosFavoritos = usuarioService.obtenerCantidadJuegosFavoritos(nombreUsuario);
+
+            // Devolver el número de películas favoritas del usuario
+            return ResponseEntity.ok(cantidadJuegosFavoritos);
+        }
+
+        // Si no se puede obtener el número de películas favoritas, devolver un error
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
     // ----------------------------------------------------------------
 
     @GetMapping("u")

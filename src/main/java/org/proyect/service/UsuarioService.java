@@ -131,12 +131,12 @@ public class UsuarioService {
     public void actualizarDescripcion(String correoUsuario, String nuevaDescripcion) {
         // Buscar el usuario por su correo en la base de datos
         Usuario usuario = usuarioRepository.getByCorreo(correoUsuario);
-    
+
         // Verificar si se encontró el usuario
         if (usuario != null) {
             // Actualizar la descripción del usuario con la nueva descripción proporcionada
             usuario.setDescripcion(nuevaDescripcion);
-    
+
             // Guardar los cambios en la base de datos
             usuarioRepository.save(usuario);
         } else {
@@ -145,4 +145,39 @@ public class UsuarioService {
         }
     }
 
+    // Método para mostrar las películas
+    public int obtenerCantidadPeliculasFavoritas(String nombreUsuario) {
+        // Buscar al usuario por su nombre en la base de datos
+        Usuario usuario = usuarioRepository.getByNombre(nombreUsuario);
+
+        // Verificar si se encontró el usuario
+        if (usuario != null) {
+            // Obtener la lista de películas favoritas del usuario
+            List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
+
+            // Devolver el tamaño de la lista de películas favoritas
+            return peliculasFavoritas.size();
+        } else {
+            // Manejar el caso en que el usuario no se encuentre
+            throw new UsernameNotFoundException("Usuario no encontrado: " + nombreUsuario);
+        }
+    }
+
+    // Método para mostrar los videojuegos
+    public int obtenerCantidadJuegosFavoritos(String nombreUsuario) {
+        // Buscar al usuario por su nombre en la base de datos
+        Usuario usuario = usuarioRepository.getByNombre(nombreUsuario);
+
+        // Verificar si se encontró el usuario
+        if (usuario != null) {
+            // Obtener la lista de películas favoritas del usuario
+            List<Juego> juegosFavoritos = usuario.getJuegosFav();
+
+            // Devolver el tamaño de la lista de películas favoritas
+            return juegosFavoritos.size();
+        } else {
+            // Manejar el caso en que el usuario no se encuentre
+            throw new UsernameNotFoundException("Usuario no encontrado: " + nombreUsuario);
+        }
+    }
 }

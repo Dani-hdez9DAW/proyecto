@@ -302,13 +302,11 @@
 		<div class="header-container">
 			<div class="header">
 				<h1 class="main-heading" th:text="${session.usuario.nombre}"></h1>
-				<span class="tag">Actor</span>
 				<span class="tag" id="puntos">Puntos</span>
 				<div class="stats">
-					<span class="stat-module">Películas <span class="stat-number">N</span></span>
 					<!-- Esto es para que muestre la cantidad de peliculas -->
-					<!-- <span class="stat-module">Películas <span class="stat-number" th:text="${cantidadPeliculasFavoritas}">N</span></span> -->
-					<span class="stat-module">Videojuegos <span class="stat-number">N</span></span>
+					<span class="stat-module">Películas <span class="stat-number" id="cantidadPeliculas"></span></span>
+					<span class="stat-module">Videojuegos <span class="stat-number" id="cantidadJuegos"></span></span>
 				</div>
 			</div> <!-- END header -->
 		</div>
@@ -317,9 +315,6 @@
 
 		<div class="body">
 			<img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" />
-			<div class="body-stats">Seguidores <span>3.5k</span></div>
-			<div class="body-stats">Siguiendo <span>1.9k</span></div>
-			<div class="u-clearfix"></div>
 			<div id="description" class="body-info">
 				<!-- Descripción -->
 				<p id="user-description" th:text="${session.usuario.descripcion}"></p>
@@ -363,11 +358,9 @@
 				<!-- Itera sobre las películas favoritas del usuario y muestra cada una -->
 				<li th:each="pelicula : ${peliculasFavoritas}">
 					<!-- Muestra la imagen de la película -->
-					<img th:src="${pelicula.imagen}" alt="" />
+					<img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}"/>
 					<!-- Muestra el título de la película -->
-					<span th:text="${pelicula.titulo}"></span>
-					<!-- Muestra la sinopsis de la película -->
-					<span th:text="${pelicula.sinopsis}"></span>
+					<!-- <span th:text="${pelicula.titulo}"></span> -->
 
 				</li>
 			</ul>
@@ -411,37 +404,60 @@
 	});
 
 	// FUNCIÓN PARA MANDAR LOS DATOS EDITADOS DE LA DESCRIPCIÓN
-		$(document).ready(function() {
-			$('#editarDescripcionForm').submit(function (event) {
-				event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+	$(document).ready(function () {
+		$('#editarDescripcionForm').submit(function (event) {
+			event.preventDefault(); // Evitar que el formulario se envíe automáticamente
 
-				// Obtener la nueva descripción del usuario del campo de texto
-				var nuevaDescripcion = $('#nuevaDescripcion').val();
+			// Obtener la nueva descripción del usuario del campo de texto
+			var nuevaDescripcion = $('#nuevaDescripcion').val();
 
-				// Enviar la nueva descripción al servidor usando AJAX
-				$.ajax({
-					type: 'POST',
-					url: '/usuario/actualizarDescripcion',
-					data: { nuevaDescripcion: nuevaDescripcion }, // Datos a enviar al servidor
-					success: function (response) {
-						// Manejar la respuesta del servidor (opcional)
-						console.log('Descripción actualizada correctamente');
+			// Enviar la nueva descripción al servidor usando AJAX
+			$.ajax({
+				type: 'POST',
+				url: '/usuario/actualizarDescripcion',
+				data: { nuevaDescripcion: nuevaDescripcion }, // Datos a enviar al servidor
+				success: function (response) {
+					// Manejar la respuesta del servidor (opcional)
+					console.log('Descripción actualizada correctamente');
 
-						// Cerrar el modal después de actualizar la descripción
-						$('#editarDescripcionModal').modal('hide');
-					},
-					error: function (xhr, status, error) {
-						// Manejar errores de AJAX (opcional)
-						console.error('Error al actualizar la descripción:', error);
-					}
-				});
+					// Cerrar el modal después de actualizar la descripción
+					$('#editarDescripcionModal').modal('hide');
+				},
+				error: function (xhr, status, error) {
+					// Manejar errores de AJAX (opcional)
+					console.error('Error al actualizar la descripción:', error);
+				}
 			});
-  });
+		});
+	});
+
+	//Función para obtener al número de películas favoritas 
+	$(document).ready(function () {
+		// Hacer una solicitud HTTP GET al backend para obtener el número de películas favoritas
+		$.get("cantidadPeliculasFavoritas", function (data) {
+			// Actualizar el contenido del elemento con el número de películas favoritas recibido
+			$("#cantidadPeliculas").text(data);
+		}).fail(function (xhr, status, error) {
+			console.error("Error al obtener la cantidad de películas favoritas:", error);
+			$("#cantidadPeliculas").text("Error");
+		});
+	});
+
+	//Función para obtener al número de juegos favoritos 
+	$(document).ready(function () {
+		// Hacer una solicitud HTTP GET al backend para obtener el número de películas favoritas
+		$.get("cantidadJuegosFavoritos", function (data) {
+			// Actualizar el contenido del elemento con el número de películas favoritas recibido
+			$("#cantidadJuegos").text(data);
+		}).fail(function (xhr, status, error) {
+			console.error("Error al obtener la cantidad de juegos favoritos:", error);
+			$("#cantidadJuegos").text("Error");
+		});
+	});
+
+
+
 </script>
-
-
 </script>
-
-
 
 </html>
