@@ -171,7 +171,7 @@
                 var peliculaId = $(this).data('id');
                 // Hacer una solicitud AJAX para obtener los datos de la película por ID
                 $.ajax({
-                    url: '/pelicula/get/' + peliculaId,
+                    url: '/pelicula/get/u?idpelicula=' + peliculaId,
                     method: 'GET',
                     success: function (data) {
                         $('#id-nombre').val(data.titulo);
