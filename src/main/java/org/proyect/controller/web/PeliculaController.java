@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.HttpSession;
 
 @RequestMapping("/pelicula/")
@@ -339,4 +340,11 @@ public class PeliculaController {
         return "_t/frame";
     }
 
+    // CARROUSELL
+    // @GetMapping("/peliculas")
+    // public String mostrarPeliculas(Model model) {
+    //     List<Pelicula> peliculas = peliculaService.obtenerTodasLasPeliculas();
+    //     model.addAttribute("peliculas", peliculas);
+    //     return "nombre-de-tu-vista"; // Reemplaza con el nombre de tu archivo HTML
+    // }
 }
