@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.proyect.domain.Categoria;
 import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
@@ -69,24 +70,30 @@ public class UsuarioController {
     }
 
     @GetMapping("rDetailed")
-public String rDetailed(ModelMap m, HttpSession session) {
-    Usuario usuario = (Usuario) session.getAttribute("usuario");
-    
-    if (usuario != null) {
-        // Añadir películas favoritas al modelo
-        List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
-        m.put("peliculasFavoritas", peliculasFavoritas);
+    public String rDetailed(ModelMap m, HttpSession session) {
+        if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        // Añadir videojuegos favoritos al modelo
-        List<Juego> juegosFavoritos = usuario.getJuegosFav();
-        m.put("juegosFavoritos", juegosFavoritos);
+            if (usuario != null) {
+                // Añadir películas favoritas al modelo
+                List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
+                m.put("peliculasFavoritas", peliculasFavoritas);
+
+                // Añadir videojuegos favoritos al modelo
+                List<Juego> juegosFavoritos = usuario.getJuegosFav();
+                m.put("juegosFavoritos", juegosFavoritos);
+            }
+
+            m.put("usuario", usuario);
+            m.put("view", "usuario/rDetailed");
+            return "_t/frame";
+        } else {
+            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
+            // de sesión u otra página apropiada.
+            return "redirect:/"; // Redirige a la página de inicio de sesión
+        }
+
     }
-    
-    m.put("usuario", usuario);
-    m.put("view", "usuario/rDetailed");
-    return "_t/frame";
-}
-
 
     @GetMapping("obtenerPuntos")
     @ResponseBody
@@ -218,4 +225,3 @@ public String rDetailed(ModelMap m, HttpSession session) {
         return "redirect:/";
     }
 }
-
