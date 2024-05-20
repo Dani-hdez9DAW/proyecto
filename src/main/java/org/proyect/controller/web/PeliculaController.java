@@ -82,7 +82,7 @@ public class PeliculaController {
         } else {
             // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
             // de sesión u otra página apropiada.
-            return "/"; // Redirige a la página de inicio de sesión
+            return "redirect:/"; // Redirige a la página de inicio de sesión
         }
     }
 

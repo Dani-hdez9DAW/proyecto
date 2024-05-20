@@ -102,7 +102,13 @@ public class HomeController {
 			s.setAttribute("nombre", email);
 
 		} catch (Exception e) {
-			PRG.error("Usuario o contraseña incorrectos");
+			if (!EmailValidator.isValidEmail(email)) {
+				PRG.error("Formato de correo electrónico no válido");
+			}else{
+				PRG.error("Usuario o contraseña incorrectos");
+			}
+
+			
 		}
 		return "redirect:/";
 	}
