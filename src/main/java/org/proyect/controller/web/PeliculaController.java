@@ -16,6 +16,7 @@ import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
+import org.proyect.helper.PeliculaValidator;
 import org.proyect.service.CategoriaService;
 import org.proyect.service.PeliculaService;
 import org.proyect.service.UsuarioService;
@@ -63,7 +64,7 @@ public class PeliculaController {
         Pageable pageable = PageRequest.of(page, 12); // 10 películas por página
         Page<Pelicula> peliculasPage = peliculaService.findAll(pageable);
         List<Categoria> categorias = categoriaService.findAll();
-        List<String> clasificaciones = Arrays.asList("R","PG-13","PG-16","PG-17");
+        List<String> clasificaciones = Arrays.asList("R", "PG-13", "PG-16", "PG-17");
         List<Pelicula> peliculas = peliculasPage.getContent();
         m.put("peliculas", peliculas);
         m.put("currentPage", page);
@@ -73,6 +74,7 @@ public class PeliculaController {
         m.put("view", "/pelicula/r");
         return "_t/frame";
     }
+
     @GetMapping("rAdmin")
     public String rAdmin(
             ModelMap m, HttpSession s) {
@@ -179,13 +181,16 @@ public class PeliculaController {
             @RequestParam("cuentaVotos") Integer cuentaVotos,
             @RequestParam("trailer") String trailer,
             @RequestParam("urlCompra") String url) throws DangerException {
+
         try {
-            peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
-                    idsCategoria, sinopsis,
-                    fechaLanzamiento, cuentaVotos, trailer, url);
-            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
+            if (PeliculaValidator.ValidarDatos(titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                    idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url)) {
+                peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                        idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url);
+            }
+            PRG.info("La película con nombre '" + titulo + "' ha sido actualizada", "/pelicula/r");
         } catch (Exception e) {
-            PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/r");
+            PRG.error("Error al actualizar la película: " + e.getMessage(), "/pelicula/r");
         }
         return "redirect:/pelicula/r";
     }
@@ -311,7 +316,7 @@ public class PeliculaController {
             categoria = categoriaService.findById(idCategoria);
         }
 
-        if (idCategoria != null) { 
+        if (idCategoria != null) {
             peliculasFiltradas = new ArrayList<>();
             for (Pelicula pelicula : peliculas) {
                 for (Categoria cat : pelicula.getCategorias()) {
@@ -321,14 +326,14 @@ public class PeliculaController {
                     }
                 }
             }
-        } else if (clasificacion != null) { 
+        } else if (clasificacion != null) {
             peliculasFiltradas = new ArrayList<>();
             for (Pelicula pelicula : peliculas) {
                 if (pelicula.getClasificacion().equals(clasificacion)) {
                     peliculasFiltradas.add(pelicula);
                 }
             }
-        } else { 
+        } else {
             peliculasFiltradas = peliculas;
         }
 
@@ -343,8 +348,8 @@ public class PeliculaController {
     // CARROUSELL
     // @GetMapping("/peliculas")
     // public String mostrarPeliculas(Model model) {
-    //     List<Pelicula> peliculas = peliculaService.obtenerTodasLasPeliculas();
-    //     model.addAttribute("peliculas", peliculas);
-    //     return "nombre-de-tu-vista"; // Reemplaza con el nombre de tu archivo HTML
+    // List<Pelicula> peliculas = peliculaService.obtenerTodasLasPeliculas();
+    // model.addAttribute("peliculas", peliculas);
+    // return "nombre-de-tu-vista"; // Reemplaza con el nombre de tu archivo HTML
     // }
 }
