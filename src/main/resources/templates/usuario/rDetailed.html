@@ -12,9 +12,16 @@
 
 <style>
 	/* Imagen de Spiderman */
-	body {
+	/* body {
 		background-image: url(https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700481705.jpg);
-	}
+	} */
+
+	body {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700481705.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
 
 	.container {
 		margin-right: 50px;
@@ -292,10 +299,163 @@
 	}
 
 	.edit-icon,
-	.accept-btn,
-	.cancel-btn {
-		cursor: pointer;
-	}
+        .accept-btn,
+        .cancel-btn,
+        .edit-overlay,
+        .input-title,
+        .input-description,
+        .save-btn,
+        .cancel-edit-btn {
+            display: none;
+        }
+
+        .show-edit .edit-icon {
+            display: block;
+        }
+
+        .show-edit .title,
+        .show-edit .description,
+        .show-edit .input-title,
+        .show-edit .input-description,
+        .show-edit .edit-overlay,
+        .show-edit .save-btn,
+        .show-edit .cancel-edit-btn {
+            display: block;
+        }
+
+        .show-edit .title,
+        .show-edit .description {
+            display: none;
+        }
+
+        .show-edit .input-title,
+        .show-edit .input-description {
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .show-edit .save-btn,
+        .show-edit .cancel-edit-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .show-edit .save-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .show-edit .cancel-edit-btn {
+            background-color: #f44336;
+            color: #fff;
+        }
+
+        /* Estilos para aceptar o cancelar la edición */
+        .edit-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .accept-btn,
+        .cancel-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .accept-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .cancel-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .edit-icon {
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .edit-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            display: none;
+        }
+
+        .edit-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .edit-container input {
+            margin-right: 10px;
+        }
+
+        .edit-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .edit-buttons button {
+            margin: 0 5px;
+        }
+
+        /* Estilos para el botón de cambio de fondo */
+        .change-bg-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .change-bg-btn, .change-profile-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Estilos para el input de selección de archivo */
+        .file-input {
+            display: none;
+        }
+
+		  .profile-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-container img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .profile-btn-container {
+            display: flex;
+            flex-direction: column;
+        }
 </style>
 
 
@@ -305,7 +465,12 @@
 	<div class="m-3 container-usu">
 		<div class="header-container">
 			<div class="header">
-				<h1 class="main-heading" th:text="${session.usuario.nombre}"></h1>
+				
+				<div class="change-bg-container">
+					<h1 class="main-heading" th:text="${session.usuario.nombre}"></h1>
+					<button class="change-bg-btn"><i class="bi bi-arrow-bar-up">Fondo</i> </button>
+					<input type="file" class="file-input" accept="image/*">
+				</div>
 				<span class="tag" id="puntos">Puntos</span>
 				<div class="stats">
 					<!-- Esto es para que muestre la cantidad de peliculas -->
@@ -316,15 +481,31 @@
 		</div>
 
 		<div class="overlay-header"></div>
-
+		
 		<div class="body">
-			<img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" />
+			
+			<!-- <img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" /> -->
+			<div class="profile-container">
+                <!-- <img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" id="profileImage" width="150" />
+                <div class="profile-btn-container">
+                    <button class="change-profile-btn"><i class="bi bi-arrow-bar-up"> Cambiar Perfil</i></button>
+                    <input type="file" class="file-input-profile" accept="image/*">
+                </div> -->
+
+				<div>
+					<img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" id="profile-image"
+						class="body-image">
+					<button onclick="document.getElementById('profile-file-input').click()">Añadir foto</button>
+					<input type="file" id="profile-file-input" class="file-input" accept="image/*"
+						style="display: none;" onchange="uploadProfileImage()">
+				</div>
+            </div>
 			<div id="description" class="body-info">
 				<!-- Descripción -->
 				<p id="user-description" th:text="${session.usuario.descripcion}"></p>
 				<!-- Ícono de editar -->
 				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarDescripcionModal">
-					✎
+					✎Descripción
 				</button>
 				<!-- Modal para editar la descripción -->
 				<div class="modal fade" id="editarDescripcionModal" tabindex="-1" role="dialog"
@@ -447,7 +628,7 @@
 			$("#cantidadPeliculas").text(data);
 		}).fail(function (xhr, status, error) {
 			console.error("Error al obtener la cantidad de películas favoritas:", error);
-			$("#cantidadPeliculas").text("Error");
+			$("#cantidadPeliculas").text("0");
 		});
 	});
 
@@ -459,13 +640,96 @@
 			$("#cantidadJuegos").text(data);
 		}).fail(function (xhr, status, error) {
 			console.error("Error al obtener la cantidad de juegos favoritos:", error);
-			$("#cantidadJuegos").text("Error");
+			$("#cantidadJuegos").text("0");
 		});
+
+		$('.change-bg-btn').on('click', function () {
+    $('.file-input').click(); // Cambiado a '.file-input' en lugar de '.file-input-bg'
+});
+
+$('.file-input').on('change', function (e) { // Cambiado a '.file-input' en lugar de '.file-input-bg'
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            $('body').css('background-image', `url(${event.target.result})`);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+
+            // Cambiar imagen de perfil
+            $('.change-profile-btn').on('click', function () {
+                $('.file-input-profile').click();
+            });
+
+            $('.file-input-profile').on('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        $('#profileImage').attr('src', event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 	});
 
 
 
 </script>
+
+
+<script>
+	function uploadImage() {
+		var fileInput = document.getElementById('file-input');
+		var file = fileInput.files[0];
+		var formData = new FormData();
+		formData.append('file', file);
+
+		$.ajax({
+			url: '/usuarios/{id}/uploadFoto',  // Reemplaza {id} con el ID real del usuario
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (response) {
+				alert('Foto de fondo subida exitosamente');
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert('Error subiendo la foto de fondo');
+			}
+		});
+	}
+
+	function uploadProfileImage() {
+		var fileInput = document.getElementById('profile-file-input');
+		var file = fileInput.files[0];
+		var formData = new FormData();
+		formData.append('file', file);
+
+		$.ajax({
+			url: '/usuario/uploadFotoPerfil',  // URL para subir la foto de perfil
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (response) {
+				alert('Foto de perfil subida exitosamente');
+				// Actualizar la imagen de perfil en el DOM
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					document.getElementById('profile-image').src = e.target.result;
+				}
+				reader.readAsDataURL(file);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				alert('Error subiendo la foto de perfil');
+			}
+		});
+	}
 </script>
+
 
 </html>

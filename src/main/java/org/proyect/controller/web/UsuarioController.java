@@ -1,5 +1,6 @@
 package org.proyect.controller.web;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -47,7 +49,6 @@ public class UsuarioController {
 
         m.put("peliculas", pelicula);
         m.put("juegos", juego);
-
 
         m.put("view", "usuario/r");
         return "_t/frame";
@@ -167,7 +168,8 @@ public class UsuarioController {
         }
 
         // Si no se puede obtener el número de películas favoritas, devolver un error
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        return ResponseEntity.ok(0);
     }
 
     // Mostrar el número de juegos
@@ -188,7 +190,8 @@ public class UsuarioController {
         }
 
         // Si no se puede obtener el número de películas favoritas, devolver un error
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        return ResponseEntity.ok(0);
     }
     // ----------------------------------------------------------------
 
@@ -239,5 +242,40 @@ public class UsuarioController {
 
         return "redirect:/";
     }
+
+    // @PostMapping("/uploadFoto")
+    // public ResponseEntity<String> uploadFoto(@RequestParam("file") MultipartFile
+    // file, HttpSession session) {
+    // Usuario usuario = (Usuario) session.getAttribute("usuario");
+    // Long id = (Long) session.getAttribute("id");
+    // if (usuario != null) {
+    // try {
+    // usuarioService.saveFoto(id, file);
+    // return ResponseEntity.ok("Foto subida exitosamente");
+    // } catch (IOException e) {
+    // return ResponseEntity.status(500).body("Error subiendo la foto");
+    // }
+    // } else {
+    // return ResponseEntity.status(401).body("Usuario no autenticado");
+    // }
+    // // }
+    // @PostMapping("/uploadFotoPerfil")
+    // public ResponseEntity<String> uploadFotoPerfil(@RequestParam("file") MultipartFile file, HttpSession session) {
+    //     try {
+    //         Usuario usuario = (Usuario) session.getAttribute("usuario");
+    //         if (usuario != null) {
+    //             // Obtener el ID del usuario
+    //             Long usuarioId = usuario.getIdPersona();
+    //             // Guardar la foto de perfil
+    //             usuarioService.saveFotoPerfil(usuarioId, file);
+    //             return ResponseEntity.ok("Foto subida exitosamente");
+    //         } else {
+    //             return ResponseEntity.badRequest()
+    //                     .body("No se encontró ningún usuario con el correo electrónico proporcionado");
+    //         }
+    //     } catch (IOException e) {
+    //         return ResponseEntity.status(500).body("Error subiendo la foto");
+    //     }
+    // }
 
 }

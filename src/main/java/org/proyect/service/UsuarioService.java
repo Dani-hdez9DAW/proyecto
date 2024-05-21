@@ -1,6 +1,8 @@
 package org.proyect.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 
@@ -180,4 +183,26 @@ public class UsuarioService {
             throw new UsernameNotFoundException("Usuario no encontrado: " + nombreUsuario);
         }
     }
+
+    //  public void saveFoto(Long id, MultipartFile file) throws IOException {
+    //     Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+    //     if (usuarioOpt.isPresent()) {
+    //         Usuario usuario = usuarioOpt.get();
+    //         usuario.setFotoPerfil(file.getBytes());
+    //         usuarioRepository.save(usuario);
+    //     } else {
+    //         throw new RuntimeException("Usuario no encontrado");
+    //     }
+    // }
+
+//     public void saveFotoPerfil(Long id, MultipartFile file) throws IOException {
+//         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+//         if (usuarioOpt.isPresent()) {
+//             Usuario usuario = usuarioOpt.get();
+//             usuario.setFotoPerfil(file.getBytes());
+//             usuarioRepository.save(usuario);
+//         } else {
+//             throw new RuntimeException("Usuario no encontrado");
+//         }
+//     }
 }

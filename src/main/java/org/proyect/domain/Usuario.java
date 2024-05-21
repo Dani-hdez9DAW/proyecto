@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
@@ -23,22 +24,18 @@ public class Usuario extends Persona {
 
     @Column
     private String descripcion;
-    
+
+    // @Lob
+    // @Column(name = "foto_perfil")
+    // private byte[] fotoPerfil;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "usuario_pelicula",
-        joinColumns = @JoinColumn(name = "usuario_idPersona"),
-        inverseJoinColumns = @JoinColumn(name = "pelicula_idElemento"))
+    @JoinTable(name = "usuario_pelicula", joinColumns = @JoinColumn(name = "usuario_idPersona"), inverseJoinColumns = @JoinColumn(name = "pelicula_idElemento"))
     private List<Pelicula> peliculasFav;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "usuario_juego",
-        joinColumns = @JoinColumn(name = "usuario_idPersona"),
-        inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
+    @JoinTable(name = "usuario_juego", joinColumns = @JoinColumn(name = "usuario_idPersona"), inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
     private List<Juego> juegosFav;
-    
 
     @Column
     private Boolean estaRegistrado;
@@ -53,9 +50,8 @@ public class Usuario extends Persona {
         this.juegosFav = new ArrayList<>();
     }
 
-
-    public Usuario(String nombre, String passwd,String correo,Integer puntos) {
-        super.setNombre(nombre); 
+    public Usuario(String nombre, String passwd, String correo, Integer puntos) {
+        super.setNombre(nombre);
         super.setContraseña(passwd);
         super.setCorreo(correo);
         this.puntos = puntos;
@@ -70,8 +66,10 @@ public class Usuario extends Persona {
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
     }
+
     public Boolean getEsAdmin() {
-        return esAdmin != null ? esAdmin : false; 
+        return esAdmin != null ? esAdmin : false;
     }
+
 
 }

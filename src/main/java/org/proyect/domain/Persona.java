@@ -30,6 +30,15 @@ public abstract class Persona {
         this.nombre = nombre;
     }
 
+    public Long getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(Long idPersona) {
+        this.idPersona = idPersona;
+    }
+
+
     public String getCorreo() {
         return correo;
     }
