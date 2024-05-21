@@ -43,9 +43,12 @@ public class PeliculaService {
                 fechaLanzamiento, trailer, urlCompra);
         pelicula.setImagen(imagen);
         pelicula.setCuenta_votos(0);
-        if (fechaLanzamiento.isBefore(LocalDate.now())) {
-           pelicula.setEstado("Unreleased");
-        }
+        if (!fechaLanzamiento.isBefore(LocalDate.now())) {
+            pelicula.setEstado("Unreleased");
+         }
+         if (fechaLanzamiento.isBefore(LocalDate.now())) {
+            pelicula.setEstado("Released");
+         }
 
         // Inicializar la lista de categorías para evitar NullPointerException
         List<Categoria> categorias = new ArrayList<>();
@@ -92,8 +95,11 @@ public class PeliculaService {
         pelicula.setTrailer(trailer);
         pelicula.setUrl(url);
         pelicula.setPuntuacion(puntuacion);
-        if (fechaLanzamiento.isBefore(LocalDate.now())) {
+        if (!fechaLanzamiento.isBefore(LocalDate.now())) {
             pelicula.setEstado("Unreleased");
+         }
+         if (fechaLanzamiento.isBefore(LocalDate.now())) {
+            pelicula.setEstado("Released");
          }
 
         idsCategoria = (idsCategoria == null) ? new ArrayList<Long>() : idsCategoria;

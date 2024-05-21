@@ -27,18 +27,19 @@
         }
 
         .card-small {
+            transform: scale(0.8);
+        }
+        .text-small {
             transform: scale(0.6);
         }
-
         .circuloSmall {
-            transform: scale(0.9);
+            transform: scale(0.7);
         }
 
         .card-offset {
-            position: relative;
-            top: -150px;
+            top: -80px;
             /* Ajusta la posición hacia arriba */
-            left: 150px;
+            left: 60px;
             /* Ajusta la posición hacia la derecha */
         }
 
@@ -415,6 +416,12 @@
             right: 220px;
             transform: translate(50%, -50%);
         }
+        .puntuacionIzq {
+            position: absolute;
+            left: -420px; /* O el valor deseado para la distancia desde la izquierda */
+        }
+        
+
 
 
         @keyframes click-wave {

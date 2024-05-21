@@ -48,10 +48,7 @@ public class JuegoValidator {
             PRG.error("La sinopsis debe tener entre 50 y 500 caracteres.", "/juego/r");
         }
 
-        // Validar la fecha de lanzamiento
-        if (fechaLanzamiento == null || fechaLanzamiento.isAfter(LocalDate.now())) {
-            PRG.error("La fecha de lanzamiento debe ser anterior a hoy.", "/juego/r");
-        }
+        
 
         // Validar la cuenta de votos
         if (cuentaVotos == null || cuentaVotos < 0) {

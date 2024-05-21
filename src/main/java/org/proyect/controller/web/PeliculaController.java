@@ -165,6 +165,7 @@ public class PeliculaController {
             // Si el usuario está autenticado, continúa con la lógica para cargar la vista
             // rDetailed
             m.put("categorias", categoriaService.findAll());
+            m.put("categoriasPertenecientes", peliculaService.findByIdElemento(id_elemento).getCategorias());
             m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
             m.put("view", "pelicula/rDetailed");
             return "_t/frame";
