@@ -1,5 +1,6 @@
 package org.proyect.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,5 +27,24 @@ public class Juego extends Elemento {
     public Juego(String plataforma) {
         this.plataforma = plataforma;
         this.usuarios = new ArrayList<>();
+    }
+
+    public Juego(String titulo, String clasificacion, Integer duracion, Integer puntuacion, String estado,
+            String plataforma,
+            String sinopsis, LocalDate fechaEstreno, String trailer, String url) {
+        this.titulo = titulo;
+        this.categorias = new ArrayList<>();
+        this.usuarios = new ArrayList<>();
+        this.puntuacion = puntuacion;
+        this.cuenta_votos = 0;
+        this.fecha_salida = fechaEstreno;
+        this.plataforma = plataforma;
+        this.clasificacion = clasificacion;
+        this.duracion = duracion;
+        this.estado = estado;
+        this.sinopsis = sinopsis;
+        this.trailer = trailer;
+        this.url = url;
+
     }
 }

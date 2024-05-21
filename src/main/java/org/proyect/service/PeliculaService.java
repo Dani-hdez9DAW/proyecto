@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.proyect.domain.Categoria;
 import org.proyect.domain.Pelicula;
+import org.proyect.helper.PRG;
 import org.proyect.repository.CategoriaRepository;
 import org.proyect.repository.PeliculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,16 @@ public class PeliculaService {
         return peliculaRepository.findAll();
     }
 
-    public void save(String titulo, List<Long> categoriaIds, String clasificacion, Integer duracion, String estado,
+    public void save(String titulo, List<Long> categoriaIds, String clasificacion, Integer duracion,Integer puntuacion, String estado,
             String plataforma,
             String sinopsis, LocalDate fechaLanzamiento, String imagen, String trailer, String urlCompra) {
-        Pelicula pelicula = new Pelicula(titulo, clasificacion, duracion, estado, plataforma, sinopsis,
+        Pelicula pelicula = new Pelicula(titulo, clasificacion, duracion,puntuacion, estado, plataforma, sinopsis,
                 fechaLanzamiento, trailer, urlCompra);
         pelicula.setImagen(imagen);
+        pelicula.setCuenta_votos(0);
+        if (fechaLanzamiento.isBefore(LocalDate.now())) {
+           pelicula.setEstado("Unreleased");
+        }
 
         // Inicializar la lista de categorías para evitar NullPointerException
         List<Categoria> categorias = new ArrayList<>();
@@ -87,6 +92,9 @@ public class PeliculaService {
         pelicula.setTrailer(trailer);
         pelicula.setUrl(url);
         pelicula.setPuntuacion(puntuacion);
+        if (fechaLanzamiento.isBefore(LocalDate.now())) {
+            pelicula.setEstado("Unreleased");
+         }
 
         idsCategoria = (idsCategoria == null) ? new ArrayList<Long>() : idsCategoria;
         pelicula.getCategorias().clear();

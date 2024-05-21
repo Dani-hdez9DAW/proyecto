@@ -54,13 +54,13 @@ public class Pelicula extends Elemento {
     }
 
     // ==================
-    public Pelicula(String titulo, String clasificacion, Integer duracion, String estado, String plataforma,
+    public Pelicula(String titulo, String clasificacion, Integer duracion,Integer puntuacion, String estado, String plataforma,
             String sinopsis, LocalDate fechaEstreno, String trailer, String url) {
         this.titulo = titulo;
         this.actores = new ArrayList<>();
         this.categorias = new ArrayList<>();
         this.usuarios = new ArrayList<>();
-        this.puntuacion = 0;
+        this.puntuacion = puntuacion;
         this.cuenta_votos = 0;
         this.fecha_salida = fechaEstreno;
         this.plataforma = plataforma;

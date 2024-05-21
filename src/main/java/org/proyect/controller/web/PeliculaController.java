@@ -110,6 +110,7 @@ public class PeliculaController {
             @RequestParam(value = "categoria[]", required = false) List<Long> categoria,
             @RequestParam("clasificacion") String clasificacion,
             @RequestParam("duracion") Integer duracion,
+            @RequestParam("puntuacion") Integer puntuacion,
             @RequestParam("estado") String estado,
             @RequestParam("plataforma") String plataforma,
             @RequestParam("sinopsis") String sinopsis,
@@ -118,31 +119,39 @@ public class PeliculaController {
             @RequestParam("trailer") String trailer,
             @RequestParam("url") String url) throws DangerException {
         try {
-            String nombreImagen = null; // variable para guardar el nombre de la imagen
-            if (!imagen.isEmpty()) {
-                String directorioImagenes = "src//main//resources//static/img/peliculas";
-                Path rutaDirectorio = Paths.get(directorioImagenes);
+            // VALIDALOR DE DATOS
 
-                // Verifica si el directorio existe, si no, intenta crearlo
-                if (!Files.exists(rutaDirectorio)) {
-                    Files.createDirectories(rutaDirectorio);
+            if (PeliculaValidator.ValidarDatosC(titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                    categoria, sinopsis, fechaLanzamiento, puntuacion, trailer, url, imagen)) {
+                String nombreImagen = null; // variable para guardar el nombre de la imagen
+                if (!imagen.isEmpty()) {
+                    String directorioImagenes = "src//main//resources//static/img/peliculas";
+                    Path rutaDirectorio = Paths.get(directorioImagenes);
+
+                    // Verifica si el directorio existe, si no, intenta crearlo
+                    if (!Files.exists(rutaDirectorio)) {
+                        Files.createDirectories(rutaDirectorio);
+                    }
+
+                    byte[] bytesImg = imagen.getBytes();
+                    nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
+
+                    Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
+
+                    try (OutputStream os = Files.newOutputStream(rutaCompleta)) {
+                        os.write(bytesImg);
+                    } catch (IOException e) {
+                        // Manejo de errores al escribir el archivo
+                        throw new RuntimeException("Error al escribir la imagen", e);
+                    }
                 }
 
-                byte[] bytesImg = imagen.getBytes();
-                nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
-
-                Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
-
-                try (OutputStream os = Files.newOutputStream(rutaCompleta)) {
-                    os.write(bytesImg);
-                } catch (IOException e) {
-                    // Manejo de errores al escribir el archivo
-                    throw new RuntimeException("Error al escribir la imagen", e);
-                }
+                peliculaService.save(titulo, categoria, clasificacion, duracion, puntuacion, estado, plataforma,
+                        sinopsis,
+                        fechaLanzamiento, nombreImagen, trailer, url);
+                PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
             }
-            peliculaService.save(titulo, categoria, clasificacion, duracion, estado, plataforma, sinopsis,
-                    fechaLanzamiento, nombreImagen, trailer, url);
-            PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
+
         } catch (Exception e) {
             PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
         }
