@@ -1,6 +1,7 @@
 package org.proyect.controller.web;
 
 import org.proyect.exception.DangerException;
+import org.proyect.helper.CategoriaValidator;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
@@ -28,36 +29,40 @@ public class CategoriaController {
         m.put("view", "categoria/r");
         return "_t/frame";
     }
+
     @GetMapping("rAdmin")
     public String rAdmin(
-            ModelMap m,HttpSession s) {
-                if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
-                    m.put("categorias", categoriaService.findAll());
-                    m.put("view", "categoria/rAdmin");
-                    return "_t/frame";
-                } else {
-                    return "/"; // Redirige a la página de inicio de sesión
-                }
+            ModelMap m, HttpSession s) {
+        if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("categorias", categoriaService.findAll());
+            m.put("view", "categoria/rAdmin");
+            return "_t/frame";
+        } else {
+            return "redirect:/"; // Redirige a la página de inicio de sesión
+        }
     }
 
     @GetMapping("c")
     public String c(
             ModelMap m,
             HttpSession s) {
-                if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
-                    m.put("view", "categoria/c");
-                    return "_t/frame";
-                } else {
-                    return "/"; // Redirige a la página de inicio de sesión
-                }
+        if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("view", "categoria/c");
+            return "_t/frame";
+        } else {
+            return "redirect:/"; // Redirige a la página de inicio de sesión
+        }
     }
 
     @PostMapping("c")
     public String cPost(
             @RequestParam("nombre") String nombre, HttpSession s) throws Exception {
- 
+
         try {
-            categoriaService.save(nombre);
+            if (CategoriaValidator.validarCategoria(nombre)) {
+                categoriaService.save(nombre);
+            }
+
         } catch (Exception e) {
             PRG.error("El país " + nombre + " ya existe", "/categoria/c");
         }
