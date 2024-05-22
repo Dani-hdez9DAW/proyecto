@@ -517,43 +517,39 @@
             </div>
             <div class="card cardArriba">
                 <div class="card-body">
-                    <ul>
-                        <li>
-                            <h3>Estado</h3>
-                            <p class="card-text"><span th:utext="${pelicula.estado}"></span></p>
-                        </li>
-                        <li>
-                            <h3>Clasificación</h3>
-                            <p class="card-text"><span th:utext="${pelicula.clasificacion}"></span></p>
-                        </li>
-                        <li>
-                            <h3>Duración</h3>
-                            <p class="card-text"><span
-                                    th:utext="'<i class=\'bi bi-alarm\'></i> ' + ${pelicula.duracion} + ' m.'"></span>
-                            </p>
-                        </li>
-                        <li>
-                            <h3>Fecha de salida</h3>
-                            <p class="card-text"><span
-                                    th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span>
-                            </p>
-                        </li>
-                        <li>
-                            <h3>Cuenta votos</h3>
-                            <p class="card-text"><span th:utext="${pelicula.cuenta_votos}"></span></p>
-                        </li>
-                        <li>
-                            <h3>Plataforma</h3>
-                            <p class="card-text"><span th:utext="${pelicula.plataforma}"></span></p>
-                        </li>
-                        <li>
-                            <h3>Categoria</h3>
-                            <li th:each="categoriaP:${categoriasPertenecientes}">
-                                <p class="card-text"><span th:utext="${categoriaP.nombre}"></span></p>
-                            </li>
-                        </li>
-
-                    </ul>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h3>Estado</h3>
+                                <p class="card-text"><span th:utext="${pelicula.estado}"></span></p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h3>Duración</h3>
+                                <p class="card-text"><span th:utext="'<i class=\'bi bi-alarm\'></i> ' + ${pelicula.duracion} + ' m.'"></span></p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h3>Fecha de salida</h3>
+                                <p class="card-text"><span th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span></p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h3>Cuenta votos</h3>
+                                <p class="card-text"><span th:utext="${pelicula.cuenta_votos}"></span></p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h3>Plataforma</h3>
+                                <p class="card-text"><span th:utext="${pelicula.plataforma}"></span></p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h3>Categoria</h3>
+                                <ul>
+                                    <li th:each="categoriaP: ${categoriasPertenecientes}">
+                                        <p class="card-text"><span th:utext="${categoriaP.nombre}"></span></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                
                     <div>
                         <h1 class="text-center text-small  highlight-text" style="text-align: left;">PUNTUACION</h1>
                         <div id="cont" class="circuloSmall puntuacionIzq" data-pct="">
@@ -570,16 +566,16 @@
                         <input type="hidden" id="puntuacion" th:value="${pelicula.puntuacion}">
                     </div>
                     <div>
-                        <div th:if="${pelicula.clasificacion == '3'}">
+                        <div th:if="${pelicula.clasificacion == 'PG-3'}">
                             <img th:src="@{/img/peliculas/edades/Apto.png}" class="imagengrande" alt="Apto">
                         </div>
-                        <div th:if="${pelicula.clasificacion == '7'}">
+                        <div th:if="${pelicula.clasificacion == 'PG-7'}">
                             <img th:src="@{/img/peliculas/edades/7.png}" class="imagengrande" alt="7">
                         </div>
                         <div th:if="${pelicula.clasificacion == 'PG-13'}">
                             <img th:src="@{/img/peliculas/edades/12.png}" class="imagengrande" alt="12">
                         </div>
-                        <div th:if="${pelicula.clasificacion == '16'}">
+                        <div th:if="${pelicula.clasificacion == 'PG-16'}">
                             <img th:src="@{/img/peliculas/edades/16.png}" class="imagengrande" alt="16">
                         </div>
                         <div th:if="${pelicula.clasificacion == 'R'}">
