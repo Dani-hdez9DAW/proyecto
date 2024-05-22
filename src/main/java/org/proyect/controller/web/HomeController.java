@@ -6,6 +6,7 @@ import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
+import org.proyect.helper.EmailValidator;
 import org.proyect.helper.PRG;
 import org.proyect.service.JuegoService;
 import org.proyect.service.PeliculaService;
@@ -26,27 +27,25 @@ public class HomeController {
 	@Autowired
 	private UsuarioService usuarioService;
 	@Autowired
-    private PeliculaService peliculaService;
+	private PeliculaService peliculaService;
 	@Autowired
-    private JuegoService juegoService;
+	private JuegoService juegoService;
 
 	@GetMapping("/")
 	public String home(ModelMap m) {
 		List<Juego> juegos = juegoService.findAll();
-		int cantidadMaximaJuegos = 4; 
-        m.put("juegos", juegos);
+		int cantidadMaximaJuegos = 4;
+		m.put("juegos", juegos);
 		m.addAttribute("cantidadMaximaJuegos", cantidadMaximaJuegos);
 
-		
-
 		List<Pelicula> peliculas = peliculaService.findAll();
-		int cantidadMaximaPeliculas = 4; 
+		int cantidadMaximaPeliculas = 4;
 		m.put("peliculas", peliculas);
 		m.addAttribute("cantidadMaximaPeliculas", cantidadMaximaPeliculas);
 
+		// Agrega las películas para el carrusel
+		m.put("carouselPeliculas", peliculas.subList(0, Math.min(4, peliculas.size())));
 
-		// List<Pelicula> peliculasPF = peliculaService.findLastFourMovies();
-		// m.put("peliculasPF", peliculasPF);
 		m.put("view", "home/home");
 		return "_t/frame";
 	}
@@ -92,13 +91,24 @@ public class HomeController {
 			HttpSession s,
 			ModelMap m) throws DangerException {
 		try {
+			// Validar el formato del correo electrónico
+			if (!EmailValidator.isValidEmail(email)) {
+				PRG.error("Formato de correo electrónico no válido");
+			}
+
 			Usuario usuario = usuarioService.login(email, password);
 			usuarioService.setRegistro(email);
 			s.setAttribute("usuario", usuario);
 			s.setAttribute("nombre", email);
 
 		} catch (Exception e) {
-			PRG.error("Usuario o contraseña incorrectos");
+			if (!EmailValidator.isValidEmail(email)) {
+				PRG.error("Formato de correo electrónico no válido");
+			}else{
+				PRG.error("Usuario o contraseña incorrectos");
+			}
+
+			
 		}
 		return "redirect:/";
 	}

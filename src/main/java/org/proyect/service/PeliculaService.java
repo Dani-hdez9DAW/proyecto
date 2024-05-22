@@ -9,6 +9,8 @@ import org.proyect.domain.Pelicula;
 import org.proyect.repository.CategoriaRepository;
 import org.proyect.repository.PeliculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +19,17 @@ public class PeliculaService {
     private PeliculaRepository peliculaRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    private List<Long> calificaciones;
+
+    public PeliculaService() {
+        this.calificaciones = new ArrayList<>();
+    }
+
+    public Page<Pelicula> findAll(Pageable pageable) {
+        return peliculaRepository.findAll(pageable);
+    }
+
 
     public List<Pelicula> findAll() {
         return peliculaRepository.findAll();
@@ -50,12 +63,17 @@ public class PeliculaService {
         return peliculaRepository.findByTitulo(titulo);
     }
 
+    public Pelicula getByTitulo(String titulo) {
+        return peliculaRepository.getByTitulo(titulo);
+    }
+
     public Pelicula findByIdElemento(Long elementoId) {
         return peliculaRepository.findById(elementoId).get();
     }
 
     public void update(Long idPelicula, String titulo, String clasificacion, Integer duracion,
-            String estado, String plataforma, String sinopsis, LocalDate fechaLanzamiento, Integer cuentaVotos,
+            String estado, String plataforma, Integer puntuacion, List<Long> idsCategoria, String sinopsis,
+            LocalDate fechaLanzamiento, Integer cuentaVotos,
             String trailer, String url) {
         Pelicula pelicula = peliculaRepository.findById(idPelicula).get();
         pelicula.setTitulo(titulo);
@@ -68,12 +86,51 @@ public class PeliculaService {
         pelicula.setCuenta_votos(cuentaVotos);
         pelicula.setTrailer(trailer);
         pelicula.setUrl(url);
-        pelicula.setCategorias(null);
+        pelicula.setPuntuacion(puntuacion);
+
+        idsCategoria = (idsCategoria == null) ? new ArrayList<Long>() : idsCategoria;
+        pelicula.getCategorias().clear();
+        List<Categoria> nuevosCategorias = new ArrayList<Categoria>();
+        for (Long idCategoria : idsCategoria) {
+            Categoria categoria = categoriaRepository.findById(idCategoria).get();
+            nuevosCategorias.add(categoria);
+        }
+        pelicula.setCategorias(nuevosCategorias);
         peliculaRepository.save(pelicula);
     }
 
     public void delete(Long idPelicula) {
         peliculaRepository.delete(peliculaRepository.getReferenceById(idPelicula));
     }
+
+    public Long setCalificacion(Pelicula pelicula, Long puntos) {
+        if (puntos != null) {
+            // Agregar la calificación a la lista de la película específica
+            pelicula.getCalificaciones().add(puntos);
+            int conteoVotos = pelicula.getCalificaciones().size();
+            Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
+            pelicula.setCalificacion(cali);
+            peliculaRepository.save(pelicula);
+            return cali;
+        } else {
+            puntos = 0L;
+            // Agregar la calificación a la lista de la película específica
+            pelicula.getCalificaciones().add(puntos);
+            int conteoVotos = pelicula.getCalificaciones().size();
+            Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
+            pelicula.setCalificacion(cali);
+            peliculaRepository.save(pelicula);
+            return cali;
+        }
+    }
     
+
+    private double calcularCalificacion(List<Long> calificaciones, int conteoVotos) {
+        long sumaCalificaciones = 0;
+        for (Long calificacion : calificaciones) {
+            sumaCalificaciones += calificacion;
+        }
+        return (double) sumaCalificaciones / conteoVotos;
+    }
+
 }

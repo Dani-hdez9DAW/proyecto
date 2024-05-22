@@ -6,6 +6,8 @@ import java.util.List;
 import org.proyect.domain.Juego;
 import org.proyect.repository.JuegoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,9 +18,14 @@ public class JuegoService {
     public List<Juego> findAll() {
         return juegoRepository.findAll();
     }
+    
+    public Page<Juego> findAll(Pageable pageable) {
+        return juegoRepository.findAll(pageable);
+    }
+
 
     public void save(String nombre) {
-        Juego Juego = new Juego(null, nombre);
+        Juego Juego = new Juego(nombre);
         juegoRepository.save(Juego);
     }
 
@@ -54,6 +61,36 @@ public class JuegoService {
 
     public void delete(Long idJuego) {
         juegoRepository.delete(juegoRepository.getReferenceById(idJuego));
+    }
+
+    public Long setCalificacion(Juego juego, Long puntos) {
+        if (puntos != null) {
+            // Agregar la calificación a la lista de la película específica
+            juego.getCalificaciones().add(puntos);
+            int conteoVotos = juego.getCalificaciones().size();
+            Long cali = (long) calcularCalificacion(juego.getCalificaciones(), conteoVotos);
+            juego.setCalificacion(cali);
+            juegoRepository.save(juego);
+            return cali;
+        } else {
+            puntos = 0L;
+            // Agregar la calificación a la lista de la película específica
+            juego.getCalificaciones().add(puntos);
+            int conteoVotos = juego.getCalificaciones().size();
+            Long cali = (long) calcularCalificacion(juego.getCalificaciones(), conteoVotos);
+            juego.setCalificacion(cali);
+            juegoRepository.save(juego);
+            return cali;
+        }
+    }
+    
+
+    private double calcularCalificacion(List<Long> calificaciones, int conteoVotos) {
+        long sumaCalificaciones = 0;
+        for (Long calificacion : calificaciones) {
+            sumaCalificaciones += calificacion;
+        }
+        return (double) sumaCalificaciones / conteoVotos;
     }
 
 }

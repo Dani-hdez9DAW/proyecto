@@ -5,6 +5,9 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
@@ -17,13 +20,25 @@ public class Usuario extends Persona {
 
     @Column
     private Long descuento;
+
+    @Column
+    private String descripcion;
     
 
-    @ManyToMany(mappedBy = "usuarios")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "usuario_pelicula",
+        joinColumns = @JoinColumn(name = "usuario_idPersona"),
+        inverseJoinColumns = @JoinColumn(name = "pelicula_idElemento"))
     private List<Pelicula> peliculasFav;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "usuario_juego",
+        joinColumns = @JoinColumn(name = "usuario_idPersona"),
+        inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
     private List<Juego> juegosFav;
+    
 
     @Column
     private Boolean estaRegistrado;
@@ -38,8 +53,9 @@ public class Usuario extends Persona {
         this.juegosFav = new ArrayList<>();
     }
 
+
     public Usuario(String nombre, String passwd,String correo,Integer puntos) {
-        super.setNombre(nombre); // Usar el setter heredado de Persona
+        super.setNombre(nombre); 
         super.setContraseña(passwd);
         super.setCorreo(correo);
         this.puntos = puntos;
@@ -55,8 +71,7 @@ public class Usuario extends Persona {
         this.juegosFav = new ArrayList<>();
     }
     public Boolean getEsAdmin() {
-        // Manejo del caso en el que esAdmin sea nulo
-        return esAdmin != null ? esAdmin : false; // Devuelve false si esAdmin es nulo
+        return esAdmin != null ? esAdmin : false; 
     }
 
 }

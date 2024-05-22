@@ -1,206 +1,254 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vista detallada de película</title>
-    <!-- Tu archivo de estilos CSS personalizado -->
-    <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-TdX7PtFTs5lCt4lwlBebN52Nq4ElCkIOHQ0pyAOn24NS+gZVv6b/2KA2RDpMBpbEe+BQiJqIp9nhffI3oyB+7A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/css/peliculas/rDetailed.css" rel="stylesheet">
+
     <style>
-        /* Estilos personalizados */
-        .movie-poster img {
-            width: 100%;
-            /* Hace que la imagen ocupe el 100% del ancho del contenedor */
-            height: auto;
-            /* Permite que la altura se ajuste automáticamente para mantener la proporción */
+        .rating {
+            display: inline-block;
         }
 
-        .movie-details {
-            width: calc(100% - 150px);
-            /* Para dejar espacio a la imagen */
+        .rating input {
+            display: none;
         }
 
-        #id-sinopsis {
-            height: 150px;
-            /* Altura ajustable */
-            resize: none;
-            /* Deshabilita el redimensionamiento */
-        }
-
-        .card {
-            position: relative;
-            background: lightgrey;
-            box-shadow: #d11bff42 0 15px 40px -5px;
-            z-index: 1;
-            border-radius: 21px;
-            overflow: hidden;
-        }
-
-        .card__content {
-            background: linear-gradient(rgba(255, 255, 255, 0.473), rgba(150, 150, 150, 0.25));
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            padding: 15px;
-            border-radius: 21px;
-        }
-
-        .card .blob {
-            position: absolute;
-            z-index: -1;
-            border-radius: 5em;
-            width: 200px;
-            height: 200px;
-        }
-
-        .card .blob:nth-child(2) {
-            left: -50px;
-            top: -90px;
-            background: #ff930f;
-        }
-
-        .card .blob:nth-child(3) {
-            left: 110px;
-            top: -20px;
-            z-index: -1;
-            background: #bf0fff;
-        }
-
-        .card .blob:nth-child(4) {
-            left: -40px;
-            top: 100px;
-            background: #ff1b6b;
-        }
-
-        .card .blob:nth-child(5) {
-            left: 100px;
-            top: 180px;
-            background: #0061ff;
-        }
-
-        @media (max-width: 768px) {
-            .form-control {
-                width: 100%;
-            }
-
-            .btn-block {
-                width: 100%;
-            }
-        }
-
-        .highlight-text {
-            font-family: 'Arial', sans-serif;
-            font-size: 3em;
-            color: #B18FCF;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
-            letter-spacing: 2px;
-        }
-
-        .heart-container {
-            --heart-color: rgb(255, 91, 137);
-            position: relative;
-            width: 50px;
-            height: 50px;
-            transition: .3s;
-        }
-
-        .heart-container .checkbox {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            z-index: 20;
+        .rating label {
+            float: right;
             cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s;
         }
 
-        .heart-container .svg-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .rating label:before {
+            content: '\2605';
+            font-size: 30px;
         }
 
-        .heart-container .svg-outline,
-        .heart-container .svg-filled {
-            fill: var(--heart-color);
-            position: absolute;
+        .rating input:checked~label,
+        .rating label:hover,
+        .rating label:hover~label {
+            color: #6f00ff;
+            transition: color 0.3s;
         }
 
-        .heart-container .svg-filled {
-            animation: keyframes-svg-filled 1s;
-            display: none;
+        #clockdiv {
+            font-family: sans-serif;
+            color: #fff;
+            display: inline-block;
+            font-weight: 100;
+            text-align: center;
+            font-size: 30px;
         }
 
-        .heart-container .svg-celebrate {
-            position: absolute;
-            animation: keyframes-svg-celebrate .5s;
-            animation-fill-mode: forwards;
-            display: none;
-            stroke: var(--heart-color);
-            fill: var(--heart-color);
-            stroke-width: 2px;
+        #clockdiv>div {
+            padding: 10px;
+            border-radius: 3px;
+            background: #ff8a80;
+            display: inline-block;
         }
 
-        .heart-container .checkbox:checked~.svg-container .svg-filled {
-            display: block
+        #clockdiv div>span {
+            padding: 15px;
+            border-radius: 3px;
+            background: #f44336;
+            display: inline-block;
         }
 
-        .heart-container .checkbox:checked~.svg-container .svg-celebrate {
-            display: block
-        }
-
-        @keyframes keyframes-svg-filled {
-            0% {
-                transform: scale(0);
-            }
-
-            25% {
-                transform: scale(1.2);
-            }
-
-            50% {
-                transform: scale(1);
-                filter: brightness(1.5);
-            }
-        }
-
-        @keyframes keyframes-svg-celebrate {
-            0% {
-                transform: scale(0);
-            }
-
-            50% {
-                opacity: 1;
-                filter: brightness(1.5);
-            }
-
-            100% {
-                transform: scale(1.4);
-                opacity: 0;
-                display: none;
-            }
+        .smalltext {
+            padding-top: 5px;
+            font-size: 16px;
         }
     </style>
 </head>
 
 <body>
-    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary"
-        onclick="habilitarCampos();"> <i class="bi bi-pen-fill"></i></button>
-    <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" id="borrarButton"
-        class="btn btn-primary" onclick="cambiarDireccionForm()">
-        Borrar
-    </button>
+
+    <div class="modal" id="modal-name">
+        <div class="modal-sandbox"></div>
+        <div class="modal-box">
+            <div class="modal-header d-flex justify-content-between">
+                <h1 style="text-align: right;">Modificacion de datos de la pelicula</h1>
+                <div class="close-modal">&#10006;</div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <form action="/pelicula/u" method="post">
+                            <div class="form-group row">
+                                <label for="id-nombre" class="col-sm-4 col-form-label">
+                                    <h4>Nombre</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-nombre" class="form-control" name="nombre" required
+                                        th:value="${pelicula.titulo}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-clasificacion" class="col-sm-4 col-form-label">
+                                    <h4>Edad</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-clasificacion" class="form-control" name="clasificacion"
+                                        required th:value="${pelicula.clasificacion}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-estado" class="col-sm-4 col-form-label">
+                                    <h4>Estado</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-estado" class="form-control" name="estado" required
+                                        th:value="${pelicula.estado}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-fechaSalida" class="col-sm-4 col-form-label">
+                                    <h4>Fecha</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida"
+                                        required th:value="${pelicula.fecha_salida}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-duracion" class="col-sm-4 col-form-label">
+                                    <h4>Duración</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-duracion" class="form-control" name="duracion" required
+                                        th:value="${pelicula.duracion}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-plataforma" class="col-sm-4 col-form-label">
+                                    <h4>Plataforma</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-plataforma" class="form-control" name="plataforma"
+                                        th:value="${pelicula.plataforma}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-puntuacion" class="col-sm-4 col-form-label">
+                                    <h4>Puntuación</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="id-puntuacion" class="form-control" name="puntuacion"
+                                        th:value="${pelicula.puntuacion}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-cuentaVotos" class="col-sm-4 col-form-label">
+                                    <h4>Votos</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos"
+                                        th:value="${pelicula.cuenta_votos}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-trailer" class="col-sm-4 col-form-label">
+                                    <h4>Trailer</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-trailer" class="form-control" name="trailer"
+                                        th:value="${pelicula.trailer}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-urlCompra" class="col-sm-4 col-form-label">
+                                    <h4>URL</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-urlCompra" class="form-control" name="urlCompra"
+                                        th:value="${pelicula.url}">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="id-sinopsis">
+                                <h4>Sinopsis</h4>
+                            </label>
+                            <textarea id="id-sinopsis" class="form-control" name="sinopsis"
+                                th:text="${pelicula.sinopsis}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <h4>Categorías</h4>
+                            </label>
+                            <br>
+                            <th:block th:each="categoria : ${categorias}">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="categoriaId[]" class="form-check-input"
+                                        th:id="|idCategoria-${categoria.idCategoria}|"
+                                        th:value="${categoria.idCategoria}"
+                                        th:checked="${pelicula.categorias.contains(categoria)}">
+                                    <label class="form-check-label" th:for="|idCategoria-${categoria.idCategoria}|"
+                                        th:text="${categoria.nombre}"></label>
+                                </div>
+                            </th:block>
+                        </div>
+                        <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
+                        <button type="submit" id="btnActualizar" class="btn btn-primary btn-block"
+                            style="margin-top:20px;">Guardar</button>
+                        </form>
+                        <button class="btn btn-danger btn-block close-modal" style="margin-top:10px;">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary modal-trigger "
+        data-modal="modal-name"> <i class="bi bi-pen-fill"></i></button>
+    <form action="/pelicula/d" method="POST">
+        <input type="hidden" name="idpelicula" th:value="${pelicula.idElemento}">
+        <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" id="borrarButton"
+            class="btn btn-primary">
+            Borrar
+        </button>
+    </form>
+    <div th:if="${pelicula.estado == 'Unreleased'}">
+        <h1
+            th:text="'Espera hasta el día ' + ${#temporals.format(pelicula.fecha_salida, 'd')} + ' de ' + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(pelicula.fecha_salida, 'yyyy')}">
+        </h1>
+        <div id="clockdiv">
+            <div>
+                <span class="days"></span>
+                <div class="smalltext">Dias</div>
+            </div>
+            <div>
+                <span class="hours"></span>
+                <div class="smalltext">Horas</div>
+            </div>
+            <div>
+                <span class="minutes"></span>
+                <div class="smalltext">Minutos</div>
+            </div>
+            <div>
+                <span class="seconds"></span>
+                <div class="smalltext">Segundos</div>
+            </div>
+            <br>
+        </div>
+    </div>
+    <div id="deadline" th:value="${pelicula.fecha_salida}"></div>
+
     <div class="container mt-5">
         <h1 class="text-center highlight-text" th:text="${pelicula.titulo}"></h1>
         <div class="heart-container" title="Like">
-            <form action="/pelicula/checklist">
-                <input type="checkbox" class="checkbox" name="favourite" id="Give-It-An-Id">
+            <form id="checklistForm" action="/pelicula/rDetailed" method="POST">
+                <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
+                <input type="checkbox" class="checkbox" name="favourite" id="Give-It-An-Id"
+                    onclick="handleCheckboxClick()">
                 <div class="svg-container">
                     <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -221,13 +269,54 @@
                         <polygon points="80,80 70,70"></polygon>
                     </svg>
                 </div>
-            </form>
         </div>
-        <!-- <button id="guardarBtn" style="display: none;" onclick="guardar()">Guardar</button> -->
+        </form>
+
+        <form id="ratingForm" action="/pelicula/rDetailedRating" method="POST">
+            <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
+            <div class="rating">
+                <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)">
+                <label for="star5"></label>
+                <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)">
+                <label for="star4"></label>
+                <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)">
+                <label for="star3"></label>
+                <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)">
+                <label for="star2"></label>
+                <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)">
+                <label for="star1"></label>
+            </div>
+        </form>
+
 
         <div class="row justify-content-center">
+
+            <!-- Tarjeta para la información -->
             <div class="col-md-6">
                 <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <span>
+                                <h3>Sinopsis</h3>
+                                <p id="id-sinopsis" name="sinopsis" class="" th:text="${pelicula.sinopsis}"
+                                    disabled="disabled"></p>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <h3>Ver trailer</h3>
+                            <iframe width="560" height="315" th:src="${pelicula.trailer}" frameborder="0"
+                                allowfullscreen></iframe>
+                        </div>
+                        <div class="form-group">
+                            <h3>URL de compra</h3>
+                            <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
+                                th:href="${pelicula.url}" target="_blank">Comprar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-small card-offset">
                     <div class="card__content">
                         <div class="movie-poster">
                             <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Poster de la película"
@@ -239,100 +328,112 @@
                     <div class="blob"></div>
                     <div class="blob"></div>
                 </div>
+                <h1 class="text-center card-small contenidoArriba highlight-text">PUNTUACION</h1>
+                <div id="cont" class="circuloSmall contenidoArriba" data-pct="">
+                    <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                            stroke-dashoffset="0"></circle>
+                        <circle id="bar" r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                            stroke-dashoffset="0"></circle>
+                    </svg>
+                </div>
+                <input type="hidden" id="puntuacion" th:value="${pelicula.puntuacion}">
             </div>
-            <!-- Tarjeta para la información -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h1 class="text-center">Detalles</h1>
-                    </div>
-                    <div class="card-body">
-                        <form action="/pelicula/u" method="post">
-                            <div class="form-group">
-                                <label for="id-nombre">Nombre</label>
-                                <input type="text" id="id-nombre" name="nombre" class="form-control" disabled required
-                                    th:value="${pelicula.titulo}">
-                            </div>
-                            <div class="form-group">
-                                <label for="id-clasificacion">Clasificación</label>
-                                <input type="text" id="id-clasificacion" name="clasificacion" class="form-control"
-                                    disabled required th:value="${pelicula.clasificacion}">
-                            </div>
-                            <!-- Agrega los demás campos de detalle aquí -->
-                            <label for="id-estado">Estado</label>
-                            <input type="text" id="id-estado" name="estado" class="form-control" disabled required
-                                th:value="${pelicula.estado}">
-                            <div class="form-group">
-                                <label for="id-fechaSalida">Fecha de estreno</label>
-                                <input type="date" id="id-fechaSalida" name="fechaSalida" class="form-control" disabled
-                                    required th:value="${pelicula.fecha_salida}">
-                            </div>
-                            <div class="form-group">
-                                <label for="id-duracion">Duración</label>
-                                <input type="text" id="id-duracion" name="duracion" class="form-control" disabled
-                                    required th:value="${pelicula.duracion}">
-                            </div>
-                            <div class="form-group">
-                                <label for="id-plataforma">Plataforma</label>
-                                <input type="text" id="id-plataforma" name="plataforma" class="form-control" disabled
-                                    required th:value="${pelicula.plataforma}">
-                            </div>
-                            <div class="form-group">
-                                <label for="id-cuentaVotos">Cuenta votos</label>
-                                <input type="text" id="id-cuentaVotos" name="cuentaVotos" class="form-control" disabled
-                                    required th:value="${pelicula.cuenta_votos}">
-                            </div>
-                            <div class="form-group">
-                                <label for="id-trailer">Ver trailer</label>
-                                <a id="trailerLink" class="btn btn-secondary" name="trailer"
-                                    th:href="${pelicula.trailer}" target="_blank">Ver trailer</a>
-                            </div>
-                            <div class="form-group">
-                                <label for="id-urlCompra">URL de compra</label>
-                                <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
-                                    th:href="${pelicula.url}" target="_blank">Comprar</a>
-                            </div>
-                            <div class="form-group">
-                                <label for="id-sinopsis">Sinopsis</label>
-                                <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
-                                    th:text="${pelicula.sinopsis}" disabled="disabled"></textarea>
-                            </div>
-                            <input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
-                            <button type="submit" id="btnActualizar" style="display:none"
-                                class="btn btn-primary btn-block">Guardar</button>
-                        </form>
+
+        </div>
+        <div class="row">
+            <div class="card cardArriba">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="text-center">Detalles</h1>
+                </div>
+                <div class="card-body">
+                    <h2>Información respecto a la película</h2>
+                    <ul>
+                        <li>
+                            <h3>Estado</h3>
+                            <p class="card-text"><span th:utext="${pelicula.estado}"></span></p>
+                        </li>
+                        <li>
+                            <h3>Clasificación</h3>
+                            <p class="card-text"><span th:utext="${pelicula.clasificacion}"></span></p>
+                        </li>
+                        <li>
+                            <h3>Duración</h3>
+                            <p class="card-text"><span
+                                    th:utext="'<i class=\'bi bi-alarm\'></i> ' + ${pelicula.duracion} + ' m.'"></span>
+                            </p>
+                        </li>
+                        <li>
+                            <h3>Fecha de salida</h3>
+                            <p class="card-text"><span
+                                    th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span>
+                            </p>
+                        </li>
+                        <li>
+                            <h3>Cuenta votos</h3>
+                            <p class="card-text"><span th:utext="${pelicula.cuenta_votos}"></span></p>
+                        </li>
+                        <li>
+                            <h3>Plataforma</h3>
+                            <p class="card-text"><span th:utext="${pelicula.plataforma}"></span></p>
+                        </li>
+
+                    </ul>
+                    <div>
+                        <div th:if="${pelicula.clasificacion == '3'}">
+                            <img th:src="@{/img/peliculas/edades/Apto.png}" class="imagengrande" alt="Apto">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '7'}">
+                            <img th:src="@{/img/peliculas/edades/7.png}" class="imagengrande" alt="7">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'PG-13'}">
+                            <img th:src="@{/img/peliculas/edades/12.png}" class="imagengrande" alt="12">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '16'}">
+                            <img th:src="@{/img/peliculas/edades/16.png}" class="imagengrande" alt="16">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'R'}">
+                            <img th:src="@{/img/peliculas/edades/18.png}" class="imagengrande" alt="+18">
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
 
 </body>
-<script>
-    function mostrarBoton() {
-        var checkBox = document.getElementById("Give-It-An-Id");
-        var guardarBtn = document.getElementById("guardarBtn");
-        if (checkBox.checked == true) {
-            guardarBtn.style.display = "block";
-        } else {
-            guardarBtn.style.display = "none";
-        }
-    }
+<script src="/js/peliculas/rDetailed.js" type="text/javascript"></script>
 
-    function guardar() {
-        // Aquí puedes agregar la lógica para guardar las cosas
-        alert("Guardado!");
-    }
+<script>
     function cambiarDireccionForm() {
-        var form = document.querySelector('form[action="/pelicula/u"]');
-        form.setAttribute('action', '/pelicula/d');
+        var form = document.querySelector('form[action="/juego/u"]');
+        form.setAttribute('action', '/juego/d');
         // Cambiar el texto del botón a "Cancelar"
         var borrarButton = document.getElementById('btnActualizar');
         borrarButton.textContent = 'Borrar';
         borrarButton.classList.remove('btn-primary');
         borrarButton.classList.add('btn-danger');
     }
+
+    function handleCheckboxClick() {
+        var checkbox = document.getElementById("Give-It-An-Id");
+        if (checkbox.checked) {
+            document.getElementById("checklistForm").submit();
+        }
+    }
+
+    function handleStarClick(rating) {
+        // Actualizar el valor del campo de rating en el formulario
+        var ratingInput = document.querySelector('input[name="rating"]');
+        ratingInput.value = rating;
+
+        // Enviar el formulario automáticamente
+        document.getElementById("ratingForm").submit();
+    }
+
 
     function habilitarCampos() {
         // Obtener el valor del href de los botones de trailer y URL de compra
@@ -357,8 +458,59 @@
         // Mostrar el botón de guardar
         document.getElementById('btnActualizar').style.display = 'block';
     }
-</script>
+    function initializeClock(id, endtime) {
+        var clock = document.getElementById(id);
+        var daysSpan = clock.querySelector('.days');
+        var hoursSpan = clock.querySelector('.hours');
+        var minutesSpan = clock.querySelector('.minutes');
+        var secondsSpan = clock.querySelector('.seconds');
 
+        function updateClock() {
+            var t = getTimeRemaining(endtime);
+
+            daysSpan.innerHTML = t.days;
+            hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+            minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+            secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+            if (t.total <= 0) {
+                clearInterval(timeinterval);
+            }
+        }
+
+        updateClock();
+        var timeinterval = setInterval(updateClock, 1000);
+    }
+
+    function getTimeRemaining(endtime) {
+        var t = Date.parse(endtime) - Date.now();
+        var seconds = Math.floor((t / 1000) % 60);
+        var minutes = Math.floor((t / 1000 / 60) % 60);
+        var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+        var days = Math.floor(t / (1000 * 60 * 60 * 24));
+        return {
+            'total': t,
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        };
+    }
+    var fechaSalida = document.getElementById('deadline').getAttribute('th:value');
+    console.log(deadline);
+    // Convertir la cadena de fecha en un objeto de fecha
+    var fechaSalidaDate = new Date(fechaSalida);
+
+    // Obtener el día y el mes de la fecha de salida de la película
+    var dia = fechaSalidaDate.getDate();
+    var mes = fechaSalidaDate.toLocaleString('en-US', { month: 'long' });
+    var currentYear = new Date().getFullYear();
+    console.log(dia);
+    console.log(mes);
+    var deadline = new Date(mes + ' 28', + currentYear + ' 00:00:00');
+    initializeClock('clockdiv', deadline);
+
+</script>
 
 
 </html>

@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de categorias</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
     <style>
         /* Estilos personalizados */
         .bg-warning {
-            background-color: #ffc107 !important;
-            color: #343a40 !important;
+            background-color: #7b07ff !important;
+            color: #ffffff !important;
         }
 
         .bg-success {
@@ -54,46 +56,78 @@
             padding: 0.25rem 0.5rem;
             font-size: 0.8rem;
         }
+        .highlight-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #B18FCF;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="btn-group">
-                    <!-- Botón de creación de categoría -->
-                    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary"
-                        onclick="window.location.href='/categoria/c'">Crear categoria</button>
-                </div>
-                <h1>Gestion de categorias</h1>
-            </div>
-        </div>
-        <table class="table table-striped text-center mt-3">
-            <thead>
+
+    <div class="container btn-group">
+        <!-- Botón de creación de categoría -->
+        <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary btn-sm"
+            style="font-size: larger;" onclick="window.location.href='/categoria/c'">Crear categoría</button>
+    </div>
+    <div class=" container bg-white mt-4 text-primary" id="table-view-container">
+        <h1 class="highlight-text">LISTADO DE CATEGORIAS</h1>
+        <table id="categoriasTable" class="table table-striped table-bordered">
+            <thead class="thead-dark">
                 <tr>
                     <th>Nombre</th>
-                    <th>Acciones</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Renderiza los datos directamente aquí -->
                 <tr th:each="categoria : ${categorias}">
-                    <td class="bg-warning text-dark" th:text="${categoria.nombre}"></td>
-                    <td class="bg-info">
-                        <!-- Botones de edición y eliminación -->
-                        <div class="btn-group">
-                            <button class="btn btn-warning"
-                                th:onclick="|window.location.href='/categoria/u?id=${categoria.id_categoria}'|">Editar</button>
-                            <form action="/categoria/d" method="post">
-                                <button class="btn btn-danger">Eliminar</button>
-                                <input type="hidden" name="id" th:value="${categoria.id_categoria}">
-                            </form>
-                        </div>
+                    <td th:text="${categoria.nombre}"></td>
+                    <td>
+                        <a href="#" id="edbo" th:href="@{'/categoria/u?id=' + ${categoria.idCategoria}}">
+                            <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}">
+                            <i class="bi bi-pen-fill"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" id="edbo" th:href="@{'/categoria/d?id=' + ${categoria.idCategoria}}">
+                            <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}">
+                            <i class="bi bi-trash3-fill"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>
         </table>
+
     </div>
+
+    <!-- Carga de jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Carga de DataTables -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        // Función para inicializar DataTables
+        $(document).ready(function () {
+            $('#categoriasTable').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                },
+            });
+            $('#categoriasTable').on('click', '#editarCategoria', function () {
+                var categoriaId = $(this).closest('tr').find('td:first').text(); // Obtener el ID de la película
+                window.location.href = '/categoria/u?id=' + categoriaId;
+            });
+        });
+
+    </script>
 
 </body>
 

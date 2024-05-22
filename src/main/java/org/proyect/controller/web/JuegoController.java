@@ -1,14 +1,23 @@
 package org.proyect.controller.web;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.proyect.domain.Categoria;
 import org.proyect.domain.Juego;
+import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
+import org.proyect.service.CategoriaService;
 import org.proyect.service.JuegoService;
+import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +32,47 @@ import jakarta.servlet.http.HttpSession;
 public class JuegoController {
     @Autowired
     private JuegoService juegoService;
+    @Autowired
+    private CategoriaService categoriaService;
+    @Autowired
+    private UsuarioService usuarioService;
 
+    // @GetMapping("r")
+    // public String r(ModelMap m) {
+
+    // List<Juego> juegos = juegoService.findAll();
+    // m.put("juegos", juegos);
+    // m.put("view", "juego/r");
+    // return "_t/frame";
+    // }
     @GetMapping("r")
-    public String r(ModelMap m) {
-
-        List<Juego> juegos = juegoService.findAll();
+    public String r(@RequestParam(defaultValue = "0") int page, ModelMap m) {
+        Pageable pageable = PageRequest.of(page, 12); // 10 películas por página
+        Page<Juego> juegosPage = juegoService.findAll(pageable);
+        List<Categoria> categorias = categoriaService.findAll();
+        List<String> clasificaciones = Arrays.asList("G", "PG", "R13", "R15", "M", "R16", "RP16");
+        List<Juego> juegos = juegosPage.getContent();
         m.put("juegos", juegos);
-        m.put("view", "juego/r");
+        m.put("currentPage", page);
+        m.put("categorias", categorias);
+        m.put("clasificaciones", clasificaciones);
+        m.put("totalPages", juegosPage.getTotalPages());
+        m.put("view", "/juego/r");
         return "_t/frame";
+    }
+
+    @GetMapping("rAdmin")
+    public String rAdmin(
+            ModelMap m, HttpSession s) {
+        if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("juegos", juegoService.findAll());
+            m.put("view", "juego/rAdmin");
+            return "_t/frame";
+        } else {
+            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
+            // de sesión u otra página apropiada.
+            return "/"; // Redirige a la página de inicio de sesión
+        }
     }
 
     @GetMapping("c")
@@ -104,6 +146,45 @@ public class JuegoController {
         }
         return "redirect:/juego/r";
     }
+
+    @PostMapping("rDetailed")
+    public String checklist(
+            @RequestParam("idJuego") Long idJuego,
+            HttpSession session,
+            ModelMap m) throws DangerException {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+        Juego juego = juegoService.findByIdElemento(idJuego);
+        List<Juego> juegosFav = usuario.getJuegosFav();
+
+        if (!juegosFav.contains(juego)) {
+            usuarioService.saveUsuarioJuegos(usuario, juego);
+        }
+
+        m.put("juego", juego);
+
+        return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
+    }
+
+    @PostMapping("rDetailedRating")
+    public String puntuacion(
+            @RequestParam("idJuego") Long idJuego,
+            @RequestParam("rating") Long puntos,
+            HttpSession session,
+            ModelMap m) throws DangerException {
+
+        Juego juego = juegoService.findByIdElemento(idJuego);
+
+        m.put("juego", juego);
+        m.put("calificacion", juegoService.setCalificacion(juego, puntos));
+        return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
+    }
+
     @PostMapping("d")
     public String delete(
             @RequestParam("idJuego") Long idJuego) throws DangerException {
@@ -113,5 +194,49 @@ public class JuegoController {
             PRG.error("", "/pelicula/r");
         }
         return "redirect:/pelicula/r";
+    }
+
+
+
+    @GetMapping("filtrar")
+    public String filtrar(@RequestParam(name = "idCategoria", required = false) Long idCategoria,
+            @RequestParam(name = "clasificacion", required = false) String clasificacion,
+            ModelMap m) {
+        List<Juego> juegosFiltradas;
+        List<Juego> juegos = juegoService.findAll();
+        List<String> clasificaciones = Arrays.asList("PEGI 3", "PEGI 7", "PEGI 12", "PEGI 16", "PEGI 18");
+        Categoria categoria = null;
+
+        if (idCategoria != null) {
+            categoria = categoriaService.findById(idCategoria);
+        }
+
+        if (idCategoria != null) { 
+            juegosFiltradas = new ArrayList<>();
+            for (Juego juego : juegos) {
+                for (Categoria cat : juego.getCategorias()) {
+                    if (cat.getIdCategoria().equals(idCategoria)) {
+                        juegosFiltradas.add(juego);
+                        break;
+                    }
+                }
+            }
+        } else if (clasificacion != null) { 
+            juegosFiltradas = new ArrayList<>();
+            for (Juego juego : juegos) {
+                if (juego.getClasificacion().equals(clasificacion)) {
+                    juegosFiltradas.add(juego);
+                }
+            }
+        } else {  
+                 juegosFiltradas = juegos;
+        }
+
+        m.put("juegos", juegosFiltradas);
+        m.put("categorias", categoriaService.findAll());
+        m.put("clasificaciones", clasificaciones);
+        m.put("categoria", categoria);
+        m.put("view", "juego/r");
+        return "_t/frame";
     }
 }

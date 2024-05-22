@@ -1,43 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear categoria</title>
+    <title>Crear categoría</title>
 </head>
+<style>
+    .highlight-text {
+        font-family: 'Arial', sans-serif;
+        font-size: 3em;
+        color: #B18FCF;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        margin-top: 20px;
+        letter-spacing: 2px;
+        text-align: center;
+    }
+
+    .group {
+        position: relative;
+        margin-bottom: 45px;
+    }
+
+    input {
+        font-size: 18px;
+        padding: 10px 10px 10px 5px;
+        display: block;
+        width: 300px;
+        border: none;
+        border-bottom: 1px solid #757575;
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    /* LABEL ======================================= */
+    label {
+        color: #999;
+        font-size: 18px;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 5px;
+        top: 10px;
+        transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+    }
+
+    /* active state */
+    input:focus~label,
+    input:valid~label {
+        top: -20px;
+        font-size: 14px;
+        color: #5264AE;
+    }
+
+    /* BOTTOM BARS ================================= */
+    .bar {
+        position: relative;
+        display: block;
+        width: 300px;
+    }
+
+    .bar:before,
+    .bar:after {
+        content: '';
+        height: 2px;
+        width: 0;
+        bottom: 1px;
+        position: absolute;
+        background: #5264AE;
+        transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+    }
+
+    .bar:before {
+        left: 50%;
+    }
+
+    .bar:after {
+        right: 50%;
+    }
+
+    /* active state */
+    input:focus~.bar:before,
+    input:focus~.bar:after {
+        width: 50%;
+    }
+
+    /* HIGHLIGHTER ================================== */
+    .highlight {
+        position: absolute;
+        height: 60%;
+        width: 100px;
+        top: 25%;
+        left: 0;
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+    /* active state */
+    input:focus~.highlight {
+        -webkit-animation: inputHighlighter 0.3s ease;
+        -moz-animation: inputHighlighter 0.3s ease;
+        animation: inputHighlighter 0.3s ease;
+    }
+
+    /* ANIMATIONS ================ */
+    @-webkit-keyframes inputHighlighter {
+        from {
+            background: #5264AE;
+        }
+
+        to {
+            width: 0;
+            background: transparent;
+        }
+    }
+
+    @-moz-keyframes inputHighlighter {
+        from {
+            background: #5264AE;
+        }
+
+        to {
+            width: 0;
+            background: transparent;
+        }
+    }
+
+    @keyframes inputHighlighter {
+        from {
+            background: #5264AE;
+        }
+
+        to {
+            width: 0;
+            background: transparent;
+        }
+    }
+
+    .btn-brown {
+        color: #fff;
+        background-color: #6C0E23;
+        /* Color marrón */
+        border-color: #6C0E23;
+        /* Color del borde */
+    }
+
+    .btn-brown:hover {
+        color: #fff;
+        background-color: #961531;
+        /* Color marrón más claro al pasar el mouse */
+        border-color: #961531;
+        /* Color del borde al pasar el mouse */
+    }
+
+    .spaced-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+        margin-bottom: 1150px;
+        /* Espacio en la parte inferior */
+    }
+</style>
 
 <body>
-    <div class="container">
-        <h1 class="my-4">Nueva categoria</h1>
+    <h1 class="highlight-text">Nueva Categoría</h1>
+    <div class="container spaced-container">
         <form id="categoriaForm" action="/categoria/c" method="post">
             <div class="form-group">
-                <label for="id-nombre">Nombre</label>
-                <input type="text" class="form-control" id="id-nombre" autofocus="autofocus" name="nombre" />
-                <small id="nombreHelp" class="form-text text-danger"></small>
+                <div class="group">
+                    <input type="text" class="form-control" id="id-nombre" name="nombre" required>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label for="id-nombre">Nombre</label>
+                </div>
             </div>
-            <input type="submit" class="btn btn-primary" value="Crear">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-brown">Crear</button>
+                    </div>
+                </div>
+            </div>
         </form>
-        <button class="btn btn-primary" onclick="window.location.href='/categoria/r'">Volver</button>
+        <div class="col-6">
+            <button class="btn btn-brown" onclick="window.location.href='/categoria/r'">Volver</button>
+        </div>
     </div>
+    
 
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Custom JavaScript -->
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             $('#categoriaForm').submit(function (event) {
-                // Evitar que se envíe el formulario por defecto
                 event.preventDefault();
-                // Validar el campo de nombre
                 var nombre = $('#id-nombre').val();
-                if (nombre == null ) {
+                if (!nombre) {
                     $('#nombreHelp').text('Por favor, introduce un nombre.');
                 } else {
-                    // Si el nombre está presente, enviar el formulario
                     this.submit();
                 }
             });
         });
-    </script>
+    </script> -->
 </body>
 
 </html>
