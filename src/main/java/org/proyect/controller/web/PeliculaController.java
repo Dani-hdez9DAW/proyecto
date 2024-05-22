@@ -10,11 +10,13 @@ import java.util.List;
 
 import org.proyect.domain.Categoria;
 import org.proyect.domain.Pelicula;
+import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
 import org.proyect.service.PeliculaService;
+import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,6 +35,9 @@ public class PeliculaController {
     private PeliculaService peliculaService;
     @Autowired
     private CategoriaService categoriaServiceService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("r")
     public String r(ModelMap m) {
@@ -155,6 +160,20 @@ public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
         return "redirect:/pelicula/r";
     }
     
+    @PostMapping("checklist")
+    public void checklist(
+        @RequestParam("idpelicula") Long idpelicula,
+        @RequestParam("idusuario") Long idusuario) throws DangerException {
+            Usuario usuario =  usuarioService.findById(idusuario);
+            Pelicula pelicula = peliculaService.findByIdElemento(idpelicula);
+
+            System.out.println(idpelicula);
+            System.out.println(idusuario);
+            List<Pelicula> peliculasUsuario = usuario.getPeliculasFav();
+            peliculasUsuario.add(pelicula);
+    }
+
+
     @PostMapping("d")
     public String delete(
             @RequestParam("idpelicula") Long idPelicula) throws DangerException {
