@@ -108,7 +108,7 @@ public class JuegoController {
             @RequestParam("fechaLanzamiento") LocalDate fechaLanzamiento,
             @RequestParam("imagen") MultipartFile imagen,
             @RequestParam("trailer") String trailer,
-            @RequestParam("url") String url) throws DangerException {
+            @RequestParam("url") String url) throws DangerException, InfoException {
                 Boolean creado = false;
         try {
             // VALIDALOR DE DATOS
@@ -145,16 +145,12 @@ public class JuegoController {
             }
 
         } catch (Exception e) {
-            PRG.error("Error al crear la película: " + e.getMessage(), "/juego/c");
+            PRG.error("El juego con el nombre " + titulo + " ya existe", "/juego/c");
         }
         if (creado) {
-            PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
+            PRG.info("El juego con el nombre " + titulo + " ha sido creado", "/juego/c");
         }
-        if (creado) {
-            PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
-        } catch (Exception e) {
-            PRG.error("El juego con el nombre " + nombre + " ya existe", "/juego/c");
-        }
+       
         return "redirect:/juego/r";
     }
 
@@ -172,20 +168,19 @@ public class JuegoController {
             @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
             @RequestParam("cuentaVotos") Integer cuentaVotos,
             @RequestParam("trailer") String trailer,
-            @RequestParam("urlCompra") String url) throws DangerException {
-
+            @RequestParam("urlCompra") String url) throws DangerException, InfoException {
+                Boolean creado = false;
         try {
             if (JuegoValidator.ValidarDatos(titulo, clasificacion, duracion, estado, plataforma, puntuacion,
                     idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url)) {
                 juegoService.update(idjuego, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
                         idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url);
             }
-            PRG.info("La película con nombre '" + titulo + "' ha sido actualizada", "/juego/r");
         }catch (Exception e) {
-            PRG.error("El juego con el nombre " + nombre + " ya existe", "/juego/c");
+            PRG.error("El juego con el nombre " + titulo + " ya existe", "/juego/c");
         }
         if (creado) {
-            PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
+            PRG.info("El juego con el nombre " + titulo + " ha sido creado", "/juego/c");
         }
         return "redirect:/juego/r";
     }
@@ -222,8 +217,7 @@ public class JuegoController {
                 Boolean creado = false;
 
         try {
-            juegoService.update(idJuego, titulo, clasificacion, duracion, estado, plataforma, sinopsis,
-                    fechaLanzamiento, cuentaVotos, trailer, url);
+            juegoService.update(idJuego, titulo, clasificacion, duracion, estado, plataforma, sinopsis,fechaLanzamiento, cuentaVotos, trailer, url);
         } catch (Exception e) {
             PRG.error("Error al crear la película: " + e.getMessage(), "/juego/r");
         }
