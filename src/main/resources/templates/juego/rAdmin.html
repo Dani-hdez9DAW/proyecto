@@ -49,15 +49,41 @@
                         </a>
                     </td>
                     <td>
-                        <a href="#" id="edbo" th:href="@{'/juego/d?id=' + ${juego.idElemento}}">
+                        <a href="#" class="delete-button" th:data-id="${juego.idElemento}" data-toggle="modal"
+                            data-target="#deleteModal">
                             <i class="bi bi-trash3-fill"></i>
                         </a>
                     </td>
+
+
                 </tr>
             </tbody>
         </table>
 
     </div>
+
+    <!-- Modal de Confirmación de Eliminación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este juego?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Carga de jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -67,10 +93,36 @@
     <script>
         // Función para inicializar DataTables
         $(document).ready(function () {
+
+            var juegoId;
+
+            // Cuando se haga clic en el botón de eliminar, mostrar el modal y guardar el ID del juego
+            $('.delete-button').on('click', function () {
+                juegoId = $(this).attr('data-id');
+                $('#deleteModal').modal('show');
+            });
+
+            // Cuando se haga clic en el botón de confirmación de eliminación, realizar la solicitud de eliminación
+            $('#confirmDeleteBtn').on('click', function () {
+                $.ajax({
+                    url: '/juego/d',
+                    method: 'POST',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: { idJuego: juegoId },  // Asegúrate de que el nombre del parámetro coincida
+                    success: function () {
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert('Error al eliminar el juego.');
+                    }
+                });
+            });
+
             $('#juegosTable').DataTable({
                 language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            },
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                },
             });
             $('#juegosTable').on('click', '#editarJuegos', function () {
                 var juegoId = $(this).closest('tr').find('td:first').text(); // Obtener el ID de la película
