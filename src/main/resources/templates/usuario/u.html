@@ -1,5 +1,23 @@
-<div class="form-group">
-    <label for="id-nombre">Nombre</label>
-    <input type="text" class="form-control" id="id-nombre" autofocus="autofocus" name="nombre" th:value="${usuario.nombre}" />
-</div>
+<div class="container">
+    <form action="/usuario/u" method="POST">
+        <input type="hidden" name="idUsuario" id="usuario" th:value="${usuario.idPersona}">
 
+        <div class="form-group">
+            <label for="id-nombre">Nombre</label>
+            <input type="text" class="form-control" id="id-nombre" autofocus="autofocus" name="nombre" th:value="${usuario.nombre}" />
+        </div>
+        <div class="form-group">
+            <label for="id-correo">Correo</label>
+            <input type="text" class="form-control" id="id-correo" autofocus="autofocus" name="correo" th:value="${usuario.correo}" />
+        </div>
+        <div class="form-group">
+            <label for="id-contra">Contraseña nueva</label>
+            <input type="password" class="form-control" id="id-contra" autofocus="autofocus" name="contra" />
+        </div>
+        <div class="form-group">
+            <label for="id-contraRep">Repetir contraseña</label>
+            <input type="password" class="form-control" id="id-contraRep" autofocus="autofocus" name="contraRep" />
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </form>
+</div>

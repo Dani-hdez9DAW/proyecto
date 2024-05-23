@@ -8,7 +8,7 @@
     <!-- Carga de estilos de DataTables -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <style>
-        .dataTables_wrapper {
+         .dataTables_wrapper {
             font-size: 14px;
             color: white;
         }
@@ -17,13 +17,39 @@
             color: black;
             background-color: plum;
         }
+
+        .highlight-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #8326d4;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .btn-group .btn {
+            margin-left: 5px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 
 <body>
-
+    <h1 class="highlight-text">GESTION DE JUEGOS</h1>
     <div class="container bg-white mt-4 text-primary" id="table-view-container">
-        <h1 class="mt-4">JUEGOS</h1>
+        <div th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="container btn-group">
+            <button class="btn btn-primary btn-sm" style="font-size: larger;"
+                onclick="window.location.href='/juego/c'"><i class="bi bi-plus"></i>Añadir</button>
+        </div>
         <table id="juegosTable" class="table table-striped table-bordered">
             <thead class="thead-dark">
                 <tr>

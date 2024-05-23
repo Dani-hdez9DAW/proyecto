@@ -21,7 +21,7 @@
         .highlight-text {
             font-family: 'Arial', sans-serif;
             font-size: 3em;
-            color: #B18FCF;
+            color: #8326d4;
             text-transform: uppercase;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             margin-top: 20px;
@@ -75,11 +75,12 @@
                         </a>
                     </td>
                     <td>
-                        <a href="#" class="delete-button" th:data-id="${pelicula.idElemento}" data-toggle="modal" data-target="#deleteModal">
+                        <a href="#" class="delete-button" th:data-id="${pelicula.idElemento}" data-toggle="modal"
+                            data-target="#deleteModal">
                             <i class="bi bi-trash3-fill"></i>
                         </a>
                     </td>
-                    
+
                 </tr>
             </tbody>
         </table>
@@ -117,72 +118,72 @@
 
             var peliculaId;
 
-        // Cuando se haga clic en el botón de eliminar, mostrar el modal y guardar el ID de la película
-        $('.delete-button').on('click', function () {
-            peliculaId = $(this).attr('data-id');
-            $('#deleteModal').modal('show');
-        });
+            // Cuando se haga clic en el botón de eliminar, mostrar el modal y guardar el ID de la película
+            $('.delete-button').on('click', function () {
+                peliculaId = $(this).attr('data-id');
+                $('#deleteModal').modal('show');
+            });
 
-        // Cuando se haga clic en el botón de confirmación de eliminación, realizar la solicitud de eliminación
-        $('#confirmDeleteBtn').on('click', function () {
-            $.ajax({
-                url: '/pelicula/d',
-                method: 'POST',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: { idpelicula: peliculaId },
-                success: function () {
-                    window.location.reload();
-                },
-                error: function (error) {
-                    console.log(error);
-                    alert('Error al eliminar la película.');
+            // Cuando se haga clic en el botón de confirmación de eliminación, realizar la solicitud de eliminación
+            $('#confirmDeleteBtn').on('click', function () {
+                $.ajax({
+                    url: '/pelicula/d',
+                    method: 'POST',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: { idpelicula: peliculaId },
+                    success: function () {
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert('Error al eliminar la película.');
+                    }
+                });
+            });
+
+            $('#peliculasTable').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                 }
             });
-        });
 
-        $('#peliculasTable').DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            }
-        });
+            $('.edit-button').on('click', function () {
+                var peliculaId = $(this).data('id');
+                // Hacer una solicitud AJAX para obtener los datos de la película por ID
+                $.ajax({
+                    url: '/pelicula/get/u?idpelicula=' + peliculaId,
+                    method: 'GET',
+                    success: function (data) {
+                        $('#id-nombre').val(data.titulo);
+                        $('#id-clasificacion').val(data.clasificacion);
+                        $('#id-estado').val(data.estado);
+                        $('#id-fechaSalida').val(data.fecha_salida);
+                        $('#id-duracion').val(data.duracion);
+                        $('#id-plataforma').val(data.plataforma);
+                        $('#id-puntuacion').val(data.puntuacion);
+                        $('#id-cuentaVotos').val(data.cuenta_votos);
+                        $('#id-trailer').val(data.trailer);
+                        $('#id-urlCompra').val(data.url);
+                        $('#id-sinopsis').val(data.sinopsis);
+                        $('#idpelicula').val(data.idElemento);
 
-        $('.edit-button').on('click', function () {
-            var peliculaId = $(this).data('id');
-            // Hacer una solicitud AJAX para obtener los datos de la película por ID
-            $.ajax({
-                url: '/pelicula/get/u?idpelicula=' + peliculaId,
-                method: 'GET',
-                success: function (data) {
-                    $('#id-nombre').val(data.titulo);
-                    $('#id-clasificacion').val(data.clasificacion);
-                    $('#id-estado').val(data.estado);
-                    $('#id-fechaSalida').val(data.fecha_salida);
-                    $('#id-duracion').val(data.duracion);
-                    $('#id-plataforma').val(data.plataforma);
-                    $('#id-puntuacion').val(data.puntuacion);
-                    $('#id-cuentaVotos').val(data.cuenta_votos);
-                    $('#id-trailer').val(data.trailer);
-                    $('#id-urlCompra').val(data.url);
-                    $('#id-sinopsis').val(data.sinopsis);
-                    $('#idpelicula').val(data.idElemento);
+                        // Marcar las categorías
+                        $('input[name="categoriaId[]"]').each(function () {
+                            var categoriaId = $(this).val();
+                            if (data.categorias.includes(parseInt(categoriaId))) {
+                                $(this).prop('checked', true);
+                            } else {
+                                $(this).prop('checked', false);
+                            }
+                        });
 
-                    // Marcar las categorías
-                    $('input[name="categoriaId[]"]').each(function () {
-                        var categoriaId = $(this).val();
-                        if (data.categorias.includes(parseInt(categoriaId))) {
-                            $(this).prop('checked', true);
-                        } else {
-                            $(this).prop('checked', false);
-                        }
-                    });
-
-                    $('#modal-edit').modal('show');
-                },
-                error: function (error) {
-                    console.log(error);
-                }
+                        $('#modal-edit').modal('show');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
             });
-        });
         });
     </script>
 

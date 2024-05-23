@@ -1,6 +1,7 @@
 package org.proyect.controller.web;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -242,6 +243,38 @@ public class UsuarioController {
 
         return "redirect:/";
     }
+
+     @PostMapping("u")
+    public String updatePost(
+            @RequestParam("idUsuario") Long idUsuario,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("correo") String correo,
+            @RequestParam("contra") String contra,
+            @RequestParam("contraRep") String contraRep) throws DangerException,InfoException {
+                Boolean creado = false;
+        try {
+            usuarioService.update(idUsuario, nombre, correo, contra, contraRep);
+        } catch (Exception e) {
+            PRG.error("Error al crear el usuario: " + e.getMessage(), "/usuario/rAdmin");
+        }
+        if (creado) {
+            PRG.info("El usuario '" + nombre + "' ha sido actualizado", "/usuario/rAdmin");
+        }
+        return "redirect:/usuario/rAdmin";
+    }
+
+    
+    @PostMapping("d")
+    public String delete(
+            @RequestParam("idPersona") Long idPersona) throws DangerException {
+        try {
+            usuarioService.delete(idPersona);
+        } catch (Exception e) {
+            PRG.error("", "/usuario/r");
+        }
+        return "redirect:/usuario/r";
+    }
+
 
     // @PostMapping("/uploadFoto")
     // public ResponseEntity<String> uploadFoto(@RequestParam("file") MultipartFile

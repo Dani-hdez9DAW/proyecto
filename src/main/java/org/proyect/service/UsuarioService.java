@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 
@@ -46,10 +45,17 @@ public class UsuarioService {
         return usuarioRepository.getByCorreo(email);
     }
 
-    public void update(Long id_Usuario, String nombre) {
+    public void update(Long id_Usuario, String nombre, String correo, String contra, String contraRep) {
         Usuario usuario = usuarioRepository.findById(id_Usuario).get();
-        usuario.setNombre(nombre);
-        usuarioRepository.save(usuario);
+        if (contra != null && contra.equals(contraRep) && !contra.isEmpty()) {
+            usuario.setNombre(nombre);
+            usuario.setCorreo(correo);
+            usuario.setContraseña((new BCryptPasswordEncoder()).encode(contra));
+            usuarioRepository.save(usuario);
+        } else {
+            
+        }
+        
     }
 
     public void delete(Long id_Usuario) {
