@@ -447,7 +447,7 @@
 			$("#cantidadPeliculas").text(data);
 		}).fail(function (xhr, status, error) {
 			console.error("Error al obtener la cantidad de películas favoritas:", error);
-			$("#cantidadPeliculas").text("Error");
+			$("#cantidadPeliculas").text("0");
 		});
 	});
 
@@ -459,7 +459,7 @@
 			$("#cantidadJuegos").text(data);
 		}).fail(function (xhr, status, error) {
 			console.error("Error al obtener la cantidad de juegos favoritos:", error);
-			$("#cantidadJuegos").text("Error");
+			$("#cantidadJuegos").text("0");
 		});
 	});
 
