@@ -70,7 +70,7 @@
                     <td th:text="${juego.duracion}"></td>
 
                     <td>
-                        <a href="#" id="edbo" th:href="@{'/juego/u?id=' + ${juego.idElemento}}">
+                        <a th:onclick="|window.location.href='/juego/rDetailed?id_elemento=${juego.idElemento}'|">
                             <i class="bi bi-pen-fill"></i>
                         </a>
                     </td>
