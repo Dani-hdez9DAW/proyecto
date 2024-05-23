@@ -9,63 +9,6 @@
         integrity="sha512-TdX7PtFTs5lCt4lwlBebN52Nq4ElCkIOHQ0pyAOn24NS+gZVv6b/2KA2RDpMBpbEe+BQiJqIp9nhffI3oyB+7A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="/css/peliculas/rDetailed.css" rel="stylesheet">
-
-    <style>
-        .rating {
-            display: inline-block;
-        }
-
-        .rating input {
-            display: none;
-        }
-
-        .rating label {
-            float: right;
-            cursor: pointer;
-            color: #ccc;
-            transition: color 0.3s;
-        }
-
-        .rating label:before {
-            content: '\2605';
-            font-size: 30px;
-        }
-
-        .rating input:checked~label,
-        .rating label:hover,
-        .rating label:hover~label {
-            color: #6f00ff;
-            transition: color 0.3s;
-        }
-
-        #clockdiv {
-            font-family: sans-serif;
-            color: #fff;
-            display: inline-block;
-            font-weight: 100;
-            text-align: center;
-            font-size: 30px;
-        }
-
-        #clockdiv>div {
-            padding: 10px;
-            border-radius: 3px;
-            background: #ff8a80;
-            display: inline-block;
-        }
-
-        #clockdiv div>span {
-            padding: 15px;
-            border-radius: 3px;
-            background: #f44336;
-            display: inline-block;
-        }
-
-        .smalltext {
-            padding-top: 5px;
-            font-size: 16px;
-        }
-    </style>
 </head>
 
 <body>
@@ -75,7 +18,7 @@
         <div class="modal-box">
             <div class="modal-header d-flex justify-content-between">
                 <h1 style="text-align: right;">Modificacion de datos de la pelicula</h1>
-                <div class="close-modal">&#10006;</div>
+                <div class="close-modal"><i class="bi bi-x"></i></div>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -87,25 +30,60 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="text" id="id-nombre" class="form-control" name="nombre" required
-                                        th:value="${pelicula.titulo}">
+                                        th:value="${pelicula.titulo}" minlength="2" maxlength="30">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="id-clasificacion" class="col-sm-4 col-form-label">
+                                <label for="clasificacion" class="col-sm-4 col-form-label">
                                     <h4>Edad</h4>
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-clasificacion" class="form-control" name="clasificacion"
-                                        required th:value="${pelicula.clasificacion}">
+                                    <div class="select_mate form-control" id="clasificacion" data-mate-select="active">
+                                        <select name="clasificacion" id="select-clasificacion"
+                                            class="form-control input-size">
+                                            <option value="3">Apto para todos</option>
+                                            <option value="7">Para 7 años</option>
+                                            <option value="PG-13">Mayores de 12</option>
+                                            <option value="16">Mayores de 16</option>
+                                            <option value="R">Mayores de 18</option>
+                                        </select>
+                                        <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                                        <span onclick="open_select(this)" class="icon_select_mate">
+                                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+                                                <path d="M0-.75h24v24H0z" fill="none" />
+                                            </svg>
+                                        </span>
+                                        <div class="cont_list_select_mate">
+                                            <ul class="cont_select_int"> </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label for="id-estado" class="col-sm-4 col-form-label">
+                                <label for="estado" class="col-sm-4 col-form-label">
                                     <h4>Estado</h4>
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-estado" class="form-control" name="estado" required
-                                        th:value="${pelicula.estado}">
+                                    <div class="select_mate form-control" id="estado" data-mate-select="active">
+                                        <select name="estado" id="select-estado" class="form-control input-size">
+                                            <option value="Released">Disponible</option>
+                                            <option value="Unreleased">No Disponible</option>
+                                        </select>
+                                        <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                                        <span onclick="open_select(this)" class="icon_select_mate">
+                                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+                                                <path d="M0-.75h24v24H0z" fill="none" />
+                                            </svg>
+                                        </span>
+                                        <div class="cont_list_select_mate">
+                                            <ul class="cont_select_int"> </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -122,8 +100,8 @@
                                     <h4>Duración</h4>
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-duracion" class="form-control" name="duracion" required
-                                        th:value="${pelicula.duracion}">
+                                    <input type="number" id="id-duracion" class="form-control" name="duracion" required
+                                        th:value="${pelicula.duracion}" min="10" max="500">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -132,7 +110,7 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="text" id="id-plataforma" class="form-control" name="plataforma"
-                                        th:value="${pelicula.plataforma}">
+                                        th:value="${pelicula.plataforma}" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -141,7 +119,7 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="number" id="id-puntuacion" class="form-control" name="puntuacion"
-                                        th:value="${pelicula.puntuacion}">
+                                        th:value="${pelicula.puntuacion}" required min="0" max="10">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -149,8 +127,8 @@
                                     <h4>Votos</h4>
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="id-cuentaVotos" class="form-control" name="cuentaVotos"
-                                        th:value="${pelicula.cuenta_votos}">
+                                    <input type="number" id="id-cuentaVotos" class="form-control" name="cuentaVotos"
+                                        th:value="${pelicula.cuenta_votos}" required min="0">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -159,7 +137,7 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="text" id="id-trailer" class="form-control" name="trailer"
-                                        th:value="${pelicula.trailer}">
+                                        th:value="${pelicula.trailer}" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -168,7 +146,7 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="text" id="id-urlCompra" class="form-control" name="urlCompra"
-                                        th:value="${pelicula.url}">
+                                        th:value="${pelicula.url}" required>
                                 </div>
                             </div>
                     </div>
@@ -178,7 +156,7 @@
                                 <h4>Sinopsis</h4>
                             </label>
                             <textarea id="id-sinopsis" class="form-control" name="sinopsis"
-                                th:text="${pelicula.sinopsis}"></textarea>
+                                th:text="${pelicula.sinopsis}" minlength="50" maxlength="500"></textarea>
                         </div>
                         <div class="form-group">
                             <label>
@@ -200,22 +178,20 @@
                         <button type="submit" id="btnActualizar" class="btn btn-primary btn-block"
                             style="margin-top:20px;">Guardar</button>
                         </form>
-                        <button class="btn btn-danger btn-block close-modal" style="margin-top:10px;">Cerrar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary modal-trigger "
-        data-modal="modal-name"> <i class="bi bi-pen-fill"></i></button>
-    <form action="/pelicula/d" method="POST">
-        <input type="hidden" name="idpelicula" th:value="${pelicula.idElemento}">
-        <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" id="borrarButton"
-            class="btn btn-primary">
-            Borrar
-        </button>
-    </form>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}"
+                class="btn btn-primary modal-trigger" data-modal="modal-name">
+                <i class="bi bi-pen-fill"></i>
+            </button>
+        </div>
+    </div>
+    </div>
     <div th:if="${pelicula.estado == 'Unreleased'}">
         <h1
             th:text="'Espera hasta el día ' + ${#temporals.format(pelicula.fecha_salida, 'd')} + ' de ' + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(pelicula.fecha_salida, 'yyyy')}">
@@ -272,51 +248,59 @@
         </div>
         </form>
 
-        <form id="ratingForm" action="/pelicula/rDetailedRating" method="POST">
-            <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
-            <div class="rating">
-                <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)">
-                <label for="star5"></label>
-                <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)">
-                <label for="star4"></label>
-                <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)">
-                <label for="star3"></label>
-                <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)">
-                <label for="star2"></label>
-                <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)">
-                <label for="star1"></label>
-            </div>
-        </form>
+
 
 
         <div class="row justify-content-center">
 
             <!-- Tarjeta para la información -->
-            <div class="col-md-6">
-                <div class="card">
+            <div class=" d-flex col-md-6">
+                <div class="card w-100 h-100">
                     <div class="card-body">
                         <div>
                             <span>
-                                <h3>Sinopsis</h3>
+                                <h3 class="textContent">Sinopsis</h3>
                                 <p id="id-sinopsis" name="sinopsis" class="" th:text="${pelicula.sinopsis}"
                                     disabled="disabled"></p>
                             </span>
                         </div>
-                        <div class="form-group">
-                            <h3>Ver trailer</h3>
-                            <iframe width="560" height="315" th:src="${pelicula.trailer}" frameborder="0"
-                                allowfullscreen></iframe>
+                        <div class="form-group mb-3">
+                            <h3 class="textContent text-center">Ver trailer</h3>
+                            <div class="iframe-container">
+                                <iframe class="trailer" height="300" width="500" th:src="${pelicula.trailer}"
+                                    frameborder="0" allowfullscreen></iframe>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <h3>URL de compra</h3>
-                            <a id="urlCompraLink" class="btn btn-secondary" name="urlCompraLink"
-                                th:href="${pelicula.url}" target="_blank">Comprar</a>
+                        <div class="form-group mb-3">
+                            <h3 class="textContent">URL de compra</h3>
+                            <a id="urlCompraLink" class="btn btn-secondary w-100" name="urlCompraLink"
+                                th:href="${pelicula.url}" target="_blank">
+                                <i class="bi bi-cart"></i> Comprar
+                            </a>
+                        </div>
+                        <div class="form-group mb-3">
+                            <h3 class="textContent">Valora</h3>
+                            <form id="ratingForm" action="/pelicula/rDetailedRating" method="POST">
+                                <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
+                                <div class="rating justify-content-center">
+                                    <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)">
+                                    <label for="star5"></label>
+                                    <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)">
+                                    <label for="star4"></label>
+                                    <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)">
+                                    <label for="star3"></label>
+                                    <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)">
+                                    <label for="star2"></label>
+                                    <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)">
+                                    <label for="star1"></label>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card card-small card-offset">
+                <div class="card w-100 h-100">
                     <div class="card__content">
                         <div class="movie-poster">
                             <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" alt="Poster de la película"
@@ -328,75 +312,86 @@
                     <div class="blob"></div>
                     <div class="blob"></div>
                 </div>
-                <h1 class="text-center card-small contenidoArriba highlight-text">PUNTUACION</h1>
-                <div id="cont" class="circuloSmall contenidoArriba" data-pct="">
-                    <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
-                            stroke-dashoffset="0"></circle>
-                        <circle id="bar" r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
-                            stroke-dashoffset="0"></circle>
-                    </svg>
-                </div>
-                <input type="hidden" id="puntuacion" th:value="${pelicula.puntuacion}">
+
             </div>
 
         </div>
         <div class="row">
-            <div class="card cardArriba">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="text-center">Detalles</h1>
-                </div>
+            <div class="container">
+                <h1 class="highlight-text" style="text-align: center;">Detalles</h1>
+            </div>
+            <div class="card">
                 <div class="card-body">
-                    <h2>Información respecto a la película</h2>
-                    <ul>
-                        <li>
+                    <div class="row">
+                        <div class="col-md-6">
                             <h3>Estado</h3>
                             <p class="card-text"><span th:utext="${pelicula.estado}"></span></p>
-                        </li>
-                        <li>
-                            <h3>Clasificación</h3>
-                            <p class="card-text"><span th:utext="${pelicula.clasificacion}"></span></p>
-                        </li>
-                        <li>
-                            <h3>Duración</h3>
-                            <p class="card-text"><span
-                                    th:utext="'<i class=\'bi bi-alarm\'></i> ' + ${pelicula.duracion} + ' m.'"></span>
-                            </p>
-                        </li>
-                        <li>
-                            <h3>Fecha de salida</h3>
-                            <p class="card-text"><span
-                                    th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span>
-                            </p>
-                        </li>
-                        <li>
-                            <h3>Cuenta votos</h3>
-                            <p class="card-text"><span th:utext="${pelicula.cuenta_votos}"></span></p>
-                        </li>
-                        <li>
-                            <h3>Plataforma</h3>
-                            <p class="card-text"><span th:utext="${pelicula.plataforma}"></span></p>
-                        </li>
-
-                    </ul>
-                    <div>
-                        <div th:if="${pelicula.clasificacion == '3'}">
-                            <img th:src="@{/img/peliculas/edades/Apto.png}" class="imagengrande" alt="Apto">
                         </div>
-                        <div th:if="${pelicula.clasificacion == '7'}">
-                            <img th:src="@{/img/peliculas/edades/7.png}" class="imagengrande" alt="7">
-                        </div>
-                        <div th:if="${pelicula.clasificacion == 'PG-13'}">
-                            <img th:src="@{/img/peliculas/edades/12.png}" class="imagengrande" alt="12">
-                        </div>
-                        <div th:if="${pelicula.clasificacion == '16'}">
-                            <img th:src="@{/img/peliculas/edades/16.png}" class="imagengrande" alt="16">
-                        </div>
-                        <div th:if="${pelicula.clasificacion == 'R'}">
-                            <img th:src="@{/img/peliculas/edades/18.png}" class="imagengrande" alt="+18">
+                        <div class="col-md-6">
+                            <h3>Categoría</h3>
+                            <div th:each="categoriaP: ${categoriasPertenecientes}">
+                                <p class="card-text"><span th:utext="${categoriaP.nombre}"></span></p>
+                            </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Duración</h3>
+                            <p class="card-text">
+                                <span th:utext="'<i class=\'bi bi-alarm\'></i> ' + ${pelicula.duracion} + ' m.'"></span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Fecha de salida</h3>
+                            <p class="card-text">
+                                <span
+                                    th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Cuenta votos</h3>
+                            <p class="card-text"><span th:utext="${pelicula.cuenta_votos}"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Plataforma</h3>
+                            <p class="card-text"><span th:utext="${pelicula.plataforma}"></span></p>
+                        </div>
+                    </div>
+                    <div class="containerImg">
+                        <div th:if="${pelicula.clasificacion == '3'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/Apto.png}" alt="Apto">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '7'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/7.png}" alt="7">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'PG-13'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/12.png}" alt="12">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '16'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/16.png}" alt="16">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'R'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/18.png}" alt="+18">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        <h1 class="text-center text-small highlight-text mb-3">PUNTUACION</h1>
+                        <div id="cont" class="circuloSmall ms-0 mb-1" data-pct="">
+                            <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                                    stroke-dashoffset="0"></circle>
+                                <circle id="bar" r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                                    stroke-dashoffset="0"></circle>
+                            </svg>
+                            <h2 class="left:3vw;position:absolute;">Publico</h2>
+                            <input type="hidden" id="puntuacion" th:value="${pelicula.puntuacion}">
+                        </div>
+                    </div>
+
+
                 </div>
 
             </div>
@@ -458,59 +453,191 @@
         // Mostrar el botón de guardar
         document.getElementById('btnActualizar').style.display = 'block';
     }
-    function initializeClock(id, endtime) {
-        var clock = document.getElementById(id);
-        var daysSpan = clock.querySelector('.days');
-        var hoursSpan = clock.querySelector('.hours');
-        var minutesSpan = clock.querySelector('.minutes');
-        var secondsSpan = clock.querySelector('.seconds');
+    // function initializeClock(id, endtime) {
+    //     var clock = document.getElementById(id);
+    //     var daysSpan = clock.querySelector('.days');
+    //     var hoursSpan = clock.querySelector('.hours');
+    //     var minutesSpan = clock.querySelector('.minutes');
+    //     var secondsSpan = clock.querySelector('.seconds');
 
-        function updateClock() {
-            var t = getTimeRemaining(endtime);
+    //     function updateClock() {
+    //         var t = getTimeRemaining(endtime);
 
-            daysSpan.innerHTML = t.days;
-            hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
-            minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
-            secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+    //         daysSpan.innerHTML = t.days;
+    //         hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+    //         minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+    //         secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
 
-            if (t.total <= 0) {
-                clearInterval(timeinterval);
+    //         if (t.total <= 0) {
+    //             clearInterval(timeinterval);
+    //         }
+    //     }
+
+    //     updateClock();
+    //     var timeinterval = setInterval(updateClock, 1000);
+    // }
+
+    // function getTimeRemaining(endtime) {
+    //     var t = Date.parse(endtime) - Date.now();
+    //     var seconds = Math.floor((t / 1000) % 60);
+    //     var minutes = Math.floor((t / 1000 / 60) % 60);
+    //     var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    //     var days = Math.floor(t / (1000 * 60 * 60 * 24));
+    //     return {
+    //         'total': t,
+    //         'days': days,
+    //         'hours': hours,
+    //         'minutes': minutes,
+    //         'seconds': seconds
+    //     };
+    // }
+    // var fechaSalida = document.getElementById('deadline').getAttribute('th:value');
+    // console.log(deadline);
+    // // Convertir la cadena de fecha en un objeto de fecha
+    // var fechaSalidaDate = new Date(fechaSalida);
+
+    // // Obtener el día y el mes de la fecha de salida de la película
+    // var dia = fechaSalidaDate.getDate();
+    // var mes = fechaSalidaDate.toLocaleString('en-US', { month: 'long' });
+    // var currentYear = new Date().getFullYear();
+    // console.log(dia);
+    // console.log(mes);
+    // var deadline = new Date(mes + ' 28', + currentYear + ' 00:00:00');
+    // initializeClock('clockdiv', deadline);
+    window.onload = function () {
+        crear_select();
+    }
+
+    function isMobileDevice() {
+        return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+    };
+
+
+    var li = new Array();
+    function crear_select() {
+        var div_cont_select = document.querySelectorAll("[data-mate-select='active']");
+        var select_ = '';
+        for (var e = 0; e < div_cont_select.length; e++) {
+            div_cont_select[e].setAttribute('data-indx-select', e);
+            div_cont_select[e].setAttribute('data-selec-open', 'false');
+            var ul_cont = document.querySelectorAll("[data-indx-select='" + e + "'] > .cont_list_select_mate > ul");
+            select_ = document.querySelectorAll("[data-indx-select='" + e + "'] >select")[0];
+            if (isMobileDevice()) {
+                select_.addEventListener('change', function () {
+                    _select_option(select_.selectedIndex, e);
+                });
+            }
+            var select_optiones = select_.options;
+            document.querySelectorAll("[data-indx-select='" + e + "']  > .selecionado_opcion ")[0].setAttribute('data-n-select', e);
+            document.querySelectorAll("[data-indx-select='" + e + "']  > .icon_select_mate ")[0].setAttribute('data-n-select', e);
+            for (var i = 0; i < select_optiones.length; i++) {
+                li[i] = document.createElement('li');
+                if (select_optiones[i].selected == true || select_.value == select_optiones[i].innerHTML) {
+                    li[i].className = 'active';
+                    document.querySelector("[data-indx-select='" + e + "']  > .selecionado_opcion ").innerHTML = select_optiones[i].innerHTML;
+                };
+                li[i].setAttribute('data-index', i);
+                li[i].setAttribute('data-selec-index', e);
+                // funcion click al selecionar 
+                li[i].addEventListener('click', function () { _select_option(this.getAttribute('data-index'), this.getAttribute('data-selec-index')); });
+
+                li[i].innerHTML = select_optiones[i].innerHTML;
+                ul_cont[0].appendChild(li[i]);
+
+            }; // Fin For select_optiones
+        }; // fin for divs_cont_select
+    } // Fin Function 
+
+
+
+    var cont_slc = 0;
+    function open_select(idx) {
+        var idx1 = idx.getAttribute('data-n-select');
+        var ul_cont_li = document.querySelectorAll("[data-indx-select='" + idx1 + "'] .cont_select_int > li");
+        var hg = 0;
+        var slect_open = document.querySelectorAll("[data-indx-select='" + idx1 + "']")[0].getAttribute('data-selec-open');
+        var slect_element_open = document.querySelectorAll("[data-indx-select='" + idx1 + "'] select")[0];
+        if (isMobileDevice()) {
+            if (window.document.createEvent) { // All
+                var evt = window.document.createEvent("MouseEvents");
+                evt.initMouseEvent("mousedown", false, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                slect_element_open.dispatchEvent(evt);
+            } else if (slect_element_open.fireEvent) { // IE
+                slect_element_open.fireEvent("onmousedown");
+            } else {
+                slect_element_open.click();
+            }
+        } else {
+
+
+            for (var i = 0; i < ul_cont_li.length; i++) {
+                hg += ul_cont_li[i].offsetHeight;
+            };
+            if (slect_open == 'false') {
+                document.querySelectorAll("[data-indx-select='" + idx1 + "']")[0].setAttribute('data-selec-open', 'true');
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .cont_list_select_mate > ul")[0].style.height = hg + "px";
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .icon_select_mate")[0].style.transform = 'rotate(180deg)';
+            } else {
+                document.querySelectorAll("[data-indx-select='" + idx1 + "']")[0].setAttribute('data-selec-open', 'false');
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .icon_select_mate")[0].style.transform = 'rotate(0deg)';
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .cont_list_select_mate > ul")[0].style.height = "0px";
             }
         }
 
-        updateClock();
-        var timeinterval = setInterval(updateClock, 1000);
+    } // fin function open_select
+
+    function salir_select(indx) {
+        var select_ = document.querySelectorAll("[data-indx-select='" + indx + "'] > select")[0];
+        document.querySelectorAll("[data-indx-select='" + indx + "'] > .cont_list_select_mate > ul")[0].style.height = "0px";
+        document.querySelector("[data-indx-select='" + indx + "'] > .icon_select_mate").style.transform = 'rotate(0deg)';
+        document.querySelectorAll("[data-indx-select='" + indx + "']")[0].setAttribute('data-selec-open', 'false');
     }
 
-    function getTimeRemaining(endtime) {
-        var t = Date.parse(endtime) - Date.now();
-        var seconds = Math.floor((t / 1000) % 60);
-        var minutes = Math.floor((t / 1000 / 60) % 60);
-        var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-        var days = Math.floor(t / (1000 * 60 * 60 * 24));
-        return {
-            'total': t,
-            'days': days,
-            'hours': hours,
-            'minutes': minutes,
-            'seconds': seconds
+
+    function _select_option(indx, selc) {
+        if (isMobileDevice()) {
+            selc = selc - 1;
+        }
+        var select_ = document.querySelectorAll("[data-indx-select='" + selc + "'] > select")[0];
+
+        var li_s = document.querySelectorAll("[data-indx-select='" + selc + "'] .cont_select_int > li");
+        var p_act = document.querySelectorAll("[data-indx-select='" + selc + "'] > .selecionado_opcion")[0].innerHTML = li_s[indx].innerHTML;
+        var select_optiones = document.querySelectorAll("[data-indx-select='" + selc + "'] > select > option");
+        for (var i = 0; i < li_s.length; i++) {
+            if (li_s[i].className == 'active') {
+                li_s[i].className = '';
+            };
+            li_s[indx].className = 'active';
+
         };
+        select_optiones[indx].selected = true;
+        select_.selectedIndex = indx;
+        select_.onchange();
+        salir_select(selc);
     }
-    var fechaSalida = document.getElementById('deadline').getAttribute('th:value');
-    console.log(deadline);
-    // Convertir la cadena de fecha en un objeto de fecha
-    var fechaSalidaDate = new Date(fechaSalida);
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const dropdown = document.getElementById('custom-dropdown');
+        const button = dropdown.querySelector('.dropdown-button');
 
-    // Obtener el día y el mes de la fecha de salida de la película
-    var dia = fechaSalidaDate.getDate();
-    var mes = fechaSalidaDate.toLocaleString('en-US', { month: 'long' });
-    var currentYear = new Date().getFullYear();
-    console.log(dia);
-    console.log(mes);
-    var deadline = new Date(mes + ' 28', + currentYear + ' 00:00:00');
-    initializeClock('clockdiv', deadline);
+        button.addEventListener('click', () => {
+            dropdown.classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.addEventListener('click', (event) => {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    });
+
 
 </script>
 
 
 </html>
+
+
+<!-- 
+<input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
+<input type="hidden" id="idusuario" name="idusuario" th:value="${session.usuario.id_persona}"> -->

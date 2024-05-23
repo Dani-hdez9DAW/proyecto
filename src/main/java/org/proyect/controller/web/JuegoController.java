@@ -1,5 +1,10 @@
 package org.proyect.controller.web;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +16,7 @@ import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
+import org.proyect.helper.JuegoValidator;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
 import org.proyect.service.JuegoService;
@@ -25,6 +31,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -72,7 +79,7 @@ public class JuegoController {
         } else {
             // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
             // de sesión u otra página apropiada.
-            return "/"; // Redirige a la página de inicio de sesión
+            return "redirect:/"; // Redirige a la página de inicio de sesión
         }
     }
 
@@ -84,33 +91,103 @@ public class JuegoController {
         } else {
             // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
             // de sesión u otra página apropiada.
-            return "redirect:/login"; // Redirige a la página de inicio de sesión
+            return "redirect:/"; // Redirige a la página de inicio de sesión
         }
     }
 
     @PostMapping("c")
     public String cPost(
-            @RequestParam("nombre") String nombre) throws DangerException,InfoException {
+            @RequestParam("titulo") String titulo,
+            @RequestParam(value = "categoria[]", required = false) List<Long> categoria,
+            @RequestParam("clasificacion") String clasificacion,
+            @RequestParam("duracion") Integer duracion,
+            @RequestParam("puntuacion") Integer puntuacion,
+            @RequestParam("estado") String estado,
+            @RequestParam("plataforma") String plataforma,
+            @RequestParam("sinopsis") String sinopsis,
+            @RequestParam("fechaLanzamiento") LocalDate fechaLanzamiento,
+            @RequestParam("imagen") MultipartFile imagen,
+            @RequestParam("trailer") String trailer,
+            @RequestParam("url") String url) throws DangerException {
                 Boolean creado = false;
+        try {
+            // VALIDALOR DE DATOS
+
+            if (JuegoValidator.ValidarDatosC(titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                    categoria, sinopsis, fechaLanzamiento, puntuacion, trailer, url, imagen)) {
+                String nombreImagen = null; // variable para guardar el nombre de la imagen
+                if (!imagen.isEmpty()) {
+                    String directorioImagenes = "src//main//resources//static/img/juegos";
+                    Path rutaDirectorio = Paths.get(directorioImagenes);
+
+                    // Verifica si el directorio existe, si no, intenta crearlo
+                    if (!Files.exists(rutaDirectorio)) {
+                        Files.createDirectories(rutaDirectorio);
+                    }
+
+                    byte[] bytesImg = imagen.getBytes();
+                    nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
+
+                    Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
+
+                    try (OutputStream os = Files.newOutputStream(rutaCompleta)) {
+                        os.write(bytesImg);
+                    } catch (IOException e) {
+                        // Manejo de errores al escribir el archivo
+                        throw new RuntimeException("Error al escribir la imagen", e);
+                    }
+                }
+
+                juegoService.save(titulo, categoria, clasificacion, duracion, puntuacion, estado, plataforma,
+                        sinopsis,
+                        fechaLanzamiento, nombreImagen, trailer, url);
+                PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/juego/c");
+            }
+
+        } catch (Exception e) {
+            PRG.error("Error al crear la película: " + e.getMessage(), "/juego/c");
+        }
+        if (creado) {
+            PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
+        }
+        if (creado) {
+            PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
+        } catch (Exception e) {
+            PRG.error("El juego con el nombre " + nombre + " ya existe", "/juego/c");
+        }
+        return "redirect:/juego/r";
+    }
+
+     @PostMapping("u")
+    public String updatePost(
+            @RequestParam("idjuego") Long idjuego,
+            @RequestParam("nombre") String titulo,
+            @RequestParam("clasificacion") String clasificacion,
+            @RequestParam("duracion") Integer duracion,
+            @RequestParam("estado") String estado,
+            @RequestParam("plataforma") String plataforma,
+            @RequestParam("puntuacion") Integer puntuacion,
+            @RequestParam(value = "categoriaId[]", required = false) List<Long> idsCategoria,
+            @RequestParam("sinopsis") String sinopsis,
+            @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
+            @RequestParam("cuentaVotos") Integer cuentaVotos,
+            @RequestParam("trailer") String trailer,
+            @RequestParam("urlCompra") String url) throws DangerException {
 
         try {
-            juegoService.save(nombre);
-        } catch (Exception e) {
+            if (JuegoValidator.ValidarDatos(titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                    idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url)) {
+                juegoService.update(idjuego, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                        idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url);
+            }
+            PRG.info("La película con nombre '" + titulo + "' ha sido actualizada", "/juego/r");
+        }catch (Exception e) {
             PRG.error("El juego con el nombre " + nombre + " ya existe", "/juego/c");
         }
         if (creado) {
             PRG.info("El juego con el nombre " + nombre + " ha sido creado", "/juego/c");
         }
         return "redirect:/juego/r";
-    }
-
-    @GetMapping("u")
-    public String update(@RequestParam("id") Long id, ModelMap m) {
-        Juego juegos = juegoService.findById(id);
-        m.put("juegos", juegos);
-
-        m.put("view", "juegos/u");
-        return "_t/frame";
     }
 
     @GetMapping("rDetailed")
@@ -165,7 +242,7 @@ public class JuegoController {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         if (usuario == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
 
         Juego juego = juegoService.findByIdElemento(idJuego);
@@ -200,12 +277,10 @@ public class JuegoController {
         try {
             juegoService.delete(idJuego);
         } catch (Exception e) {
-            PRG.error("", "/pelicula/r");
+            PRG.error("", "/juego/r");
         }
-        return "redirect:/pelicula/r";
+        return "redirect:/juego/r";
     }
-
-
 
     @GetMapping("filtrar")
     public String filtrar(@RequestParam(name = "idCategoria", required = false) Long idCategoria,
@@ -220,7 +295,7 @@ public class JuegoController {
             categoria = categoriaService.findById(idCategoria);
         }
 
-        if (idCategoria != null) { 
+        if (idCategoria != null) {
             juegosFiltradas = new ArrayList<>();
             for (Juego juego : juegos) {
                 for (Categoria cat : juego.getCategorias()) {
@@ -230,15 +305,15 @@ public class JuegoController {
                     }
                 }
             }
-        } else if (clasificacion != null) { 
+        } else if (clasificacion != null) {
             juegosFiltradas = new ArrayList<>();
             for (Juego juego : juegos) {
                 if (juego.getClasificacion().equals(clasificacion)) {
                     juegosFiltradas.add(juego);
                 }
             }
-        } else {  
-                 juegosFiltradas = juegos;
+        } else {
+            juegosFiltradas = juegos;
         }
 
         m.put("juegos", juegosFiltradas);

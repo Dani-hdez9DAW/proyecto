@@ -1,6 +1,7 @@
 package org.proyect.controller.web;
 
 import org.proyect.exception.DangerException;
+import org.proyect.helper.CategoriaValidator;
 import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
@@ -38,7 +39,7 @@ public class CategoriaController {
             m.put("view", "categoria/rAdmin");
             return "_t/frame";
         } else {
-            return "/"; // Redirige a la página de inicio de sesión
+            return "redirect:/"; // Redirige a la página de inicio de sesión
         }
     }
 
@@ -50,7 +51,7 @@ public class CategoriaController {
             m.put("view", "categoria/c");
             return "_t/frame";
         } else {
-            return "/"; // Redirige a la página de inicio de sesión
+            return "redirect:/"; // Redirige a la página de inicio de sesión
         }
     }
 
@@ -59,7 +60,10 @@ public class CategoriaController {
             @RequestParam("nombre") String nombre, HttpSession s) throws Exception, DangerException, InfoException {
         Boolean creado = false;
         try {
-            categoriaService.save(nombre);
+            if (CategoriaValidator.validarCategoria(nombre)) {
+                categoriaService.save(nombre);
+            }
+
         } catch (Exception e) {
             PRG.error("El país " + nombre + " ya existe", "/categoria/c");
         }

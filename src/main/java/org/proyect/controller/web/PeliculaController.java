@@ -17,6 +17,7 @@ import org.proyect.exception.DangerException;
 import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
+import org.proyect.helper.PeliculaValidator;
 import org.proyect.service.CategoriaService;
 import org.proyect.service.PeliculaService;
 import org.proyect.service.UsuarioService;
@@ -64,7 +65,7 @@ public class PeliculaController {
         Pageable pageable = PageRequest.of(page, 12); // 10 películas por página
         Page<Pelicula> peliculasPage = peliculaService.findAll(pageable);
         List<Categoria> categorias = categoriaService.findAll();
-        List<String> clasificaciones = Arrays.asList("R","PG-13","PG-16","PG-17");
+        List<String> clasificaciones = Arrays.asList("R", "PG-13", "PG-16", "PG-17");
         List<Pelicula> peliculas = peliculasPage.getContent();
         m.put("peliculas", peliculas);
         m.put("currentPage", page);
@@ -74,6 +75,7 @@ public class PeliculaController {
         m.put("view", "/pelicula/r");
         return "_t/frame";
     }
+
     @GetMapping("rAdmin")
     public String rAdmin(
             ModelMap m, HttpSession s) {
@@ -109,6 +111,7 @@ public class PeliculaController {
             @RequestParam(value = "categoria[]", required = false) List<Long> categoria,
             @RequestParam("clasificacion") String clasificacion,
             @RequestParam("duracion") Integer duracion,
+            @RequestParam("puntuacion") Integer puntuacion,
             @RequestParam("estado") String estado,
             @RequestParam("plataforma") String plataforma,
             @RequestParam("sinopsis") String sinopsis,
@@ -118,21 +121,24 @@ public class PeliculaController {
             @RequestParam("url") String url) throws DangerException, InfoException {
                 Boolean creado = false;
         try {
-            
-            String nombreImagen = null; // variable para guardar el nombre de la imagen
-            if (!imagen.isEmpty()) {
-                String directorioImagenes = "src//main//resources//static/img/peliculas";
-                Path rutaDirectorio = Paths.get(directorioImagenes);
+            // VALIDALOR DE DATOS
 
-                // Verifica si el directorio existe, si no, intenta crearlo
-                if (!Files.exists(rutaDirectorio)) {
-                    Files.createDirectories(rutaDirectorio);
-                }
+            if (PeliculaValidator.ValidarDatosC(titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                    categoria, sinopsis, fechaLanzamiento, puntuacion, trailer, url, imagen)) {
+                String nombreImagen = null; // variable para guardar el nombre de la imagen
+                if (!imagen.isEmpty()) {
+                    String directorioImagenes = "src//main//resources//static/img/peliculas";
+                    Path rutaDirectorio = Paths.get(directorioImagenes);
 
-                byte[] bytesImg = imagen.getBytes();
-                nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
+                    // Verifica si el directorio existe, si no, intenta crearlo
+                    if (!Files.exists(rutaDirectorio)) {
+                        Files.createDirectories(rutaDirectorio);
+                    }
 
-                Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
+                    byte[] bytesImg = imagen.getBytes();
+                    nombreImagen = imagen.getOriginalFilename(); // guardamos el nombre de la imagen
+
+                    Path rutaCompleta = rutaDirectorio.resolve(nombreImagen);
 
                 try (OutputStream os = Files.newOutputStream(rutaCompleta)) {
                     os.write(bytesImg);
@@ -160,6 +166,7 @@ public class PeliculaController {
             // Si el usuario está autenticado, continúa con la lógica para cargar la vista
             // rDetailed
             m.put("categorias", categoriaService.findAll());
+            m.put("categoriasPertenecientes", peliculaService.findByIdElemento(id_elemento).getCategorias());
             m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
             m.put("view", "pelicula/rDetailed");
             return "_t/frame";
@@ -188,14 +195,21 @@ public class PeliculaController {
                 Boolean creado = false;
 
         try {
-            peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
-                    idsCategoria, sinopsis,
-                    fechaLanzamiento, cuentaVotos, trailer, url);
+            if (PeliculaValidator.ValidarDatos(titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                    idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url)) {
+                peliculaService.update(idPelicula, titulo, clasificacion, duracion, estado, plataforma, puntuacion,
+                        idsCategoria, sinopsis, fechaLanzamiento, cuentaVotos, trailer, url);
+            }
         } catch (Exception e) {
-            PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/r");
+            PRG.error("Error al actualizar la película: " + e.getMessage(), "/pelicula/r");
         }
         if (creado) {
             PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
+        }
+        if (creado) {
+            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
+        } catch (Exception e) {
+            PRG.error("Error al actualizar la película: " + e.getMessage(), "/pelicula/r");
         }
         return "redirect:/pelicula/r";
     }
@@ -321,7 +335,7 @@ public class PeliculaController {
             categoria = categoriaService.findById(idCategoria);
         }
 
-        if (idCategoria != null) { 
+        if (idCategoria != null) {
             peliculasFiltradas = new ArrayList<>();
             for (Pelicula pelicula : peliculas) {
                 for (Categoria cat : pelicula.getCategorias()) {
@@ -331,14 +345,14 @@ public class PeliculaController {
                     }
                 }
             }
-        } else if (clasificacion != null) { 
+        } else if (clasificacion != null) {
             peliculasFiltradas = new ArrayList<>();
             for (Pelicula pelicula : peliculas) {
                 if (pelicula.getClasificacion().equals(clasificacion)) {
                     peliculasFiltradas.add(pelicula);
                 }
             }
-        } else { 
+        } else {
             peliculasFiltradas = peliculas;
         }
 
@@ -353,8 +367,8 @@ public class PeliculaController {
     // CARROUSELL
     // @GetMapping("/peliculas")
     // public String mostrarPeliculas(Model model) {
-    //     List<Pelicula> peliculas = peliculaService.obtenerTodasLasPeliculas();
-    //     model.addAttribute("peliculas", peliculas);
-    //     return "nombre-de-tu-vista"; // Reemplaza con el nombre de tu archivo HTML
+    // List<Pelicula> peliculas = peliculaService.obtenerTodasLasPeliculas();
+    // model.addAttribute("peliculas", peliculas);
+    // return "nombre-de-tu-vista"; // Reemplaza con el nombre de tu archivo HTML
     // }
 }
