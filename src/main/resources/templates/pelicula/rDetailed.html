@@ -11,203 +11,23 @@
     <link href="/css/peliculas/rDetailed.css" rel="stylesheet">
 
     <style>
-        .rating {
-            display: inline-block;
-        }
-
-        .rating input {
-            display: none;
-        }
-
-        .rating label {
-            float: right;
-            cursor: pointer;
-            color: #ccc;
-            transition: color 0.3s;
-        }
-
-        .rating label:before {
-            content: '\2605';
-            font-size: 30px;
-        }
-
-        .rating input:checked~label,
-        .rating label:hover,
-        .rating label:hover~label {
-            color: #6f00ff;
-            transition: color 0.3s;
-        }
-
-        #clockdiv {
-            font-family: sans-serif;
-            color: #fff;
-            display: inline-block;
-            font-weight: 100;
-            text-align: center;
-            font-size: 30px;
-        }
-
-        #clockdiv>div {
-            padding: 10px;
-            border-radius: 3px;
-            background: #ff8a80;
-            display: inline-block;
-        }
-
-        #clockdiv div>span {
-            padding: 15px;
-            border-radius: 3px;
-            background: #f44336;
-            display: inline-block;
-        }
-
-        .smalltext {
-            padding-top: 5px;
-            font-size: 16px;
-        }
-
-        .icon_select_mate {
+        .containerImg {
             position: absolute;
-            top: 20px;
-            right: 2%;
-            font-size: 16px;
-            height: 22px;
-            transition: all 275ms;
+            top: 10vw;
+            left: 53vw;
         }
 
-        .select_mate {
-            position: relative;
-            font-family: 'Roboto';
-            color: #777;
-            font-weight: 300;
-            background-color: #fff;
-            box-shadow: 1px 2px 10px -2px rgba(0, 0, 0, 0.3);
-            border-radius: 3px;
-            transition: all 375ms ease-in-out;
+        .classification-image {
+            width: 10vw;
+            /* Utiliza vw (viewport width) para un tamaño relativo */
+        }
 
-            /* Oculto el elemento select */
-            select {
-                position: absolute;
-                overflow: hidden;
-                height: 0px;
-                opacity: 0;
-                z-index: -1;
+        /* Ajuste para pantallas pequeñas */
+        @media (max-width: 200px) {
+            .classification-image {
+                width: 30vw;
+                /* Reducir el tamaño para pantallas más pequeñas */
             }
-        }
-
-        .cont_list_select_mate {
-            position: relative;
-            float: left;
-            width: 70%;
-        }
-
-        .cont_select_int {
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            z-index: 999;
-            overflow: hidden;
-            height: 0px;
-            width: 100%;
-            background-color: #fff;
-            padding: 0px;
-            margin-bottom: 0px;
-            margin-top: 0px;
-            border-radius: 0px 0px 3px 3px;
-            box-shadow: 1px 4px 10px -2px rgba(0, 0, 0, 0.2);
-            transition: all 375ms ease-in-out;
-
-            li {
-                position: relative;
-                float: left;
-                width: 96%;
-                border-bottom: 1px solid #E0E0E0;
-                background-color: #F5F5F5;
-                list-style-type: none;
-                padding: 10px 2%;
-                margin: 0px;
-                transition: all 275ms ease-in-out;
-                display: block;
-                cursor: pointer;
-
-                &:last-child {
-                    border-radius: 3px;
-                    border-bottom: 0px;
-
-                }
-
-                &:hover {
-                    background-color: #EEEEEE;
-                }
-            }
-
-            .active {
-                background-color: #EEEEEE;
-            }
-
-        }
-
-        /* etiqueta <p> con la opcion selecionada  */
-        .selecionado_opcion {
-            padding: 20px 2%;
-            width: 96%;
-            display: block;
-            margin: 0px;
-            cursor: pointer;
-        }
-
-        .custom-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-button {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 10px;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            padding: 12px 16px;
-            z-index: 1;
-        }
-
-        .dropdown-content label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .custom-dropdown.show .dropdown-content {
-            display: block;
-        }
-
-        .input-size {
-            height: calc(2.25rem + 2px);
-            /* Altura estándar para input y select */
-            padding: .375rem .75rem;
-            /* Padding estándar para input y select */
-            font-size: 1rem;
-            /* Fuente estándar para input y select */
-            line-height: 1.5;
-            /* Altura de línea estándar */
-            border: 1px solid #ced4da;
-            /* Borde estándar */
-            border-radius: .25rem;
-            /* Radio de borde estándar */
-        }
-
-        .form-control {
-            width: 100%;
-            /* Asegura que el ancho sea del 100% del contenedor */
-            box-sizing: border-box;
-            /* Incluye el padding y el borde en el tamaño total */
         }
     </style>
 </head>
@@ -219,7 +39,7 @@
         <div class="modal-box">
             <div class="modal-header d-flex justify-content-between">
                 <h1 style="text-align: right;">Modificacion de datos de la pelicula</h1>
-                <div class="close-modal">&#10006;</div>
+                <div class="close-modal"><i class="bi bi-x"></i></div>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -379,7 +199,6 @@
                         <button type="submit" id="btnActualizar" class="btn btn-primary btn-block"
                             style="margin-top:20px;">Guardar</button>
                         </form>
-                        <button class="btn btn-danger btn-block close-modal" style="margin-top:10px;">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -512,10 +331,10 @@
 
         </div>
         <div class="row">
-            <div class="container cardArriba">
+            <div class="container">
                 <h1 class="highlight-text" style="text-align: center;">Detalles</h1>
             </div>
-            <div class="card cardArriba">
+            <div class="card">
                 <div class="card-body">
                     <ul>
                         <li>
@@ -548,14 +367,31 @@
                         </li>
                         <li>
                             <h3>Categoria</h3>
-                            <li th:each="categoriaP:${categoriasPertenecientes}">
-                                <p class="card-text"><span th:utext="${categoriaP.nombre}"></span></p>
-                            </li>
+                        <li th:each="categoriaP:${categoriasPertenecientes}">
+                            <p class="card-text"><span th:utext="${categoriaP.nombre}"></span></p>
+                        </li>
                         </li>
 
                     </ul>
+                    <div class="containerImg">
+                        <div th:if="${pelicula.clasificacion == '3'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/Apto.png}" alt="Apto">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '7'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/7.png}" alt="7">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'PG-13'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/12.png}" alt="12">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == '16'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/16.png}" alt="16">
+                        </div>
+                        <div th:if="${pelicula.clasificacion == 'R'}">
+                            <img class="classification-image" th:src="@{/img/peliculas/edades/18.png}" alt="+18">
+                        </div>
+                    </div>
                     <div>
-                        <h1 class="text-center text-small  highlight-text" style="text-align: left;">PUNTUACION</h1>
+                        <h1 class="text-center text-small  highlight-text">PUNTUACION</h1>
                         <div id="cont" class="circuloSmall puntuacionIzq" data-pct="">
 
                             <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
@@ -566,26 +402,10 @@
                                     stroke-dashoffset="0"></circle>
                             </svg>
                         </div>
-                        <h2 style="left:80px;position: relative;">Publico</h2>
+                        <h2 style="left:20%;position: relative;">Publico</h2>
                         <input type="hidden" id="puntuacion" th:value="${pelicula.puntuacion}">
                     </div>
-                    <div>
-                        <div th:if="${pelicula.clasificacion == '3'}">
-                            <img th:src="@{/img/peliculas/edades/Apto.png}" class="imagengrande" alt="Apto">
-                        </div>
-                        <div th:if="${pelicula.clasificacion == '7'}">
-                            <img th:src="@{/img/peliculas/edades/7.png}" class="imagengrande" alt="7">
-                        </div>
-                        <div th:if="${pelicula.clasificacion == 'PG-13'}">
-                            <img th:src="@{/img/peliculas/edades/12.png}" class="imagengrande" alt="12">
-                        </div>
-                        <div th:if="${pelicula.clasificacion == '16'}">
-                            <img th:src="@{/img/peliculas/edades/16.png}" class="imagengrande" alt="16">
-                        </div>
-                        <div th:if="${pelicula.clasificacion == 'R'}">
-                            <img th:src="@{/img/peliculas/edades/18.png}" class="imagengrande" alt="+18">
-                        </div>
-                    </div>
+
                 </div>
 
             </div>
