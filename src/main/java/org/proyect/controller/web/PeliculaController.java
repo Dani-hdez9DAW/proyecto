@@ -147,8 +147,10 @@ public class PeliculaController {
                     throw new RuntimeException("Error al escribir la imagen", e);
                 }
             }
-            peliculaService.save(titulo, categoria, clasificacion, duracion, estado, plataforma, sinopsis,
+            peliculaService.save(titulo, categoria, clasificacion, duracion, puntuacion, estado, plataforma, sinopsis,
                     fechaLanzamiento, nombreImagen, trailer, url);
+        }
+            
             // PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
         } catch (Exception e) {
             PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
@@ -208,8 +210,6 @@ public class PeliculaController {
         }
         if (creado) {
             PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/pelicula/r");
-        } catch (Exception e) {
-            PRG.error("Error al actualizar la película: " + e.getMessage(), "/pelicula/r");
         }
         return "redirect:/pelicula/r";
     }

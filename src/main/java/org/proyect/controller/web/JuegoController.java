@@ -201,31 +201,8 @@ public class JuegoController {
         }
     }
 
-    @PostMapping("u")
-    public String updatePost(
-            @RequestParam("idJuego") Long idJuego,
-            @RequestParam("nombre") String titulo,
-            @RequestParam("clasificacion") String clasificacion,
-            @RequestParam("duracion") Integer duracion,
-            @RequestParam("estado") String estado,
-            @RequestParam("plataforma") String plataforma,
-            @RequestParam("sinopsis") String sinopsis,
-            @RequestParam("fechaSalida") LocalDate fechaLanzamiento,
-            @RequestParam("cuentaVotos") Integer cuentaVotos,
-            @RequestParam("trailer") String trailer,
-            @RequestParam("urlCompra") String url) throws DangerException,InfoException {
-                Boolean creado = false;
-
-        try {
-            juegoService.update(idJuego, titulo, clasificacion, duracion, estado, plataforma, sinopsis,fechaLanzamiento, cuentaVotos, trailer, url);
-        } catch (Exception e) {
-            PRG.error("Error al crear la película: " + e.getMessage(), "/juego/r");
-        }
-        if (creado) {
-            PRG.info("La película con nombre '" + titulo + "' ha sido actualizado", "/juego/r");
-        }
-        return "redirect:/juego/r";
-    }
+    
+    
 
     @PostMapping("rDetailed")
     public String checklist(
