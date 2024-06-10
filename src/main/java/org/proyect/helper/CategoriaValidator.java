@@ -1,13 +1,13 @@
 package org.proyect.helper;
 
 import org.proyect.exception.DangerException;
-import org.proyect.helper.PRG;
+
 
 public class CategoriaValidator {
     public static final String[] CATEGORIAS_PELICULA_VIDEOJUEGOS = {
-            "Acción", "Aventura", "Comedia", "Drama", "Fantasía", "Terror", "Misterio",
-            "Romance", "Ciencia ficción", "Animación", "Documental", "Musical",
-            "Biografía", "Historia", "Deporte", "Familia", "Guerra", "Western", "RPG", "Shooter", "Plataforma",
+            "Accion", "Aventura", "Comedia", "Drama", "Fantasia", "Terror", "Misterio",
+            "Romance", "Ciencia ficcion", "Animacion", "Documental", "Musical",
+            "Biografia", "Historia", "Deporte", "Familia", "Guerra", "Western", "RPG", "Shooter", "Plataforma",
             "Estrategia", "Carreras", "Puzzle", "Survival", "Simulación"
     };
 

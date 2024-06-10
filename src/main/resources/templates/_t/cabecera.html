@@ -1,212 +1,174 @@
-<style>
-    .form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding-left: 2em;
-        padding-right: 2em;
-        padding-bottom: 0.4em;
-        background-color: white;
-        color: black;
-        border-radius: 25px;
-        transition: .4s ease-in-out;
-    }
+  <style>
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 2em;
+            background-color: #7775e6;
+            color: white;
+            border-radius: 25px;
+            transition: .4s ease-in-out;
+        }
 
-    .form:hover {
-        transform: scale(1.05);
-        border: 1px solid white;
-    }
+        .form:hover {
+            transform: scale(1.05);
+            border: 1px solid #7775e6;
+        }
 
-    #heading {
-        text-align: center;
-        color: black;
-        font-size: 2.4em;
-    }
+        #heading {
+            text-align: center;
+            color: white;
+            font-size: 2.4em;
+        }
 
-    .field {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5em;
-        border-radius: 25px;
-        padding: 0.6em;
-        border: none;
-        outline: none;
-        color: black;
-        background-color: white;
-        box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
-    }
+        .field {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            border-radius: 25px;
+            padding: 0.6em;
+            background-color: #7775e6;
+            box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+        }
 
-    .input-icon {
-        height: 1.3em;
-        width: 1.3em;
-        fill: black;
-    }
+        .input-icon {
+            height: 1.3em;
+            width: 1.3em;
+            fill: white;
+        }
 
-    .input-field {
-        background: none;
-        border: none;
-        outline: none;
-        width: 100%;
-        color: black;
-    }
+        .input-field {
+            background: none;
+            border: none;
+            outline: none;
+            width: 100%;
+            color: white;
+        }
+        input::placeholder {
+            color: white; /* Cambia el color aquí */
+        }
 
-    .form .btn {
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
-        margin-top: 2.5em;
-    }
+        .form .btn {
+            display: flex;
+            justify-content: center;
+            margin-top: 2.5em;
+            box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+        }
+        .button1{
+            border: 1px white solid;
+        } 
 
-    .button1 {
-        padding: 0.5em;
-        padding-left: 1.1em;
-        padding-right: 1.1em;
-        border-radius: 5px;
-        margin-right: 0.5em;
-        border: none;
-        outline: none;
-        transition: .4s ease-in-out;
-        background-color: white;
-        color: black;
-        text-align: justify;
-    }
+        .button1,
+        .button2,
+        .button3 {
+            padding: 0.5em;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            transition: .4s ease-in-out;
+            background-color: #7775e6;
+            color: white;
+            cursor: pointer;
+        }
 
-    .button1:hover {
-        background-color: black;
-        color: white;
-    }
+        .button1 {
+            margin-right: 0.5em;
+        }
 
-    .button2 {
-        padding: 0.5em;
-        padding-left: 2.3em;
-        padding-right: 2.3em;
-        border-radius: 5px;
-        border: none;
-        outline: none;
-        transition: .4s ease-in-out;
-        background-color: white;
-        color: black;
-        text-align: justify;
-    }
+        .button1:hover,
+        .button2:hover {
+            background-color: white;
+            color: #7775e6;
+        }
 
-    .button2:hover {
-        background-color: black;
-        color: white;
-    }
+        .button3:hover {
+            background-color: red;
+            color: #7775e6;
+        }
 
-    .button3 {
-        margin-bottom: 3em;
-        padding: 0.5em;
-        border-radius: 5px;
-        border: none;
-        outline: none;
-        transition: .4s ease-in-out;
-        background-color: white;
-        color: black;
-    }
+        .modal-content {
+            background-color: #7775e6;
+            color: white;
+            border-radius: 25px;
+            width: 80%;
+            margin: auto;
+        }
 
-    .button3:hover {
-        background-color: red;
-        color: white;
-    }
+        .modal-body {
+            text-align: center;
+        }
 
-    .modal-content {
-        background-color: white;
-        color: black;
-        border-radius: 25px;
-        width: 80%;
-        margin: auto;
-    }
+        .navbar-brand {
+            letter-spacing: 3px;
+        }
 
-    .modal-body {
-        text-align: center;
-    }
-
-    .navbar-brand {
-        letter-spacing: 3px;
-    }
-
-
-
-    .sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: #111;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-    }
-
-    .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #818181;
-        display: block;
-        transition: 0.3s;
-    }
-
-    .sidenav a:hover {
-        color: #f1f1f1;
-    }
-
-    .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-    }
-
-    @media screen and (max-height: 450px) {
         .sidenav {
-            padding-top: 15px;
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
         }
 
         .sidenav a {
-            font-size: 18px;
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
         }
-    }
 
-    .navbar {
-        background-color: transparent !important;
-        border-bottom: none !important;
-    }
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
 
-    .navbar-nav .nav-link {
-        color: white !important;
-        /* Color del texto del navbar */
-    }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+        }
 
-    .navbar-nav .nav-link:hover {
-        color: rgba(255, 255, 255, 0.7) !important;
-    }
+        .navbar {
+            background-color: transparent !important;
+            border-bottom: none !important;
+        }
 
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
 
-    .dropdown-menu li {
-        position: relative;
-    }
+        .navbar-nav .nav-link:hover {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
 
-    .dropdown-menu .dropdown-submenu {
-        display: none;
-        position: absolute;
-        left: 100%;
-        top: -7px;
-    }
+        .dropdown-menu li {
+            position: relative;
+        }
 
-    .dropdown-menu .dropdown-submenu-left {
-        right: 100%;
-        left: auto;
-    }
+        .dropdown-menu .dropdown-submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: -7px;
+        }
 
-    .dropdown-menu>li:hover>.dropdown-submenu {
-        display: block;
-    }
+        .dropdown-menu .dropdown-submenu-left {
+            right: 100%;
+            left: auto;
+        }
+
+        .dropdown-menu>li:hover>.dropdown-submenu {
+            display: block;
+        }
+
+        
 </style>
 
 <div id="mySidenav" class="sidenav" style="margin-top:80px opacity-0">
@@ -214,6 +176,7 @@
     <a href="/pelicula/r">Peliculas</a>
     <a href="/juego/r">Juegos</a>
     <a href="/categoria/r">Categorias</a>
+    <a href="/evento/r">Eventos</a>
     <hr>
     <a th:if="${session.usuario!=null and session.usuario.esAdmin==true}">
         <h4>Opciones de administrador</h4>
@@ -300,43 +263,54 @@
                         <ul class="navbar-nav">
                             <!-- Dropdown -->
                             <li class="nav-item dropdown">
-                                <a data-mdb-dropdown-init class="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                                    Acciones
+                                <a data-mdb-dropdown-init class="nav-link dropdown-toggle" href="/"
+                                    id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Administrar
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <li>
-                                        <a class="dropdown-item" href="/pelicula/rAdmin">
-                                            Películas &raquo;
+                                        <a class="dropdown-item" href="">
+                                            Gestionar &raquo;
                                         </a>
                                         <ul class="dropdown-menu dropdown-submenu">
                                             <li>
-                                                <a class="dropdown-item" href="/pelicula/rAdmin">Ver</a>
+                                                <a class="dropdown-item" href="/pelicula/rAdmin">Peliculas</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="/pelicula/c">Agregar</a>
+                                                <a class="dropdown-item" href="/juego/rAdmin">Juegos</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/categoria/rAdmin">Categorias</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/usuario/rAdmin">Usuarios</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/evento/rAdmin">Eventos</a>
                                             </li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="/juego/rAdmin">
-                                            Juegos &raquo;
+                                        <a class="dropdown-item" href="">
+                                            Añadir &raquo;
                                         </a>
                                         <ul class="dropdown-menu dropdown-submenu">
                                             <li>
-                                                <a class="dropdown-item" href="/juego/rAdmin">Ver</a>
+
+                                                <a class="dropdown-item" href="/pelicula/c">Peliculas</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="/juego/c">Agregar</a>
+                                                <a class="dropdown-item" href="/juego/c">Juegos</a>
                                             </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="/usuario/rAdmin">
-                                            Usuarios &raquo;
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-submenu">
                                             <li>
-                                                <a class="dropdown-item" href="/usuario/rAdmin">Ver</a>
+                                                <a class="dropdown-item" href="/categoria/c">Categorias</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/usuario/cAdmin">Usuarios</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/evento/c">Eventos</a>
                                             </li>
                                         </ul>
                                     </li>
@@ -345,21 +319,20 @@
                         </ul>
                     </div>
                 </div>
-                
+
 
 
             </ul>
             <div class="d-flex justify-content-center"></div>
-            <form class="d-flex input-group w-auto">
-                <input type="search" class="form-control" placeholder="Título, Autor..." aria-label="Search" />
-                <button class="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark"
-                    style="padding: .45rem 1.5rem .35rem;">
-                    Buscar
-                </button>
-            </form>
         </div>
         <ul class="navbar-nav mb-2 mb-lg-0 mr-3">
-
+            <li class="nav-item" th:if="${session.usuario != null}">
+                <span th:if="${session.usuario.puntos >= 15 && session.usuario.puntos <= 100}" class="badge bg-dark rounded-pill fs-6 border border-primary">Primeros pasos</span>
+                <span th:if="${session.usuario.puntos >= 101 && session.usuario.puntos <= 200}" class="badge bg-secondary rounded-pill fs-6 border border-primary">Avanzado</span>
+                <span th:if="${session.usuario.puntos >= 201 && session.usuario.puntos <= 500}" class="badge bg-info rounded-pill fs-6 border border-primary">Experto</span>
+                <span th:if="${session.usuario.puntos >= 501 && session.usuario.puntos <= 1000}" class="badge bg-warning rounded-pill fs-6 border border-primary">Profesional</span>
+                <span th:if="${session.usuario.puntos > 1000}" class="badge bg-primary rounded-pill fs-6 border border-primary">VIP</span>
+            </li>
 
             <li class="nav-item" th:if="${session.usuario==null}">
                 <a class="nav-link" href="#" style="color: white;">
@@ -378,15 +351,29 @@
                     </a>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="/pelicula/c">Peliculas </a>
-                    <a class="dropdown-item" href="/juego/c">Juegos </a>
+                    <!-- Admin -->
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="dropdown-item"
+                        href="/pelicula/c">Peliculas </a>
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="dropdown-item"
+                        href="/juego/c">Juegos </a>
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="dropdown-item"
+                        href="/categoria/c">Categorias </a>
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="dropdown-item" href="/evento/c">Eventos</a>
+                    <!-- Registrado -->
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==false}" class="dropdown-item"
+                        href="/pelicula/r">Peliculas </a>
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==false}" class="dropdown-item"
+                        href="/juego/r">Juegos </a>
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==false}" class="dropdown-item"
+                        href="/categoria/r">Categorias </a>
+                    <a th:if="${session.usuario!=null and session.usuario.esAdmin==false}" class="dropdown-item" href="/evento/r">Eventos</a> 
 
                     <hr class="dropdown-divider" />
 
                     <a class="dropdown-item" href="/usuario/rDetailed">Mi cuenta</a>
-                    <a class="dropdown-item" href="#">Ayuda</a>
+                    <a class="dropdown-item" href="/contacto">Ayuda</a>
                     <a class="nav-item nav-link" th:if="${session.usuario!=null}" href="/logout"> <button
-                            class="btn btn-primary" type="button">Logout</button></a>
+                            class="btn btn-primary w-100" type="button">Logout</button></a>
                 </div>
             </div>
             </li>
@@ -402,6 +389,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form action="/login" method="post" class="mt-4">
+                    <img src="/img/logo.png" height="100" width="100">
                     <p id="heading">Acceder</p>
                     <div class="field mb-2 ">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -410,8 +398,8 @@
                                 d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z">
                             </path>
                         </svg>
-                        <input autocomplete="off" placeholder="Email" class="input-field" type="text" name="email"
-                            id="id-email" required>
+                        <input autocomplete="off" placeholder="Email" class="input-field text-white" type="text" name="email"
+                            id="id-email" minlength="2" maxlength="40" required>
                     </div>
                     <div class="field mb-2">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -421,7 +409,7 @@
                             </path>
                         </svg>
                         <input placeholder="Contraseña" name="pass" id="id-password" class="input-field" required
-                            type="password">
+                            type="password" minlength="4" maxlength="15">
                     </div>
                     <div class="btn">
                         <button
@@ -429,7 +417,7 @@
                     </div>
                     <!-- <button class="button3">Forgot Password</button> -->
                 </form>
-                <button class="btn button2" id="registerModalButton">Registrarse</button>
+                ¿No tienes cuenta? <a class="btn button2" id="registerModalButton">  Registrarte</a>
 
             </div>
         </div>
@@ -443,6 +431,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form id="usuarioForm" action="/usuario/c" method="post">
+                    <img src="/img/logoSaludo.png" height="100" width="100">
                     <p id="heading" class="m-4">Registro</p>
                     <div class="field m-2">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -452,7 +441,7 @@
                             </path>
                         </svg>
                         <input autocomplete="off" placeholder="Nombre" class="input-field" type="text" id="id-nombre"
-                            name="nombre" required>
+                            name="nombre" required minlength="2" maxlength="12">
                     </div>
 
                     <div class="field m-2">
@@ -464,7 +453,7 @@
                             </path>
                         </svg>
                         <input autocomplete="off" placeholder="Email" class="input-field" type="text" id="id-email"
-                            name="email" required>
+                            name="email" required minlength="3" maxlength="30">
                     </div>
                     <div class="field m-2">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -473,7 +462,8 @@
                                 d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z">
                             </path>
                         </svg>
-                        <input placeholder="Contraseña" id="id-pass" name="pass" class="input-field" type="password" required>
+                        <input placeholder="Contraseña" id="id-pass" name="pass" class="input-field" type="password"
+                            required minlength="4" maxlength="15">
                     </div>
                     <div class="btn">
                         <button class="button1"

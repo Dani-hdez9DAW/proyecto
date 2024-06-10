@@ -6,12 +6,16 @@ import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
+import org.proyect.helper.ComentarioValidator;
 import org.proyect.helper.EmailValidator;
+import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.JuegoService;
 import org.proyect.service.PeliculaService;
 import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class HomeController {
@@ -30,9 +35,12 @@ public class HomeController {
 	private PeliculaService peliculaService;
 	@Autowired
 	private JuegoService juegoService;
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@GetMapping("/")
 	public String home(ModelMap m) {
+		// Obtiene todos los juegos y los añade al modelo
 		List<Juego> juegos = juegoService.findAll();
 		int cantidadMaximaJuegos = 4;
 		m.put("juegos", juegos);
@@ -44,7 +52,8 @@ public class HomeController {
 		m.addAttribute("cantidadMaximaPeliculas", cantidadMaximaPeliculas);
 
 		// Agrega las películas para el carrusel
-		m.put("carouselPeliculas", peliculas.subList(0, Math.min(4, peliculas.size())));
+		m.put("carouselPeliculas", peliculas.subList(0, Math.min(5, peliculas.size())));
+		m.put("carouselJuegos", juegos.subList(0, Math.min(4, juegos.size())));
 
 		m.put("view", "home/home");
 		return "_t/frame";
@@ -95,6 +104,9 @@ public class HomeController {
 			if (!EmailValidator.isValidEmail(email)) {
 				PRG.error("Formato de correo electrónico no válido");
 			}
+			if (!ComentarioValidator.validarComentario(email)) {
+				PRG.error("El email tiene palabras prohibidas", "/");
+			}
 
 			Usuario usuario = usuarioService.login(email, password);
 			usuarioService.setRegistro(email);
@@ -104,11 +116,8 @@ public class HomeController {
 		} catch (Exception e) {
 			if (!EmailValidator.isValidEmail(email)) {
 				PRG.error("Formato de correo electrónico no válido");
-			}else{
-				PRG.error("Usuario o contraseña incorrectos");
 			}
 
-			
 		}
 		return "redirect:/";
 	}
@@ -119,6 +128,64 @@ public class HomeController {
 		usuarioService.setLogout(nombre);
 		s.invalidate();
 		return "redirect:/";
+	}
+
+	@GetMapping("/sn")
+	public String sn(ModelMap m) {
+		m.put("view", "home/sn");
+		return "_t/frame";
+	}
+
+	@GetMapping("/politica")
+	public String politica(ModelMap m) {
+		m.put("view", "home/politica");
+		return "_t/frame";
+	}
+
+	@GetMapping("/contacto")
+	public String contacto(ModelMap m, HttpSession session) {
+		if (H.isRolOk("auth", session)) {
+			Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+			// Verificar si el usuario existe y tiene películas favoritas
+			if (usuario != null) {
+				m.put("usuario", usuario);
+			}
+			m.put("view", "home/contacto");
+			return "_t/frame";
+		}
+		return "redirect:/";
+
+	}
+
+	@PostMapping("/contacto")
+	public String contactoPost(
+			@RequestParam("tema") String tema,
+			@RequestParam("contenido") String contenido,
+			ModelMap m, HttpSession session) throws DangerException {
+
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
+		if (!ComentarioValidator.validarComentario(contenido)) {
+			PRG.error("El comentario no puede estar vacío o tiene palabras prohibidas", "redirect:/");
+		}
+		sendEmail(usuario.getCorreo(), tema, "Datos del usuario👤 \n" + "----------------------\n" +
+				"Nombre: " + usuario.getNombre() + "\n" + "Correo📧: " + usuario.getCorreo() + "\n"
+				+ "----------------------\n" + "Detalles de la incidencia🔍 \n"
+				+ "----------------------\n" + contenido);
+		m.put("view", "home/contacto");
+		return "_t/frame";
+	}
+
+	public void sendEmail(String emailTo, String subject, String content) {
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo("pelijuegosdanaca33@gmail.com");
+		message.setSubject(subject);
+		message.setText(content);
+		message.setFrom(emailTo);
+
+		javaMailSender.send(message);
+		System.out.println("Correo enviado exitosamente");
 	}
 
 }

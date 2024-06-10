@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,9 @@ public class Juego extends Elemento {
     @Column
     private String plataforma;
 
+    @OneToMany(mappedBy = "juego")
+    private List<Comentario> comentarios ;
+
     @ManyToMany(mappedBy = "juegosFav")
     private List<Usuario> usuarios;
 
@@ -25,8 +29,9 @@ public class Juego extends Elemento {
     private List<Categoria> categorias;
 
     public Juego(String plataforma) {
-        this.plataforma = plataforma;
         this.usuarios = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
+        this.categorias = new ArrayList<>();
     }
 
     public Juego(String titulo, String clasificacion, Integer duracion, Integer puntuacion, String estado,

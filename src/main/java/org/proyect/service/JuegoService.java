@@ -36,8 +36,11 @@ public class JuegoService {
                 fechaLanzamiento, trailer, urlCompra);
         juego.setImagen(imagen);
         juego.setCuenta_votos(0);
+        if (!fechaLanzamiento.isBefore(LocalDate.now())) {
+            juego.setEstado("No disponible");
+        }
         if (fechaLanzamiento.isBefore(LocalDate.now())) {
-            juego.setEstado("Unreleased");
+            juego.setEstado("Disponible");
         }
 
         // Inicializar la lista de categorías para evitar NullPointerException
@@ -85,8 +88,11 @@ public class JuegoService {
         juego.setTrailer(trailer);
         juego.setUrl(url);
         juego.setPuntuacion(puntuacion);
+        if (!fechaLanzamiento.isBefore(LocalDate.now())) {
+            juego.setEstado("No disponible");
+        }
         if (fechaLanzamiento.isBefore(LocalDate.now())) {
-            juego.setEstado("Unreleased");
+            juego.setEstado("Disponible");
         }
 
         idsCategoria = (idsCategoria == null) ? new ArrayList<Long>() : idsCategoria;
@@ -136,22 +142,22 @@ public class JuegoService {
     public void update(Long idJuego, String titulo, String clasificacion, Integer duracion, String estado,
             String plataforma, String sinopsis, LocalDate fechaLanzamiento, Integer cuentaVotos, String trailer,
             String url) {
-                Juego juego = juegoRepository.findById(idJuego).get();
-                juego.setTitulo(titulo);
-                juego.setClasificacion(clasificacion);
-                juego.setDuracion(duracion);
-                juego.setEstado(estado);
-                juego.setPlataforma(plataforma);
-                juego.setSinopsis(sinopsis);
-                juego.setFecha_salida(fechaLanzamiento);
-                juego.setCuenta_votos(cuentaVotos);
-                juego.setTrailer(trailer);
-                juego.setUrl(url);
-                if (fechaLanzamiento.isBefore(LocalDate.now())) {
-                    juego.setEstado("Unreleased");
-                }
-        
-                juegoRepository.save(juego);
+        Juego juego = juegoRepository.findById(idJuego).get();
+        juego.setTitulo(titulo);
+        juego.setClasificacion(clasificacion);
+        juego.setDuracion(duracion);
+        juego.setEstado(estado);
+        juego.setPlataforma(plataforma);
+        juego.setSinopsis(sinopsis);
+        juego.setFecha_salida(fechaLanzamiento);
+        juego.setCuenta_votos(cuentaVotos);
+        juego.setTrailer(trailer);
+        juego.setUrl(url);
+        if (fechaLanzamiento.isBefore(LocalDate.now())) {
+            juego.setEstado("Unreleased");
+        }
+
+        juegoRepository.save(juego);
     }
 
 }

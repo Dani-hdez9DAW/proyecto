@@ -12,6 +12,9 @@ import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.exception.InfoException;
+import org.proyect.helper.ComentarioValidator;
+import org.proyect.helper.EmailSenderService;
+import org.proyect.helper.EmailValidator;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.repository.JuegoRepository;
@@ -20,6 +23,8 @@ import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,20 +47,20 @@ public class UsuarioController {
 
     @Autowired
     private JuegoRepository juegoRepository;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
-    @GetMapping("r")
-    public String r(ModelMap m) {
-        List<Pelicula> pelicula = peliculaRepository.findAll();
-        List<Juego> juego = juegoRepository.findAll();
+    // @GetMapping("r")
+    // public String r(ModelMap m) {
+    // List<Pelicula> pelicula = peliculaRepository.findAll();
+    // List<Juego> juego = juegoRepository.findAll();
 
-        m.put("peliculas", pelicula);
-        m.put("juegos", juego);
+    // m.put("peliculas", pelicula);
+    // m.put("juegos", juego);
 
-        m.put("view", "usuario/r");
-        return "_t/frame";
-    }
-
-    // -------------------------NATALIA---------------------------------------
+    // m.put("view", "usuario/r");
+    // return "_t/frame";
+    // }
 
     @GetMapping("rAdmin")
     public String rUsuarios(ModelMap m, HttpSession s) {
@@ -77,28 +82,27 @@ public class UsuarioController {
 
     @GetMapping("rDetailed")
     public String rDetailed(ModelMap m, HttpSession session) {
-        if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado
+        if (H.isRolOk("auth", session)) {
+            // Obtener el usuario actual desde el servicio
             Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-            if (usuario != null) {
-                // Añadir películas favoritas al modelo
+            // Verificar si el usuario existe y tiene películas favoritas
+            if (usuario != null && usuario.getPeliculasFav() != null && !usuario.getPeliculasFav().isEmpty()) {
+                // Obtener la lista de películas favoritas del usuario
                 List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
-                m.put("peliculasFavoritas", peliculasFavoritas);
 
-                // Añadir videojuegos favoritos al modelo
-                List<Juego> juegosFavoritos = usuario.getJuegosFav();
-                m.put("juegosFavoritos", juegosFavoritos);
+                // Poner la lista de películas favoritas en el modelo para que esté disponible
+                // en la vista
+                m.put("peliculasFavoritas", peliculasFavoritas);
             }
 
             m.put("usuario", usuario);
+            // m.put("cantidadPeliculasFavoritas", cantidadPeliculasFavoritas);
             m.put("view", "usuario/rDetailed");
             return "_t/frame";
         } else {
-            // Si el usuario no está autenticado, puedes redirigirlo a una página de inicio
-            // de sesión u otra página apropiada.
-            return "redirect:/"; // Redirige a la página de inicio de sesión
+            return "redirect:/";
         }
-
     }
 
     @GetMapping("obtenerPuntos")
@@ -173,37 +177,39 @@ public class UsuarioController {
         return ResponseEntity.ok(0);
     }
 
-    // Mostrar el número de juegos
-    @GetMapping("cantidadJuegosFavoritos")
-    @ResponseBody
-    public ResponseEntity<Integer> getCantidadJuegosFavoritos(HttpSession session) {
-        // Obtener el nombre de usuario de la sesión
-        String nombreUsuario = (String) session.getAttribute("nombre");
+    // // Mostrar el número de juegos
+    // @GetMapping("cantidadJuegosFavoritos")
+    // @ResponseBody
+    // public ResponseEntity<Integer> getCantidadJuegosFavoritos(HttpSession
+    // session) {
+    // // Obtener el nombre de usuario de la sesión
+    // Usuario usuario = (Usuario) session.getAttribute("usuario");
+    // String nombreUsuario = (String) session.getAttribute("nombre");
 
-        // Verificar si el nombre de usuario está presente en la sesión
-        if (nombreUsuario != null) {
-            // Llamar al servicio para obtener la cantidad de películas favoritas del
-            // usuario
-            int cantidadJuegosFavoritos = usuarioService.obtenerCantidadJuegosFavoritos(nombreUsuario);
+    // // Verificar si el nombre de usuario está presente en la sesión
+    // if (nombreUsuario != null) {
+    // // Llamar al servicio para obtener la cantidad de películas favoritas del
+    // // usuario
+    // int cantidadJuegosFavoritos =
+    // usuarioService.obtenerCantidadJuegosFavoritos(nombreUsuario);
 
-            // Devolver el número de películas favoritas del usuario
-            return ResponseEntity.ok(cantidadJuegosFavoritos);
-        }
+    // // Devolver el número de películas favoritas del usuario
+    // return ResponseEntity.ok(cantidadJuegosFavoritos);
+    // }
 
-        // Si no se puede obtener el número de películas favoritas, devolver un error
-        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        return ResponseEntity.ok(0);
-    }
+    // // Si no se puede obtener el número de películas favoritas, devolver un error
+    // // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    // return ResponseEntity.ok(0);
+    // }
     // ----------------------------------------------------------------
 
     @GetMapping("u")
-    public String update(@RequestParam("id") String email,
+    public String update(@RequestParam("id") Long id,
             ModelMap m, HttpSession session) {
         if (H.isRolOk("admin", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
             // Si el usuario está autenticado, continúa con la lógica para cargar la vista
             // rDetailed
-            m.put("usuario", usuarioService.findByCorreo(email));
-            System.out.println("" + usuarioService.findByCorreo(email));
+            m.put("usuario", usuarioService.findById(id));
             m.put("view", "usuario/u");
             return "_t/frame";
         } else {
@@ -213,57 +219,140 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("c")
-    public String c(ModelMap m) {
-        m.put("view", "usuario/c");
-        return "_t/frame";
+    @GetMapping("cAdmin")
+    public String c(ModelMap m, HttpSession session) {
+        if (H.isRolOk("admin", session)) {
+            m.put("view", "usuario/cAdmin");
+            return "_t/frame";
+        } else {
+            return "redirect:/";
+        }
+
+    }
+
+    public void sendEmail(String emailTo, String subject, String content) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(emailTo);
+        message.setSubject(subject);
+        message.setText(content);
+        message.setFrom("pelijuegosdanaca33@gmail.com");
+
+        javaMailSender.send(message);
+        System.out.println("Correo enviado exitosamente");
     }
 
     @PostMapping("c")
     public String cPost(
             @RequestParam("nombre") String nombre,
             @RequestParam("pass") String password,
-            @RequestParam("email") String correo) throws DangerException, InfoException {
-        String mensaje = "El usuario con el nombre " + nombre;
-        Boolean creado = false;
-        try {
-            if (usuarioService.findByCorreo(correo) != null) {
-                PRG.error("El correo electrónico " + correo + " ya está registrado", "/");
-                return "redirect:/";
-            }
-            usuarioService.save(nombre, password, correo);
-            creado = true;
-        } catch (Exception e) {
-            PRG.error("Error al crear el usuario", "/");
+            @RequestParam("email") String correo) throws Exception {
+        String contenido = "Querido/a " + nombre + ",\n\n" +
+                "Gracias por registrarte en nuestra página de películas y videojuegos.\n" +
+                "En nuestra plataforma, encontrarás una amplia selección de películas y videojuegos para disfrutar.\n" +
+                "No dudes en explorar nuestras secciones y descubrir contenido que te encante.\n" +
+                "Si tienes alguna pregunta o necesitas ayuda, no dudes en ponerte en contacto con nosotros.\n\n" +
+                "Un saludo,\n" +
+                "Equipo de películas y videojuegos.📽️🎮";// La imagen será incluida mediante un identificador
+
+        // Validar el formato del correo electrónico
+        if (!EmailValidator.isValidEmail(correo)) {
+            PRG.error("Formato de correo electrónico no válido");
+            return "redirect:/"; // Redirigir en caso de error de formato
+        }
+        if (!ComentarioValidator.validarComentario(nombre)) {
+            PRG.error("El nombre tiene palabras prohibidas", "/");
+        }
+        if (!ComentarioValidator.validarComentario(correo)) {
+            PRG.error("El email tiene palabras prohibidas", "/");
         }
 
-        if (creado) {
-            PRG.info(mensaje + " ha sido creado", "/");
+        // Validar el nombre y la contraseña
+        if (!EmailValidator.isValidNamePass(nombre, password)) {
+            PRG.error("Nombre o contraseña no válidos");
+            return "redirect:/"; // Redirigir si la validación de nombre/contraseña falla
         }
+
+        // Guardar el usuario
+        usuarioService.save(nombre, password, correo);
+        sendEmail(correo, "Bienvenido a nuestra pagina de videojuegos y peliculas", contenido);
+
+        // EmailSender.sendEmail(correo, "Bienvenido a la plataforma de videojuegos",
+        // "Que tengas un buen dia");
+        // Informar al usuario si se creó correctamente
+        PRG.info("El usuario con el nombre " + nombre + " ha sido creado", "/");
 
         return "redirect:/";
     }
 
-     @PostMapping("u")
+    @PostMapping("cAdmin")
+    public String cAdminPost(
+            @RequestParam("nombre") String nombre,
+            @RequestParam("password") String password,
+            @RequestParam("correo") String correo,
+            @RequestParam("roleOptions") String rolSeleccionado, HttpSession session)
+            throws Exception {
+        // String contenido = "Querido/a " + nombre + ",\n\n" +
+        // "Gracias por registrarte en nuestra página de películas y videojuegos.\n" +
+        // "En nuestra plataforma, encontrarás una amplia selección de películas y
+        // videojuegos para disfrutar.\n" +
+        // "No dudes en explorar nuestras secciones y descubrir contenido que te
+        // encante.\n" +
+        // "Si tienes alguna pregunta o necesitas ayuda, no dudes en ponerte en contacto
+        // con nosotros.\n\n" +
+        // "Un saludo,\n" +
+        // "Equipo de películas y videojuegos.📽️🎮";// La imagen será incluida mediante
+        // un identificador
+
+        // Validar el formato del correo electrónico
+        if (!EmailValidator.isValidEmail(correo)) {
+            PRG.error("Formato de correo electrónico no válido");
+            return "redirect:/"; // Redirigir en caso de error de formato
+        }
+        if (!ComentarioValidator.validarComentario(nombre)) {
+            PRG.error("El nombre tiene palabras prohibidas", "/");
+        }
+        if (!ComentarioValidator.validarComentario(correo)) {
+            PRG.error("El email tiene palabras prohibidas", "/");
+        }
+
+        // Validar el nombre y la contraseña
+        if (!EmailValidator.isValidNamePass(nombre, password)) {
+            PRG.error("Nombre o contraseña no válidos");
+            return "redirect:/"; // Redirigir si la validación de nombre/contraseña falla
+        }
+
+        // Guardar el usuario
+        usuarioService.saveAdmin(nombre, password, correo, rolSeleccionado);
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        String correoUsuario = usuario.getCorreo();
+        usuarioService.modificacionPuntos(correoUsuario, 8);
+        // sendEmail(correo, "Bienvenido a nuestra pagina de videojuegos y peliculas",
+        // contenido);
+
+        // EmailSender.sendEmail(correo, "Bienvenido a la plataforma de videojuegos",
+        // "Que tengas un buen dia");
+        // Informar al usuario si se creó correctamente
+        PRG.info("El usuario con el nombre " + nombre + " ha sido creado", "/");
+
+        return "redirect:/";
+    }
+
+    @PostMapping("u")
     public String updatePost(
             @RequestParam("idUsuario") Long idUsuario,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("correo") String correo,
-            @RequestParam("contra") String contra,
-            @RequestParam("contraRep") String contraRep) throws DangerException,InfoException {
-                Boolean creado = false;
-        try {
-            usuarioService.update(idUsuario, nombre, correo, contra, contraRep);
-        } catch (Exception e) {
-            PRG.error("Error al crear el usuario: " + e.getMessage(), "/usuario/rAdmin");
-        }
-        if (creado) {
-            PRG.info("El usuario '" + nombre + "' ha sido actualizado", "/usuario/rAdmin");
-        }
+            @RequestParam("roleOptions") String rolSeleccionado, HttpSession session)
+            throws DangerException, InfoException {
+
+        usuarioService.updatePermisos(idUsuario, rolSeleccionado);
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        String correoUsuario = usuario.getCorreo();
+        usuarioService.modificacionPuntos(correoUsuario, 2);
+        PRG.info("Los permisos del usuario se han actualizado", "/usuario/rAdmin");
+
         return "redirect:/usuario/rAdmin";
     }
 
-    
     @PostMapping("d")
     public String delete(
             @RequestParam("idPersona") Long idPersona) throws DangerException {
@@ -274,7 +363,6 @@ public class UsuarioController {
         }
         return "redirect:/usuario/r";
     }
-
 
     // @PostMapping("/uploadFoto")
     // public ResponseEntity<String> uploadFoto(@RequestParam("file") MultipartFile
@@ -293,22 +381,24 @@ public class UsuarioController {
     // }
     // // }
     // @PostMapping("/uploadFotoPerfil")
-    // public ResponseEntity<String> uploadFotoPerfil(@RequestParam("file") MultipartFile file, HttpSession session) {
-    //     try {
-    //         Usuario usuario = (Usuario) session.getAttribute("usuario");
-    //         if (usuario != null) {
-    //             // Obtener el ID del usuario
-    //             Long usuarioId = usuario.getIdPersona();
-    //             // Guardar la foto de perfil
-    //             usuarioService.saveFotoPerfil(usuarioId, file);
-    //             return ResponseEntity.ok("Foto subida exitosamente");
-    //         } else {
-    //             return ResponseEntity.badRequest()
-    //                     .body("No se encontró ningún usuario con el correo electrónico proporcionado");
-    //         }
-    //     } catch (IOException e) {
-    //         return ResponseEntity.status(500).body("Error subiendo la foto");
-    //     }
+    // public ResponseEntity<String> uploadFotoPerfil(@RequestParam("file")
+    // MultipartFile file, HttpSession session) {
+    // try {
+    // Usuario usuario = (Usuario) session.getAttribute("usuario");
+    // if (usuario != null) {
+    // // Obtener el ID del usuario
+    // Long usuarioId = usuario.getIdPersona();
+    // // Guardar la foto de perfil
+    // usuarioService.saveFotoPerfil(usuarioId, file);
+    // return ResponseEntity.ok("Foto subida exitosamente");
+    // } else {
+    // return ResponseEntity.badRequest()
+    // .body("No se encontró ningún usuario con el correo electrónico
+    // proporcionado");
+    // }
+    // } catch (IOException e) {
+    // return ResponseEntity.status(500).body("Error subiendo la foto");
+    // }
     // }
 
 }

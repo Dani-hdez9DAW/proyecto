@@ -1,11 +1,17 @@
 package org.proyect.controller.web;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.proyect.domain.Categoria;
+import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.CategoriaValidator;
 import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
+import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,10 +28,17 @@ public class CategoriaController {
 
     @Autowired
     private CategoriaService categoriaService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("r")
     public String r(
             ModelMap m) {
+        List<String> classArray = Arrays.asList(
+                "one", "two", "three", "five", "six", "seven", "eight", "nine",
+                "ten", "eleven", "tlv", "thirteen", "ftn", "fith", "sith", "sevth");
+
+        m.addAttribute("classArray", classArray);
         m.put("categorias", categoriaService.findAll());
         m.put("view", "categoria/r");
         return "_t/frame";
@@ -62,6 +75,10 @@ public class CategoriaController {
         try {
             if (CategoriaValidator.validarCategoria(nombre)) {
                 categoriaService.save(nombre);
+                // GESTION DE PUNTOS DEL USUARIO
+                Usuario usuario = (Usuario) s.getAttribute("usuario");
+                String correoUsuario = usuario.getCorreo();
+                usuarioService.modificacionPuntos(correoUsuario, 6);
             }
 
         } catch (Exception e) {
@@ -76,20 +93,29 @@ public class CategoriaController {
     @GetMapping("u")
     public String update(
             @RequestParam("id") Long idCategoria,
-            ModelMap m) {
-        m.put("categoria", categoriaService.findById(idCategoria));
-        m.put("view", "categoria/u");
-        return "_t/frame";
+            ModelMap m, HttpSession s) {
+        if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("view", "categoria/c");
+            m.put("categoria", categoriaService.findById(idCategoria));
+            m.put("view", "categoria/u");
+            return "_t/frame";
+        }
+        return "redirect:/"; // Redirige a la página de inicio de sesión
+
     }
 
     @PostMapping("u")
     public String updatePost(
-            @RequestParam("id") Long idCategoria,
-            @RequestParam("nombre") String nombre) throws DangerException, InfoException  {
-                Boolean creado = false;
+            @RequestParam("idcategoria") Long idCategoria,
+            @RequestParam("nombre") String nombre, HttpSession session) throws DangerException, InfoException {
+        Boolean creado = false;
 
         try {
             categoriaService.update(idCategoria, nombre);
+            // GESTION DE PUNTOS DEL USUARIO
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            String correoUsuario = usuario.getCorreo();
+            usuarioService.modificacionPuntos(correoUsuario, 3);
         } catch (Exception e) {
             PRG.error("La categoria no pudo ser actualizada", "/categoria/r");
         }
@@ -101,8 +127,8 @@ public class CategoriaController {
 
     @PostMapping("d")
     public String delete(
-            @RequestParam("id") Long id_Bean) throws DangerException, InfoException  {
-                Boolean creado = false;
+            @RequestParam("id") Long id_Bean) throws DangerException, InfoException {
+        Boolean creado = false;
 
         try {
             categoriaService.delete(id_Bean);

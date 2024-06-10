@@ -8,11 +8,6 @@
 
         /*ANIMACIONES*/
 
-
-
-
-
-
         /* FIN DE ANIMACIONES*/
         html,
         body {
@@ -76,11 +71,11 @@
             font-size: 16px;
             line-height: 1.6;
             color: #333;
-            margin-top: 30px;
+            margin-top: -50px;
         }
 
         .description p {
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
 
@@ -217,8 +212,184 @@
             color: #fff4f4;
         }
 
-
         /* FIN DEL boton */
+
+        /* CARROUSELL */
+
+        /* CARROUSELL */
+
+        #slideshow {
+            margin: 0 auto;
+            padding-top: 70px;
+            height: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .slideshow-title {
+            font-family: 'Allerta Stencil';
+            font-size: 62px;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 25%;
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+
+        .sub-heading {
+            padding-top: 50px;
+            font-size: 18px;
+        }
+
+        .sub-heading-two {
+            font-size: 15px;
+        }
+
+        .sub-heading-three {
+            font-size: 13px;
+        }
+
+        .sub-heading-four {
+            font-size: 11px;
+        }
+
+        .sub-heading-five {
+            font-size: 9px;
+        }
+
+        .sub-heading-six {
+            font-size: 7px;
+        }
+
+        .sub-heading-seven {
+            font-size: 5px;
+        }
+
+        .sub-heading-eight {
+            font-size: 3px;
+        }
+
+        .sub-heading-nine {
+            font-size: 1px;
+        }
+
+        .entire-content {
+            margin: auto;
+            width: 190px;
+            perspective: 1000px;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .content-carrousel {
+            width: 100%;
+            position: absolute;
+            float: right;
+            animation: rotar 35s infinite linear;
+            transform-style: preserve-3d;
+        }
+
+        .content-carrousel:hover {
+            animation-play-state: paused;
+            cursor: pointer;
+        }
+
+        .content-carrousel figure {
+            width: 110%;
+            height: 180px;
+            border: 1px solid #3b444b;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .content-carrousel figure:nth-child(1) {
+            transform: rotateY(0deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(2) {
+            transform: rotateY(40deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(3) {
+            transform: rotateY(80deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(4) {
+            transform: rotateY(120deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(5) {
+            transform: rotateY(160deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(6) {
+            transform: rotateY(200deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(7) {
+            transform: rotateY(240deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(8) {
+            transform: rotateY(280deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(9) {
+            transform: rotateY(320deg) translateZ(300px);
+        }
+
+        .content-carrousel figure:nth-child(10) {
+            transform: rotateY(360deg) translateZ(300px);
+        }
+
+        .shadow {
+            position: absolute;
+            box-shadow: 0px 0px 20px 0px #000;
+            border-radius: 1px;
+        }
+
+        .content-carrousel img {
+            image-rendering: auto;
+            transition: all 300ms;
+            width: 100%;
+            height: 100%;
+        }
+
+        .content-carrousel img:hover {
+            transform: scale(1.2);
+            transition: all 300ms;
+        }
+
+        @keyframes rotar {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
+        /* Estilos para el botón de subir al inicio */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .scroll-to-top:hover {
+            background-color: #444;
+        }
     </style>
 </head>
 
@@ -243,6 +414,21 @@
 
 
     <div class="container">
+        <!-- CARRUSEL -->
+        <section id="slideshow">
+            <div class="entire-content">
+                <div class="content-carrousel">
+                    <figure class="shadow" th:each="pelicula : ${carouselPeliculas}">
+                        <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" th:alt="${pelicula.titulo}" />
+                    </figure>
+                    <figure class="shadow" th:each="juego : ${carouselJuegos}">
+                        <img th:src="@{'/img/juegos/' + ${juego.imagen}}" th:alt="${juego.titulo}" />
+                    </figure>
+                </div>
+            </div>
+        </section>
+        <!-- FIN DEL CARRUSEL -->
+
         <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <div th:each="pelicula, iterStat : ${peliculas}" class="carousel-item"
@@ -308,28 +494,49 @@
         <div class="mb-5">
         </div>
 
-        <div class="bg-primary p-4 position-relative" style="text-align: right; border-radius: 2%; box-shadow: #c5c2c7 2px 2px 4px; ">
+        <div class="bg-primary p-4 position-relative"
+            style="text-align: right; border-radius: 2%; box-shadow: #c5c2c7 2px 2px 4px; ">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <a href="/juego/r" class="btn1">Ver más</a>
                 <h1 class="highlight-text2" style="border-radius: 10%; width: 12%; margin-right: 80px;">JUEGOS</h1>
             </div>
             <div class="row">
-                <div th:each="juego, iterStat : ${juegos}" class="col-md-3" th:if="${iterStat.index lt cantidadMaximaJuegos}">
+                <div th:each="juego, iterStat : ${juegos}" class="col-md-3"
+                    th:if="${iterStat.index lt cantidadMaximaJuegos}">
                     <div class="juego-image">
-                        <img th:src="@{'/img/juegos/' + ${juego.imagen}}" alt="Imagen de Juego" style="max-width: 100%; height: auto;">
+                        <img th:src="@{'/img/juegos/' + ${juego.imagen}}" alt="Imagen de Juego"
+                            style="max-width: 100%; height: auto;">
                     </div>
                 </div>
             </div>
         </div>
-        
-        
-
-
         <div class="mb-5 ">
         </div>
-
-
-
-
     </div>
+
+    <!-- Botón de subir al inicio -->
+    <button id="scrollToTopBtn" class="scroll-to-top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
 </body>
+
+<script>
+    // Mostrar el botón cuando el usuario hace scroll hacia abajo
+    window.onscroll = function () {
+        var scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            scrollToTopBtn.style.display = "block";
+        } else {
+            scrollToTopBtn.style.display = "none";
+        }
+    };
+
+    // Hacer scroll hacia arriba cuando el botón es clickeado
+    document.getElementById('scrollToTopBtn').addEventListener('click', function () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+</script>

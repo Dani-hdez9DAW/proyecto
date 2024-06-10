@@ -31,7 +31,7 @@
         }
 
         .text-small {
-            transform: scale(0.6);
+            transform: scale(0.7);
         }
 
         .circuloSmall {
@@ -43,6 +43,10 @@
             /* Ajusta la posición hacia arriba */
             left: 60px;
             /* Ajusta la posición hacia la derecha */
+        }
+
+        .textoSubrayado {
+            text-decoration: underline;
         }
 
         .contenidoArriba {
@@ -124,6 +128,15 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             margin-top: 20px;
             letter-spacing: 2px;
+        }
+
+        .textoSecundario {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            text-decoration: underline;
         }
 
         .heart-container {
@@ -212,18 +225,24 @@
             }
         }
 
-        #svg circle {
+        #svg1 circle,
+        #svg2 circle {
             stroke-dashoffset: 0;
             transition: stroke-dashoffset 1s linear;
-            stroke: #666;
+            stroke: black;
             stroke-width: 1em;
         }
 
-        #svg #bar {
-            stroke: #39D2C0;
+        #svg1 #bar1 {
+            stroke: #4B39EF;
         }
 
-        #cont {
+        #svg2 #bar2 {
+            stroke: #6C0E23;
+        }
+
+        #cont1,
+        #cont2 {
             display: block;
             height: 200px;
             width: 200px;
@@ -233,7 +252,8 @@
             position: relative;
         }
 
-        #cont:after {
+        #cont1:after,
+        #cont2:after {
             position: absolute;
             display: block;
             height: 160px;
@@ -248,7 +268,7 @@
             line-height: 160px;
             font-size: 4em;
             text-align: center;
-            color: white;
+            color: black;
             text-shadow: 0 0 0.5em black;
         }
 
@@ -835,4 +855,36 @@
 
         .modal-trigger:hover {
             padding: 20px 60px;
+        }
+
+        .boton {
+            padding: 17px 40px;
+            border-radius: 10px;
+            border: 0;
+            background-color: #B18FCF;
+            letter-spacing: 1.5px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: #f402f4;
+            color: hsl(0, 0%, 100%);
+            cursor: pointer;
+        }
+
+        .boton:hover {
+            box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
+        }
+
+        .boton:active {
+            background-color: rgb(255, 56, 86);
+            /*50, 168, 80*/
+            box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
+            transform: translateY(5px);
+            transition: 200ms;
+        }
+        .badge-container {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            position: relative;
+            width: 9vw;
         }

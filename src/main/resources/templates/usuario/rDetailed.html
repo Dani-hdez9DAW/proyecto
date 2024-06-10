@@ -1,30 +1,25 @@
 <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 
 <style>
 	/* Imagen de Spiderman */
-	/* body {
-		background-image: url(https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700481705.jpg);
-	} */
-
 	body {
-            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700481705.jpg');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
+		background: linear-gradient(to right, #39D2C0, #4B39EF);
+		/*f2E9E4
+		
+		6C0E23
+		B18FCF*/
+		height: 100vh;
+		margin: 0;
+		font-family: 'Orbitron', sans-serif;
+	}
+
 
 	.container {
-		margin-right: 50px;
+		display: table;
+		text-align: center;
 	}
 
 	.footer {
@@ -43,8 +38,9 @@
 		position: relative;
 	}
 
+
 	.header {
-		color: #fff;
+		color: #6C0E23;
 		padding: 15px;
 		height: 300px;
 	}
@@ -53,24 +49,25 @@
 	.container-usu {
 		box-shadow: 0 0 50px rgba(0, 0, 0, .3);
 		margin-top: -10px;
-		margin-right: 30px;
-		/* Cambiado a un valor mayor */
-		/* Aplica un margen negativo para compensar el margen derecho del contenedor principal */
 		overflow: hidden;
 		width: 700px;
-		/* Aumentado el ancho */
-		background-color: #4B39EF;
+		background-color: rgba(255, 255, 255, 0.8);
 		border-radius: 10px;
 		box-sizing: border-box;
 		padding: 20px;
-		float: right;
-		/* Flota el contenedor a la derecha */
 		position: relative;
+		left: 390px;
+
+
+
+		/*top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);*/
 	}
 
 
 	.main-heading {
-		color: #fff;
+		color: #6C0E23;
 		font-size: 26px;
 		font-weight: 300;
 		margin-bottom: 12px;
@@ -103,7 +100,7 @@
 	}
 
 	.overlay-header {
-		background-color: #6C0E23;
+		background-color: rgba(255, 255, 255, .35);
 		height: 100px;
 		margin: -50px 0 0 -25%;
 		transform: rotate(-10deg);
@@ -299,163 +296,178 @@
 	}
 
 	.edit-icon,
-        .accept-btn,
-        .cancel-btn,
-        .edit-overlay,
-        .input-title,
-        .input-description,
-        .save-btn,
-        .cancel-edit-btn {
-            display: none;
-        }
+	.accept-btn,
+	.cancel-btn,
+	.edit-overlay,
+	.input-title,
+	.input-description,
+	.save-btn,
+	.cancel-edit-btn {
+		display: none;
+	}
 
-        .show-edit .edit-icon {
-            display: block;
-        }
+	.show-edit .edit-icon {
+		display: block;
+	}
 
-        .show-edit .title,
-        .show-edit .description,
-        .show-edit .input-title,
-        .show-edit .input-description,
-        .show-edit .edit-overlay,
-        .show-edit .save-btn,
-        .show-edit .cancel-edit-btn {
-            display: block;
-        }
+	.show-edit .title,
+	.show-edit .description,
+	.show-edit .input-title,
+	.show-edit .input-description,
+	.show-edit .edit-overlay,
+	.show-edit .save-btn,
+	.show-edit .cancel-edit-btn {
+		display: block;
+	}
 
-        .show-edit .title,
-        .show-edit .description {
-            display: none;
-        }
+	.show-edit .title,
+	.show-edit .description {
+		display: none;
+	}
 
-        .show-edit .input-title,
-        .show-edit .input-description {
-            width: 100%;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-        }
+	.show-edit .input-title,
+	.show-edit .input-description {
+		width: 100%;
+		border: none;
+		border-radius: 5px;
+		padding: 10px;
+		box-sizing: border-box;
+		margin-bottom: 10px;
+	}
 
-        .show-edit .save-btn,
-        .show-edit .cancel-edit-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+	.show-edit .save-btn,
+	.show-edit .cancel-edit-btn {
+		padding: 10px 20px;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
 
-        .show-edit .save-btn {
-            background-color: #4CAF50;
-            color: #fff;
-            margin-right: 10px;
-        }
+	.show-edit .save-btn {
+		background-color: #4CAF50;
+		color: #fff;
+		margin-right: 10px;
+	}
 
-        .show-edit .cancel-edit-btn {
-            background-color: #f44336;
-            color: #fff;
-        }
+	.show-edit .cancel-edit-btn {
+		background-color: #f44336;
+		color: #fff;
+	}
 
-        /* Estilos para aceptar o cancelar la edición */
-        .edit-container {
-            text-align: center;
-            margin-top: 10px;
-        }
+	/* Estilos para aceptar o cancelar la edición */
+	.edit-container {
+		text-align: center;
+		margin-top: 10px;
+	}
 
-        .accept-btn,
-        .cancel-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
+	.accept-btn,
+	.cancel-btn {
+		padding: 5px 10px;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 14px;
+	}
 
-        .accept-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
+	.accept-btn {
+		background-color: #4CAF50;
+		color: white;
+	}
 
-        .cancel-btn {
-            background-color: #f44336;
-            color: white;
-        }
+	.cancel-btn {
+		background-color: #f44336;
+		color: white;
+	}
 
-        .edit-icon {
-            cursor: pointer;
-            font-size: 16px;
-        }
+	.edit-icon {
+		cursor: pointer;
+		font-size: 16px;
+	}
 
-        .edit-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 10;
-            display: none;
-        }
+	.edit-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 10;
+		display: none;
+	}
 
-        .edit-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            position: relative;
-        }
+	.edit-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		position: relative;
+	}
 
-        .edit-container input {
-            margin-right: 10px;
-        }
+	.edit-container input {
+		margin-right: 10px;
+	}
 
-        .edit-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
+	.edit-buttons {
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
+	}
 
-        .edit-buttons button {
-            margin: 0 5px;
-        }
+	.edit-buttons button {
+		margin: 0 5px;
+	}
 
-        /* Estilos para el botón de cambio de fondo */
-        .change-bg-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+	/* Estilos para el botón de cambio de fondo */
+	.change-bg-container {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 20px;
+	}
 
-        .change-bg-btn, .change-profile-btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+	.change-bg-btn,
+	.change-profile-btn {
+		padding: 10px 20px;
+		background-color: #4CAF50;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 16px;
+	}
 
-        /* Estilos para el input de selección de archivo */
-        .file-input {
-            display: none;
-        }
+	/* Estilos para el input de selección de archivo */
+	.file-input {
+		display: none;
+	}
 
-		  .profile-container {
-            display: flex;
-            align-items: center;
-        }
+	.profile-container {
+		display: flex;
+		align-items: center;
+	}
 
-        .profile-container img {
-            border-radius: 50%;
-            margin-right: 10px;
-        }
+	.profile-container img {
+		border-radius: 50%;
+		margin-right: 10px;
+	}
 
-        .profile-btn-container {
-            display: flex;
-            flex-direction: column;
-        }
+	.profile-btn-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.pelicula-item {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.pelicula-img {
+		max-width: 100px;
+		margin-right: 15px;
+	}
+
+	.btn-eliminar {
+		width: 100%;
+	}
 </style>
 
 
@@ -465,7 +477,7 @@
 	<div class="m-3 container-usu">
 		<div class="header-container">
 			<div class="header">
-				
+
 				<div class="change-bg-container">
 					<h1 class="main-heading" th:text="${session.usuario.nombre}"></h1>
 					<button class="change-bg-btn"><i class="bi bi-arrow-bar-up">Fondo</i> </button>
@@ -481,12 +493,12 @@
 		</div>
 
 		<div class="overlay-header"></div>
-		
+
 		<div class="body">
-			
+
 			<!-- <img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" /> -->
 			<div class="profile-container">
-                <!-- <img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" id="profileImage" width="150" />
+				<!-- <img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" class="body-image" id="profileImage" width="150" />
                 <div class="profile-btn-container">
                     <button class="change-profile-btn"><i class="bi bi-arrow-bar-up"> Cambiar Perfil</i></button>
                     <input type="file" class="file-input-profile" accept="image/*">
@@ -495,11 +507,12 @@
 				<div>
 					<img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" id="profile-image"
 						class="body-image">
-					<button onclick="document.getElementById('profile-file-input').click()">Añadir foto</button>
+					<button class="change-bg-btn" onclick="document.getElementById('profile-file-input').click()">Añadir
+						foto</button>
 					<input type="file" id="profile-file-input" class="file-input" accept="image/*"
 						style="display: none;" onchange="uploadProfileImage()">
 				</div>
-            </div>
+			</div>
 			<div id="description" class="body-info">
 				<!-- Descripción -->
 				<p id="user-description" th:text="${session.usuario.descripcion}"></p>
@@ -519,8 +532,8 @@
 								</button>
 							</div>
 							<div class="modal-body">
-								 <!-- Aquí se mostrará el mensaje -->
-								 <div id="modalMensaje" style="display: none; margin-bottom: 10px;" class="alert"></div>
+								<!-- Aquí se mostrará el mensaje -->
+								<div id="modalMensaje" style="display: none; margin-bottom: 10px;" class="alert"></div>
 								<form id="editarDescripcionForm">
 									<div class="form-group">
 										<label for="nuevaDescripcion">Nueva descripción:</label>
@@ -548,7 +561,10 @@
 					<img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" />
 					<!-- Muestra el título de la película -->
 					<!-- <span th:text="${pelicula.titulo}"></span> -->
-
+					<!-- Botón de eliminación -->
+					<button class="btn btn-danger btn-sm btn-eliminar mt-2">
+						Eliminar
+					</button>
 				</li>
 			</ul>
 		</div>
@@ -617,7 +633,7 @@
 					console.error('Error al actualizar la descripción:', error);
 				}
 			});
-	});
+		});
 	});
 
 	//Función para obtener al número de películas favoritas 
@@ -632,6 +648,8 @@
 		});
 	});
 
+
+
 	//Función para obtener al número de juegos favoritos 
 	$(document).ready(function () {
 		// Hacer una solicitud HTTP GET al backend para obtener el número de películas favoritas
@@ -644,36 +662,35 @@
 		});
 
 		$('.change-bg-btn').on('click', function () {
-    $('.file-input').click(); // Cambiado a '.file-input' en lugar de '.file-input-bg'
-});
+			$('.file-input').click(); // Cambiado a '.file-input' en lugar de '.file-input-bg'
+		});
 
-$('.file-input').on('change', function (e) { // Cambiado a '.file-input' en lugar de '.file-input-bg'
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            $('body').css('background-image', `url(${event.target.result})`);
-        };
-        reader.readAsDataURL(file);
-    }
-});
+		$('.file-input').on('change', function (e) { // Cambiado a '.file-input' en lugar de '.file-input-bg'
+			const file = e.target.files[0];
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function (event) {
+					$('body').css('background-image', `url(${event.target.result})`);
+				};
+				reader.readAsDataURL(file);
+			}
+		});
 
+		// Cambiar imagen de perfil
+		$('.change-profile-btn').on('click', function () {
+			$('.file-input-profile').click();
+		});
 
-            // Cambiar imagen de perfil
-            $('.change-profile-btn').on('click', function () {
-                $('.file-input-profile').click();
-            });
-
-            $('.file-input-profile').on('change', function (e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                        $('#profileImage').attr('src', event.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
+		$('.file-input-profile').on('change', function (e) {
+			const file = e.target.files[0];
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function (event) {
+					$('#profileImage').attr('src', event.target.result);
+				};
+				reader.readAsDataURL(file);
+			}
+		});
 	});
 
 

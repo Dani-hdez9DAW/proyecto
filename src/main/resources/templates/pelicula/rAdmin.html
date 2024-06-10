@@ -8,20 +8,66 @@
     <!-- Carga de estilos de DataTables -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <style>
-        .dataTables_wrapper {
-            font-size: 14px;
+        /* Cambiar color del texto en los encabezados de la tabla */
+        .dataTables_wrapper table.dataTable thead th {
             color: white;
+            /* Mantener el texto blanco en los encabezados */
+            background-color: #B18FCF;
+            /* Asegurar el contraste con un fondo morado oscuro */
         }
 
+        /* Cambiar color del texto en la información y paginación */
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            color: white;
+            /* Mantener el texto blanco para la información y paginación */
+        }
+
+        /* Cambiar color del texto en los controles de paginación */
         .dataTables_wrapper .dataTables_paginate .paginate_button {
-            color: black;
-            background-color: plum;
+            color: white !important;
+            /* Mantener el texto blanco para los botones de paginación */
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: #ddd !important;
+            /* Cambiar el color al pasar el cursor por los botones de paginación */
+        }
+
+        /* Cambiar color del texto de la entrada de búsqueda */
+        .dataTables_wrapper .dataTables_filter label,
+        .dataTables_wrapper .dataTables_filter input {
+            color: white;
+            /* Cambiar el color del texto de la etiqueta y la entrada a blanco */
+        }
+
+        /* Cambiar color del texto del selector de registros */
+        .dataTables_wrapper .dataTables_length label,
+        .dataTables_wrapper .dataTables_length select {
+            color: white;
+            /* Cambiar el color del texto de la etiqueta y el selector a blanco */
+        }
+
+        /* Estilo adicional para el input de búsqueda */
+        .dataTables_wrapper .dataTables_filter input {
+            background-color: transparent;
+            /* Hacer el fondo del input transparente */
+            border: 1px solid white;
+            /* Borde blanco */
+        }
+
+        /* Estilo adicional para el select de registros */
+        .dataTables_wrapper .dataTables_length select {
+            background-color: transparent;
+            /* Hacer el fondo del select transparente */
+            border: 1px solid white;
+            /* Borde blanco */
         }
 
         .highlight-text {
             font-family: 'Arial', sans-serif;
             font-size: 3em;
-            color: #8326d4;
+            color: #B18FCF;
             text-transform: uppercase;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             margin-top: 20px;
@@ -40,25 +86,54 @@
             padding: 0.25rem 0.5rem;
             font-size: 0.8rem;
         }
+        .icon-purple {
+            color: #B18FCF;
+        }
+
+        select option {
+            background-color: black;
+            color: white;
+        }
+
+        .columnaCentrada {
+            text-align: center;
+        }
+
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_desc:after {
+            color: black !important;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #B18FCF !important; /* Cambia este color al que prefieras */
+            color: white !important;
+            border: 1px solid #B18FCF !important;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #8B5FBF !important; /* Cambia este color al que prefieras */
+            color: black !important;
+        }
     </style>
 </head>
 
 <body>
     <h1 class="highlight-text">GESTION DE PELICULAS</h1>
-    <div class="container bg-white mt-4 text-primary" id="table-view-container">
+    <div class="container  mt-4 text-primary" id="table-view-container">
         <div th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="container btn-group">
-            <button class="btn btn-primary btn-sm" style="font-size: larger;"
+            <button class="btn btn-primary btn-sm mb-3" style="font-size: larger;"
                 onclick="window.location.href='/pelicula/c'"><i class="bi bi-plus"></i>Añadir</button>
         </div>
-        <table id="peliculasTable" class="table table-striped table-bordered">
+        <table id="peliculasTable" class="uk-table uk-table-hover">
             <thead class="thead-dark">
                 <tr>
-                    <th>Título</th>
-                    <th>Fecha de Salida</th>
-                    <th>Estado</th>
-                    <th>Duración</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
+                    <th class="columnaCentrada">Título</th>
+                    <th class="columnaCentrada">Fecha de Salida</th>
+                    <th class="columnaCentrada">Estado</th>
+                    <th class="columnaCentrada">Duración</th>
+                    <th class="columnaCentrada">Editar</th>
+                    <th class="columnaCentrada">Eliminar</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,13 +146,13 @@
                     <td>
                         <a th:onclick="|window.location.href='/pelicula/rDetailed?id_elemento=${pelicula.idElemento}'|"
                             data-toggle="modal" data-target="#authModal">
-                            <i class="bi bi-pen-fill"></i>
+                            <i class="bi bi-pen-fill icon-purple"></i>
                         </a>
                     </td>
                     <td>
                         <a href="#" class="delete-button" th:data-id="${pelicula.idElemento}" data-toggle="modal"
                             data-target="#deleteModal">
-                            <i class="bi bi-trash3-fill"></i>
+                            <i class="bi bi-trash3-fill icon-purple"></i>
                         </a>
                     </td>
 
@@ -90,18 +165,18 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                <div class="modal-header" style="text-align: center;">
+                    <h5 class="modal-title" id="deleteModalLabel" >Confirmar Eliminación</h5>
+                    <button type="button" class="close btn btn-danger ms-auto" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ¿Estás seguro de que deseas eliminar esta película?
+                    ¿Estás seguro de que deseas eliminar esta película?,si lo borras no se podrá recuperar.
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary w-40" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger w-40" id="confirmDeleteBtn">Eliminar</button>
                 </div>
             </div>
         </div>

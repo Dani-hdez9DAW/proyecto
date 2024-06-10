@@ -192,30 +192,9 @@
         </div>
     </div>
     </div>
-    <div th:if="${pelicula.estado == 'Unreleased'}">
-        <h1
-            th:text="'Espera hasta el día ' + ${#temporals.format(pelicula.fecha_salida, 'd')} + ' de ' + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(pelicula.fecha_salida, 'yyyy')}">
-        </h1>
-        <div id="clockdiv">
-            <div>
-                <span class="days"></span>
-                <div class="smalltext">Dias</div>
-            </div>
-            <div>
-                <span class="hours"></span>
-                <div class="smalltext">Horas</div>
-            </div>
-            <div>
-                <span class="minutes"></span>
-                <div class="smalltext">Minutos</div>
-            </div>
-            <div>
-                <span class="seconds"></span>
-                <div class="smalltext">Segundos</div>
-            </div>
-            <br>
-        </div>
-    </div>
+
+
+
     <div id="deadline" th:value="${pelicula.fecha_salida}"></div>
 
     <div class="container mt-5">
@@ -245,8 +224,15 @@
                         <polygon points="80,80 70,70"></polygon>
                     </svg>
                 </div>
+
         </div>
+
         </form>
+        <div th:if="${pelicula.estado == 'Unreleased'}"  class="text-end">
+            <span class="badge bg-primary rounded-pill fs-5 py-2 px-3 "
+                th:text="'Disponible el día ' + ${#temporals.format(pelicula.fecha_salida, 'd')} + ' de ' + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(pelicula.fecha_salida, 'yyyy')}">
+            </span>
+        </div>
 
 
 
@@ -318,7 +304,7 @@
         </div>
         <div class="row">
             <div class="container">
-                <h1 class="highlight-text" style="text-align: center;">Detalles</h1>
+                <h2 class="highlight-text" style="text-align: center;">Detalles</h2>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -377,26 +363,74 @@
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center">
-                        <h1 class="text-center text-small highlight-text mb-3">PUNTUACION</h1>
-                        <div id="cont" class="circuloSmall ms-0 mb-1" data-pct="">
-                            <svg id="svg" width="200" height="200" viewPort="0 0 100 100" version="1.1"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
-                                    stroke-dashoffset="0"></circle>
-                                <circle id="bar" r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
-                                    stroke-dashoffset="0"></circle>
-                            </svg>
-                            <h2 class="left:3vw;position:absolute;">Publico</h2>
-                            <input type="hidden" id="puntuacion" th:value="${pelicula.puntuacion}">
+                        <h1 class="text-center text-small textoSecundario mb-3">PUNTUACION</h1>
+                        <div class="d-flex w-100 justify-content-center">
+                            <div class="d-flex justify-content-between" style="width: 450px;">
+                                <div id="cont1" class="circuloSmall ms-2 mb-1" data-pct="">
+                                    <svg id="svg1" width="200" height="200" viewPort="0 0 100 100" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                                            stroke-dashoffset="0"></circle>
+                                        <circle id="bar1" r="90" cx="100" cy="100" fill="transparent"
+                                            stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
+                                    </svg>
+                                    <input type="hidden" id="puntuacion1" th:value="${pelicula.puntuacion}">
+                                </div>
+                                <div id="cont2" class="circuloSmall ms-2 mb-1" data-pct="">
+                                    <svg id="svg2" width="200" height="200" viewPort="0 0 100 100" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                                            stroke-dashoffset="0"></circle>
+                                        <circle id="bar2" r="90" cx="100" cy="100" fill="transparent"
+                                            stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
+
+                                    </svg>
+                                    <input type="hidden" id="puntuacion2" th:value="${pelicula.calificacion}">
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-
                 </div>
-
             </div>
         </div>
     </div>
+
+    <div class="container mt-5">
+        <h2 class="highlight-text" style="text-align: center;">Sección de Comentarios</h2>
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">Deja un comentario</h5>
+                <form action="/comentario/cP" method="post">
+                    <div class="mb-3">
+                        <input type="hidden" name="autor" th:value="${session.usuario.nombre}">
+                        <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
+
+                        <label for="contenido" class="form-label">Comentario</label>
+                        <textarea class="form-control" id="contenido" rows="3" name="contenido"
+                            placeholder="Escribe tu comentario aquí"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card my-3 mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Comentarios</h5>
+                <div class="mb-3">
+                    <div th:each="comentario : ${comentarios}" class="border-bottom pb-3">
+                        <div class="d-flex align-items-center">
+                            <strong class="mr-2" th:text="${comentario.autor}"></strong>
+                            <span class="text-muted" th:text="| - ${comentario.fecha} |"></span>
+                        </div>
+                        <p class="mt-2" th:text="${comentario.contenido}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 
 
 </body>

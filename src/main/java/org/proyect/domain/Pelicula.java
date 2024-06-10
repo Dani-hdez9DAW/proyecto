@@ -7,6 +7,7 @@ import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Pelicula extends Elemento {
   
+    @OneToMany(mappedBy = "pelicula")
+    private List<Comentario> comentarios ;
 
     @ManyToMany(mappedBy = "peliculas")
     private List<Actor> actores;
@@ -32,6 +35,7 @@ public class Pelicula extends Elemento {
         this.actores = new ArrayList<>();
         this.categorias = new ArrayList<>();
         this.usuarios = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
     }
 
     public Pelicula(String titulo, String clasificacion, Integer duracion, String estado, String plataforma,

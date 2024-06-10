@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.proyect.domain.Categoria;
+import org.proyect.domain.Comentario;
 import org.proyect.domain.Pelicula;
 import org.proyect.helper.PRG;
 import org.proyect.repository.CategoriaRepository;
+import org.proyect.repository.ComentarioRepository;
 import org.proyect.repository.PeliculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,9 @@ public class PeliculaService {
     private PeliculaRepository peliculaRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private ComentarioRepository comentarioRepository;
 
     private List<Long> calificaciones;
 
@@ -67,6 +72,7 @@ public class PeliculaService {
         peliculaRepository.save(pelicula);
     }
 
+   
     public List<Pelicula> findByTitulo(String titulo) {
         return peliculaRepository.findByTitulo(titulo);
     }
@@ -147,4 +153,15 @@ public class PeliculaService {
         return (double) sumaCalificaciones / conteoVotos;
     }
 
+    public List<Pelicula> findByCategoria(Categoria categoria) {
+        return peliculaRepository.findByCategorias(categoria);
+    }
+    
+    public List<Pelicula> findByClasificacion(String clasificacion) {
+        return peliculaRepository.findByClasificacion(clasificacion);
+    }
+
+    // public List<Pelicula> buscarPorNombre(String titulo) {
+    //     return peliculaRepository.findByTituloContainingIgnoreCase(titulo);
+    // }
 }

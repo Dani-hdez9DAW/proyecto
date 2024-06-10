@@ -324,6 +324,95 @@
         }
 
         /* FIN IMAGEN */
+        /* ESTILOS DEL DATATABLE */
+        select option {
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+
+        /* Cambiar color del texto en los encabezados de la tabla */
+        .dataTables_wrapper table.dataTable thead th {
+            color: white;
+            /* Mantener el texto blanco en los encabezados */
+            background-color: #B18FCF;
+            /* Asegurar el contraste con un fondo morado oscuro */
+        }
+
+        /* Cambiar color del texto en la información y paginación */
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            color: white;
+            /* Mantener el texto blanco para la información y paginación */
+        }
+
+        /* Cambiar color del texto en los controles de paginación */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: white !important;
+            /* Mantener el texto blanco para los botones de paginación */
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: #ddd !important;
+            /* Cambiar el color al pasar el cursor por los botones de paginación */
+        }
+
+        /* Cambiar color del texto de la entrada de búsqueda */
+        .dataTables_wrapper .dataTables_filter label,
+        .dataTables_wrapper .dataTables_filter input {
+            color: white;
+            /* Cambiar el color del texto de la etiqueta y la entrada a blanco */
+        }
+
+        /* Cambiar color del texto del selector de registros */
+        .dataTables_wrapper .dataTables_length label,
+        .dataTables_wrapper .dataTables_length select {
+            color: white;
+            /* Cambiar el color del texto de la etiqueta y el selector a blanco */
+        }
+
+        .columnaCentrada {
+            text-align: center;
+        }
+
+        /* Estilo adicional para el input de búsqueda */
+        .dataTables_wrapper .dataTables_filter input {
+            background-color: transparent;
+            /* Hacer el fondo del input transparente */
+            border: 1px solid white;
+            /* Borde blanco */
+        }
+
+        /* Estilo adicional para el select de registros */
+        .dataTables_wrapper .dataTables_length select {
+            background-color: transparent;
+            /* Hacer el fondo del select transparente */
+            border: 1px solid white;
+            /* Borde blanco */
+        }
+
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_desc:after {
+            color: black !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #B18FCF !important;
+            /* Cambia este color al que prefieras */
+            color: white !important;
+            border: 1px solid #B18FCF !important;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #8B5FBF !important;
+            /* Cambia este color al que prefieras */
+            color: black !important;
+        }
+
+        /* FIN DE ESTILOS DEL DATATABLE */
     </style>
 </head>
 
@@ -331,7 +420,7 @@
 
     <div class="filtro container">
         <div style="display: inline-block;">
-            <h4 style="display: inline-block; margin: 0;">Filtrar</h4>
+            <h4 style="display: inline-block; margin: 0;color: white;">Filtrar</h4>
             <form action="/juego/filtrar" method="get" style="display: inline-block;">
                 <select name="idCategoria">
                     <option value="">Categorías</option>
@@ -343,11 +432,11 @@
                     <option th:each="clasificacion : ${clasificaciones}" th:value="${clasificacion}"
                         th:text="${clasificacion}"></option>
                 </select>
-                <button type="submit"><i class="bi bi-funnel-fill"></i></button>
+                <button type="submit"><i class="bi bi-funnel-fill">Filtrar</i></button>
             </form>
         </div>
         <button class="quitar-filtro" onclick="window.location.href='/juego/r'" style="display: inline-block;"><i
-                class="bi bi-funnel"></i></button>
+                class="bi bi-funnel"></i>Cancelar filtro</button>
 
         <div class="float-right-container" style="float: right;">
             <div class="switch-container">
@@ -438,7 +527,7 @@
     </div>
 
 
-    <div class="container bg-info mt-4 mb-5 text-info" id="table-view-container" style="display: none;">
+    <div class="container  mt-4 mb-5 text-info" id="table-view-container" style="display: none;">
         <table id="juegosTable" class="table table-striped table-bordered">
             <thead class="thead-dark">
                 <tr>

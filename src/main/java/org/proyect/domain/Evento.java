@@ -1,6 +1,7 @@
 package org.proyect.domain;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,23 +19,71 @@ public class Evento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_evento;
+    private Long idEvento;
 
     @Column
     private String tipo;
     @Column
-    private Date fecha;
+    private LocalDate fecha;
     @Column
     private String localizacion;
+    @Column
+    private String nombre;
     @ManyToOne
     private Usuario usuario;
 
     // ==================
 
-    public Evento(String tipo, Date fecha, String localizacion) {
+    // Getters y Setters
+
+    public Long getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(Long idEvento) {
+        this.idEvento = idEvento;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
         this.tipo = tipo;
-        this.fecha = fecha;
+    }
+
+    public String getLocalizacion() {
+        return localizacion;
+    }
+
+    public void setLocalizacion(String localizacion) {
         this.localizacion = localizacion;
     }
 
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public Evento(String tipo, LocalDate fecha, String localizacion, String nombre) {
+        this.tipo = tipo;
+        this.fecha = fecha;
+        this.localizacion = localizacion;
+        this.nombre = nombre;
+    }
+
+    public Evento(String tipo) {
+        this.tipo = tipo;
+    }
 }

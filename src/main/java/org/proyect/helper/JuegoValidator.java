@@ -48,8 +48,6 @@ public class JuegoValidator {
             PRG.error("La sinopsis debe tener entre 50 y 500 caracteres.", "/juego/r");
         }
 
-        
-
         // Validar la cuenta de votos
         if (cuentaVotos == null || cuentaVotos < 0) {
             PRG.error("La cuenta de votos debe ser al menos 0.", "/juego/r");
@@ -68,17 +66,17 @@ public class JuegoValidator {
         return true;
     }
 
-    // CASO DE C DE PELIS
+    // CASO DE C DE Juegos
     public static boolean ValidarDatosC(String titulo, String clasificacion, Integer duracion, String estado,
             String plataforma,
             Integer puntuacion, List<Long> categoria, String sinopsis, LocalDate fechaLanzamiento,
             Integer cuentaVotos, String trailer, String url, MultipartFile imagen) throws DangerException {
         // Validar el nombre
         if (titulo == null || titulo.trim().isEmpty() || titulo.trim().length() < 2 || titulo.trim().length() > 30
-        || !titulo.matches("^[a-zA-Z0-9\\-\\s]+$")) {
-    PRG.error("El nombre debe tener entre 2 y 30 caracteres y solo puede contener letras, números y guiones.",
-            "/juego/r");
-}
+                || !titulo.matches("^[a-zA-Z0-9\\-\\s]+$")) {
+            PRG.error("El nombre debe tener entre 2 y 30 caracteres y solo puede contener letras, números y guiones.",
+                    "/juego/r");
+        }
 
         // Validar la clasificación
         if (clasificacion == null || clasificacion.trim().isEmpty()) {
@@ -110,16 +108,16 @@ public class JuegoValidator {
             PRG.error("La sinopsis debe tener entre 50 y 500 caracteres.", "/juego/r");
         }
 
-        // Validar la fecha de lanzamiento
-        if (fechaLanzamiento == null || fechaLanzamiento.isAfter(LocalDate.now())) {
-            PRG.error("La fecha de lanzamiento debe ser anterior a hoy.", "/juego/r");
-        }
-
         // Validar la cuenta de votos
         if (cuentaVotos == null || cuentaVotos < 0) {
             PRG.error("La cuenta de votos debe ser al menos 0.", "/juego/r");
         }
-
+        if (!ComentarioValidator.validarComentario(titulo)) {
+            PRG.error("El titulo no puede tener palabras prohibidas", "/pelicula/r");
+        }
+        if (!ComentarioValidator.validarComentario(plataforma)) {
+            PRG.error("La plataforma no puede tener palabras prohibidas", "/pelicula/r");
+        }
         // Validar el trailer
         if (trailer == null || !trailer.matches("^https://www\\.youtube\\.com/embed/.*$")) {
             PRG.error("El enlace del trailer debe tener esta estructura: https://www.youtube.com/embed/",

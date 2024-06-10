@@ -23,40 +23,9 @@
         margin-bottom: 45px;
     }
 
-    input {
-        font-size: 18px;
-        padding: 10px 10px 10px 5px;
-        display: block;
-        width: 300px;
-        border: none;
-        border-bottom: 1px solid #757575;
-    }
-
-    input:focus {
-        outline: none;
-    }
-
-    /* LABEL ======================================= */
-    label {
-        color: #999;
-        font-size: 18px;
-        font-weight: normal;
-        position: absolute;
-        pointer-events: none;
-        left: 5px;
-        top: 10px;
-        transition: 0.2s ease all;
-        -moz-transition: 0.2s ease all;
-        -webkit-transition: 0.2s ease all;
-    }
-
-    /* active state */
-    input:focus~label,
-    input:valid~label {
-        top: -20px;
-        font-size: 14px;
-        color: #5264AE;
-    }
+    
+   
+    
 
     /* BOTTOM BARS ================================= */
     .bar {
@@ -160,47 +129,23 @@
         /* Color del borde al pasar el mouse */
     }
 
-    .spaced-container {
-    max-width: 600px;
-    width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
-    margin-bottom: 20px; 
-}
-
+    
 </style>
 
 <body>
     <h1 class="highlight-text">Nueva Categoría</h1>
-    <div class="container spaced-container ">
+    <div class="container w-50 mt-5 p-4 bg-light shadow-sm rounded">
         <form id="categoriaForm" action="/categoria/c" method="post">
-            <div class="form-group">
-                <div class="group">
-                    <input type="text" minlength="3" maxlength="20" class="form-control" id="id-nombre" name="nombre"
-                        required>
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label for="id-nombre">Nombre</label>
-                </div>
+            <div class="mb-3">
+                <label for="id-nombre" class="form-label">Nombre</label>
+                <input type="text" minlength="3" maxlength="20" class="form-control" id="id-nombre" name="nombre" required aria-describedby="nombreHelp">
+                <div id="nombreHelp" class="form-text">El nombre debe tener entre 3 y 20 caracteres.</div>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <button type="submit" class="btn btn-brown btn-block">Crear</button>
-                    </div>
-                    <div class="col-md-6">
-                        <button class="btn btn-brown btn-block" onclick="window.location.href='/categoria/rAdmin'">Volver</button>
-                    </div>
-                </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Crear</button>
             </div>
         </form>
     </div>
-
-
 
     <!-- Bootstrap JS (optional) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

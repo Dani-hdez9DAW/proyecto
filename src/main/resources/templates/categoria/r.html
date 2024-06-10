@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,24 +8,18 @@
     <link rel="stylesheet" href="/css/categorias/categorias.css">
 </head>
 
+
 <body>
     <div class="container mt-5">
+        <h1 class="highlight-text mb-3">Listado de categorias</h1>
+
         <div class="row">
-            <div class="col-md-6">
-                <h1>Lista de categorias</h1>
-            </div>
-            <div class="col-md-6 d-flex justify-content-center align-items-center">
-                <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="btn btn-primary" onclick="window.location.href='/categoria/c'">Crear categoria</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 col-6" th:each="categoria : ${categorias}">
+            <div class="col-md-3 col-6" th:each="categoria, iterStat : ${categorias}">
                 <div class="wrap">
-                    <div class="box one">
-                        <div class="date">
-                        </div>
+                    <div th:class="'box ' + ${classArray[(iterStat.count - 1) % 16]}">
+                        <div class="date"></div>
                         <h1 th:text="${categoria.nombre}"></h1>
-                        <div class="poster p1">
+                        <div th:class="'poster p' + ${iterStat.count % 16 == 0 ? 16 : iterStat.count % 16}">
                             <h4 th:text="${#strings.substring(categoria.nombre, 0, 1)}"></h4>
                         </div>
                     </div>
@@ -32,5 +27,7 @@
             </div>
         </div>
     </div>
+    </div>
 </body>
+
 </html>

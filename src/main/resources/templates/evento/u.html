@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar evento</title>
+    <style>
+        .highlight-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #B18FCF;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h4 {
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="highlight-text hidden" th:text="|Editar el evento Nº${evento.idEvento}|"></h1>
+        <div class="text-end">
+            <span class="badge bg-info rounded-pill fs-5" th:text="'Tipo'"></span>
+            <span th:text="${evento.tipo}" class="badge bg-primary rounded-pill fs-5"></span>
+        </div>
+
+        <form action="/evento/u" method="POST">
+
+            <div class="mb-3 hidden">
+                <label for="id-nombre" class="form-label">Nombre</label>
+                <input type="text" required minlength="2" maxlength="20" class="form-control" id="id-nombre"
+                    name="nombre" th:value="${evento.nombre}" />
+            </div>
+            <div class="mb-3 hidden form-group">
+                <label for="tipo">Tipo</label>
+                <select class="form-control" name="tipo" required>
+                    <option value="" disabled selected>Seleccione un tipo</option>
+                    <option value="Videojuegos">Videojuegos</option>
+                    <option value="Peliculas">Peliculas</option>
+                    <option value="Estrenos">Estrenos</option>
+                    <option value="Concurso">Concurso</option>
+                </select>
+            </div>
+            <div class="mb-3 hidden">
+                <label for="id-localizacion" class="form-label">Localización</label>
+                <input type="text" required minlength="2" maxlength="35" class="form-control" id="id-localizacion"
+                    name="localizacion" th:value="${evento.localizacion}" />
+            </div>
+            <div class="mb-3 hidden">
+                <label for="id-fecha" class="form-label">Fecha del evento</label>
+                <input type="date" required class="form-control" id="id-fecha" name="fechaEvento"
+                    th:value="${evento.fecha}" />
+            </div>
+
+            <input type="hidden" name="id" id="idEvento" th:value="${evento.idEvento}">
+            <button type="submit" class="btn btn-primary w-100">Guardar cambios</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.highlight-text').fadeIn(1000);
+            $('.mb-3').each(function (index) {
+                $(this).delay(500 * index).fadeIn(1000);
+            });
+
+            $('form').on('submit', function () {
+                $('button[type="submit"]').addClass('disabled').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...');
+            });
+        });
+    </script>
+</body>

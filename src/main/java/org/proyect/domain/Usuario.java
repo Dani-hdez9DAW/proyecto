@@ -55,6 +55,18 @@ public class Usuario extends Persona {
         super.setContraseña(passwd);
         super.setCorreo(correo);
         this.puntos = puntos;
+        this.esAdmin = false;
+        this.peliculasFav = new ArrayList<>();
+        this.juegosFav = new ArrayList<>();
+
+    }
+
+    public Usuario(String nombre, String passwd, String correo, Integer puntos, Boolean esAdmin) {
+        super.setNombre(nombre);
+        super.setContraseña(passwd);
+        super.setCorreo(correo);
+        this.puntos = puntos;
+        this.esAdmin = esAdmin;
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
     }
@@ -70,6 +82,5 @@ public class Usuario extends Persona {
     public Boolean getEsAdmin() {
         return esAdmin != null ? esAdmin : false;
     }
-
 
 }

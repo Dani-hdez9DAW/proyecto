@@ -376,3 +376,13 @@ body {
 				-webkit-transform: rotate(359deg);
 		}
 }
+.highlight-text {
+	font-family: 'Arial', sans-serif;
+	font-size: 3em;
+	color: #B18FCF;
+	text-transform: uppercase;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	margin-top: 20px;
+	letter-spacing: 2px;
+	text-align: center;
+}

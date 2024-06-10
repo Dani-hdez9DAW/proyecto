@@ -1,157 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vista detallada de juego</title>
-    <!-- Tu archivo de estilos CSS personalizado -->
-    <link href="styles.css" rel="stylesheet">
-    <style>
-        /* Estilos personalizados */
-        .movie-poster {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-right: 20px;
-        }
-
-        .movie-details {
-            width: calc(100% - 150px);
-            /* Para dejar espacio a la imagen */
-        }
-
-        #id-sinopsis {
-            height: 150px;
-            /* Altura ajustable */
-            resize: none;
-            /* Deshabilita el redimensionamiento */
-        }
-
-        .heart-container {
-            --heart-color: rgb(255, 91, 137);
-            position: relative;
-            width: 50px;
-            height: 50px;
-            transition: .3s;
-        }
-
-        .heart-container .checkbox {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            z-index: 20;
-            cursor: pointer;
-        }
-
-        .heart-container .svg-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .heart-container .svg-outline,
-        .heart-container .svg-filled {
-            fill: var(--heart-color);
-            position: absolute;
-        }
-
-        .heart-container .svg-filled {
-            animation: keyframes-svg-filled 1s;
-            display: none;
-        }
-
-        .heart-container .svg-celebrate {
-            position: absolute;
-            animation: keyframes-svg-celebrate .5s;
-            animation-fill-mode: forwards;
-            display: none;
-            stroke: var(--heart-color);
-            fill: var(--heart-color);
-            stroke-width: 2px;
-        }
-
-        .heart-container .checkbox:checked~.svg-container .svg-filled {
-            display: block
-        }
-
-        .heart-container .checkbox:checked~.svg-container .svg-celebrate {
-            display: block
-        }
-
-
-        @keyframes keyframes-svg-filled {
-            0% {
-                transform: scale(0);
-            }
-
-            25% {
-                transform: scale(1.2);
-            }
-
-            50% {
-                transform: scale(1);
-                filter: brightness(1.5);
-            }
-        }
-
-        @keyframes keyframes-svg-celebrate {
-            0% {
-                transform: scale(0);
-            }
-
-            50% {
-                opacity: 1;
-                filter: brightness(1.5);
-            }
-
-            100% {
-                transform: scale(1.4);
-                opacity: 0;
-                display: none;
-            }
-        }
-
-        .rating {
-            display: inline-block;
-        }
-
-        .rating input {
-            display: none;
-        }
-
-        .rating label {
-            float: right;
-            cursor: pointer;
-            color: #ccc;
-            transition: color 0.3s;
-        }
-
-        .rating label:before {
-            content: '\2605';
-            font-size: 30px;
-        }
-
-        .rating input:checked~label,
-        .rating label:hover,
-        .rating label:hover~label {
-            color: #6f00ff;
-            transition: color 0.3s;
-        }
-    </style>
+    <title>Vista detallada de película</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-TdX7PtFTs5lCt4lwlBebN52Nq4ElCkIOHQ0pyAOn24NS+gZVv6b/2KA2RDpMBpbEe+BQiJqIp9nhffI3oyB+7A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/css/juegos/rDetailed.css" rel="stylesheet">
 </head>
 
 <body>
-    <button th:if="${session.usuario != null and session.usuario.esAdmin == true}" class="btn btn-primary"
-        onclick="habilitarCampos();">
-        <i class="bi bi-pen-fill"></i>
-    </button>
 
-   
+    <div class="modal" id="modal-name">
+        <div class="modal-sandbox"></div>
+        <div class="modal-box">
+            <div class="modal-header d-flex justify-content-between">
+                <h1 style="text-align: right;">Modificacion de datos de la juego</h1>
+                <div class="close-modal"><i class="bi bi-x"></i></div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <form action="/juego/u" method="post">
+                            <div class="form-group row">
+                                <label for="id-nombre" class="col-sm-4 col-form-label">
+                                    <h4>Nombre</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-nombre" class="form-control" name="nombre" required
+                                        th:value="${juego.titulo}" minlength="2" maxlength="30">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="clasificacion" class="col-sm-4 col-form-label">
+                                    <h4>Edad</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="select_mate form-control" id="clasificacion" data-mate-select="active">
+                                        <select name="clasificacion" id="select-clasificacion"
+                                            class="form-control input-size">
+                                            <option value="3">Apto para todos</option>
+                                            <option value="7">Para 7 años</option>
+                                            <option value="PG-13">Mayores de 12</option>
+                                            <option value="16">Mayores de 16</option>
+                                            <option value="R">Mayores de 18</option>
+                                        </select>
+                                        <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                                        <span onclick="open_select(this)" class="icon_select_mate">
+                                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+                                                <path d="M0-.75h24v24H0z" fill="none" />
+                                            </svg>
+                                        </span>
+                                        <div class="cont_list_select_mate">
+                                            <ul class="cont_select_int"> </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="estado" class="col-sm-4 col-form-label">
+                                    <h4>Estado</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="select_mate form-control" id="estado" data-mate-select="active">
+                                        <select name="estado" id="select-estado" class="form-control input-size">
+                                            <option value="Released">Disponible</option>
+                                            <option value="Unreleased">No Disponible</option>
+                                        </select>
+                                        <p class="selecionado_opcion" onclick="open_select(this)"></p>
+                                        <span onclick="open_select(this)" class="icon_select_mate">
+                                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+                                                <path d="M0-.75h24v24H0z" fill="none" />
+                                            </svg>
+                                        </span>
+                                        <div class="cont_list_select_mate">
+                                            <ul class="cont_select_int"> </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-fechaSalida" class="col-sm-4 col-form-label">
+                                    <h4>Fecha</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="date" id="id-fechaSalida" class="form-control" name="fechaSalida"
+                                        required th:value="${juego.fecha_salida}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-duracion" class="col-sm-4 col-form-label">
+                                    <h4>Duración</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="id-duracion" class="form-control" name="duracion" required
+                                        th:value="${juego.duracion}" min="10" max="500">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-plataforma" class="col-sm-4 col-form-label">
+                                    <h4>Plataforma</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-plataforma" class="form-control" name="plataforma"
+                                        th:value="${juego.plataforma}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-puntuacion" class="col-sm-4 col-form-label">
+                                    <h4>Puntuación</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="id-puntuacion" class="form-control" name="puntuacion"
+                                        th:value="${juego.puntuacion}" required min="0" max="10">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-cuentaVotos" class="col-sm-4 col-form-label">
+                                    <h4>Votos</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="id-cuentaVotos" class="form-control" name="cuentaVotos"
+                                        th:value="${juego.cuenta_votos}" required min="0">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-trailer" class="col-sm-4 col-form-label">
+                                    <h4>Trailer</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-trailer" class="form-control" name="trailer"
+                                        th:value="${juego.trailer}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id-urlCompra" class="col-sm-4 col-form-label">
+                                    <h4>URL</h4>
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="id-urlCompra" class="form-control" name="urlCompra"
+                                        th:value="${juego.url}" required>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="id-sinopsis">
+                                <h4>Sinopsis</h4>
+                            </label>
+                            <textarea id="id-sinopsis" class="form-control" name="sinopsis"
+                                th:text="${juego.sinopsis}" minlength="50" maxlength="500"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <h4>Categorías</h4>
+                            </label>
+                            <br>
+                            <th:block th:each="categoria : ${categorias}">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" name="categoriaId[]" class="form-check-input"
+                                        th:id="|idCategoria-${categoria.idCategoria}|"
+                                        th:value="${categoria.idCategoria}"
+                                        th:checked="${juego.categorias.contains(categoria)}">
+                                    <label class="form-check-label" th:for="|idCategoria-${categoria.idCategoria}|"
+                                        th:text="${categoria.nombre}"></label>
+                                </div>
+                            </th:block>
+                        </div>
+                        <input type="hidden" id="idjuego" name="idjuego" th:value="${juego.idElemento}">
+                        <button type="submit" id="btnActualizar" class="btn btn-primary btn-block"
+                            style="margin-top:20px;">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <button th:if="${session.usuario!=null and session.usuario.esAdmin==true}"
+                class="btn btn-primary modal-trigger" data-modal="modal-name">
+                <i class="bi bi-pen-fill"></i>
+            </button>
+        </div>
+    </div>
+    </div>
+    <div id="deadline" th:value="${juego.fecha_salida}"></div>
 
     <div class="container mt-5">
+        <h1 class="text-center highlight-text" th:text="${juego.titulo}"></h1>
         <div class="heart-container" title="Like">
             <form id="checklistForm" action="/juego/rDetailed" method="POST">
                 <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
@@ -178,72 +222,164 @@
                     </svg>
                 </div>
         </div>
-        <button id="guardarBtn" style="display: none;" onclick="guardar()">Guardar</button>
         </form>
+        <div th:if="${juego.estado == 'No disponible'}"  class="text-end">
+            <span class="badge bg-primary rounded-pill fs-5 py-2 px-3 "
+                th:text="'Disponible el día ' + ${#temporals.format(juego.fecha_salida, 'd')} + ' de ' + ${#temporals.format(juego.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(juego.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(juego.fecha_salida, 'yyyy')}">
+            </span>
+        </div>
 
-        <form id="ratingForm" action="/juego/rDetailedRating" method="POST">
-            <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
-            <div class="rating">
-                <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)">
-                <label for="star5"></label>
-                <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)">
-                <label for="star4"></label>
-                <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)">
-                <label for="star3"></label>
-                <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)">
-                <label for="star2"></label>
-                <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)">
-                <label for="star1"></label>
-            </div>
-        </form>
+
 
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h1 class="text-center">Detalles del juego</h1>
-                    </div>
+
+            <!-- Tarjeta para la información -->
+            <div class=" d-flex col-md-6">
+                <div class="card w-100 h-100">
                     <div class="card-body">
-                        <div class="row">
-                            <!-- Tarjeta para la imagen -->
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="game-poster">
-                                            <img th:src="@{'/img/juego/' + ${juego.imagen}}" alt="Poster del juego"
-                                                class="img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
+                        <div>
+                            <span>
+                                <h3 class="textContent">Sinopsis</h3>
+                                <p id="id-sinopsis" name="sinopsis" class="" th:text="${juego.sinopsis}"
+                                    disabled="disabled"></p>
+                            </span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <h3 class="textContent text-center">Ver trailer</h3>
+                            <div class="iframe-container">
+                                <iframe class="trailer" height="300" width="500" th:src="${juego.trailer}"
+                                    frameborder="0" allowfullscreen></iframe>
                             </div>
-                            <!-- Tarjeta para los detalles -->
-                            <div class="col-md-8">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <form action="/juego/u" method="post">
-                                            <div class="form-group">
-                                                <label for="id-nombre">Nombre</label>
-                                                <input type="text" id="id-nombre" name="nombre" class="form-control"
-                                                    disabled required th:value="${juego.titulo}">
-                                                <!-- Otros campos aquí... -->
-                                                <label for="id-trailer">Ver trailer</label>
-                                                <a id="trailerLink" class="btn btn-secondary" name="trailer"
-                                                    th:href="${juego.trailer}" target="_blank">Ver trailer</a>
+                        </div>
+                        <div class="form-group mb-3">
+                            <h3 class="textContent">URL de compra</h3>
+                            <a id="urlCompraLink" class="btn btn-secondary w-100" name="urlCompraLink"
+                                th:href="${juego.url}" target="_blank">
+                                <i class="bi bi-cart"></i> Comprar
+                            </a>
+                        </div>
+                        <div class="form-group mb-3">
+                            <h3 class="textContent">Valora</h3>
+                            <form id="ratingForm" action="/juego/rDetailedRating" method="POST">
+                                <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
+                                <div class="rating justify-content-center">
+                                    <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)">
+                                    <label for="star5"></label>
+                                    <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)">
+                                    <label for="star4"></label>
+                                    <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)">
+                                    <label for="star3"></label>
+                                    <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)">
+                                    <label for="star2"></label>
+                                    <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)">
+                                    <label for="star1"></label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card w-100 h-100">
+                    <div class="card__content">
+                        <div class="movie-poster">
+                            <img th:src="@{'/img/juegos/' + ${juego.imagen}}" alt="Poster de la película"
+                                class="img-fluid">
+                        </div>
+                    </div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                    <div class="blob"></div>
+                </div>
 
-                                                <label for="id-urlCompra">URL de compra</label>
-                                                <a id="urlCompraLink" class="btn btn-secondary" name="urlCompra"
-                                                    th:href="${juego.url}" target="_blank">Comprar</a>
+            </div>
 
-                                                <label for="id-sinopsis">Sinopsis</label>
-                                                <textarea id="id-sinopsis" name="sinopsis" class="form-control" required
-                                                    th:text="${juego.sinopsis}" disabled="disabled"></textarea>
-                                                <input type="hidden" id="idjuego" name="idJuego"
-                                                    th:value="${juego.idElemento}">
-                                            </div>
-                                            <button type="submit" id="btnActualizar" style="display:none"
-                                                class="btn btn-primary btn-block">Guardar</button>
-                                        </form>
-                                    </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <h2 class="highlight-text" style="text-align: center;">Detalles</h2>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Estado</h3>
+                            <p class="card-text"><span th:utext="${juego.estado}"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Categoría</h3>
+                            <div th:each="categoriaP: ${categoriasPertenecientes}">
+                                <p class="card-text"><span th:utext="${categoriaP.nombre}"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Duración</h3>
+                            <p class="card-text">
+                                <span th:utext="'<i class=\'bi bi-alarm\'></i> ' + ${juego.duracion} + ' m.'"></span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Fecha de salida</h3>
+                            <p class="card-text">
+                                <span
+                                    th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${juego.fecha_salida}"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Cuenta votos</h3>
+                            <p class="card-text"><span th:utext="${juego.cuenta_votos}"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Plataforma</h3>
+                            <p class="card-text"><span th:utext="${juego.plataforma}"></span></p>
+                        </div>
+                    </div>
+                    <div class="containerImg">
+                        <div th:if="${juego.clasificacion == 'PEGI 3'}">
+                            <img class="classification-image" th:src="@{/img/juegos/edades/Apto.png}" alt="Apto">
+                        </div>
+                        <div th:if="${juego.clasificacion == 'PEGI 7'}">
+                            <img class="classification-image" th:src="@{/img/juegos/edades/7.png}" alt="7">
+                        </div>
+                        <div th:if="${juego.clasificacion == 'PEGI 12'}">
+                            <img class="classification-image" th:src="@{/img/juegos/edades/12.png}" alt="12">
+                        </div>
+                        <div th:if="${juego.clasificacion == 'PEGI 16'}">
+                            <img class="classification-image" th:src="@{/img/juegos/edades/16.jpeg}" alt="16">
+                        </div>
+                        <div th:if="${juego.clasificacion == 'PEGI 18'}">
+                            <img class="classification-image" th:src="@{/img/juegos/edades/18.png}" alt="+18">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        <h1 class="text-center text-small textoSecundario mb-3">PUNTUACION</h1>
+                        <div class="d-flex w-100 justify-content-center">
+                            <div class="d-flex justify-content-between" style="width: 450px;">
+                                <div id="cont1" class="circuloSmall ms-2 mb-1" data-pct="">
+                                    <svg id="svg1" width="200" height="200" viewPort="0 0 100 100" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                                            stroke-dashoffset="0"></circle>
+                                        <circle id="bar1" r="90" cx="100" cy="100" fill="transparent"
+                                            stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
+                                    </svg>
+                                    <input type="hidden" id="puntuacion1" th:value="${juego.puntuacion}">
+                                </div>
+                                <div id="cont2" class="circuloSmall ms-2 mb-1" data-pct="">
+                                    <svg id="svg2" width="200" height="200" viewPort="0 0 100 100" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48"
+                                            stroke-dashoffset="0"></circle>
+                                        <circle id="bar2" r="90" cx="100" cy="100" fill="transparent"
+                                            stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
+
+                                    </svg>
+                                    <input type="hidden" id="puntuacion2" th:value="${juego.calificacion}">
                                 </div>
                             </div>
                         </div>
@@ -253,8 +389,45 @@
         </div>
     </div>
 
+    <div class="container mt-5">
+        <h2 class="highlight-text" style="text-align: center;">Sección de Comentarios</h2>
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">Deja un comentario</h5>
+                <form action="/comentario/cJ" method="post">
+                    <div class="mb-3">
+                        <input type="hidden" name="autor" th:value="${session.usuario.nombre}">
+                        <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
+
+                        <label for="contenido" class="form-label">Comentario</label>
+                        <textarea class="form-control" id="contenido" rows="3" name="contenido"
+                            placeholder="Escribe tu comentario aquí"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card my-3 mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Comentarios</h5>
+                <div class="mb-3">
+                    <div th:each="comentario : ${comentarios}" class="border-bottom pb-3">
+                        <div class="d-flex align-items-center">
+                            <strong class="mr-2" th:text="${comentario.autor}"></strong>
+                            <span class="text-muted" th:text="| - ${comentario.fecha} |"></span>
+                        </div>
+                        <p class="mt-2" th:text="${comentario.contenido}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
 
 </body>
+<script src="/js/juegos/rDetailed.js" type="text/javascript"></script>
+
 <script>
     function cambiarDireccionForm() {
         var form = document.querySelector('form[action="/juego/u"]');
@@ -273,7 +446,6 @@
         }
     }
 
-    
     function handleStarClick(rating) {
         // Actualizar el valor del campo de rating en el formulario
         var ratingInput = document.querySelector('input[name="rating"]');
@@ -307,8 +479,191 @@
         // Mostrar el botón de guardar
         document.getElementById('btnActualizar').style.display = 'block';
     }
+    // function initializeClock(id, endtime) {
+    //     var clock = document.getElementById(id);
+    //     var daysSpan = clock.querySelector('.days');
+    //     var hoursSpan = clock.querySelector('.hours');
+    //     var minutesSpan = clock.querySelector('.minutes');
+    //     var secondsSpan = clock.querySelector('.seconds');
+
+    //     function updateClock() {
+    //         var t = getTimeRemaining(endtime);
+
+    //         daysSpan.innerHTML = t.days;
+    //         hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+    //         minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+    //         secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+    //         if (t.total <= 0) {
+    //             clearInterval(timeinterval);
+    //         }
+    //     }
+
+    //     updateClock();
+    //     var timeinterval = setInterval(updateClock, 1000);
+    // }
+
+    // function getTimeRemaining(endtime) {
+    //     var t = Date.parse(endtime) - Date.now();
+    //     var seconds = Math.floor((t / 1000) % 60);
+    //     var minutes = Math.floor((t / 1000 / 60) % 60);
+    //     var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    //     var days = Math.floor(t / (1000 * 60 * 60 * 24));
+    //     return {
+    //         'total': t,
+    //         'days': days,
+    //         'hours': hours,
+    //         'minutes': minutes,
+    //         'seconds': seconds
+    //     };
+    // }
+    // var fechaSalida = document.getElementById('deadline').getAttribute('th:value');
+    // console.log(deadline);
+    // // Convertir la cadena de fecha en un objeto de fecha
+    // var fechaSalidaDate = new Date(fechaSalida);
+
+    // // Obtener el día y el mes de la fecha de salida de la película
+    // var dia = fechaSalidaDate.getDate();
+    // var mes = fechaSalidaDate.toLocaleString('en-US', { month: 'long' });
+    // var currentYear = new Date().getFullYear();
+    // console.log(dia);
+    // console.log(mes);
+    // var deadline = new Date(mes + ' 28', + currentYear + ' 00:00:00');
+    // initializeClock('clockdiv', deadline);
+    window.onload = function () {
+        crear_select();
+    }
+
+    function isMobileDevice() {
+        return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+    };
+
+
+    var li = new Array();
+    function crear_select() {
+        var div_cont_select = document.querySelectorAll("[data-mate-select='active']");
+        var select_ = '';
+        for (var e = 0; e < div_cont_select.length; e++) {
+            div_cont_select[e].setAttribute('data-indx-select', e);
+            div_cont_select[e].setAttribute('data-selec-open', 'false');
+            var ul_cont = document.querySelectorAll("[data-indx-select='" + e + "'] > .cont_list_select_mate > ul");
+            select_ = document.querySelectorAll("[data-indx-select='" + e + "'] >select")[0];
+            if (isMobileDevice()) {
+                select_.addEventListener('change', function () {
+                    _select_option(select_.selectedIndex, e);
+                });
+            }
+            var select_optiones = select_.options;
+            document.querySelectorAll("[data-indx-select='" + e + "']  > .selecionado_opcion ")[0].setAttribute('data-n-select', e);
+            document.querySelectorAll("[data-indx-select='" + e + "']  > .icon_select_mate ")[0].setAttribute('data-n-select', e);
+            for (var i = 0; i < select_optiones.length; i++) {
+                li[i] = document.createElement('li');
+                if (select_optiones[i].selected == true || select_.value == select_optiones[i].innerHTML) {
+                    li[i].className = 'active';
+                    document.querySelector("[data-indx-select='" + e + "']  > .selecionado_opcion ").innerHTML = select_optiones[i].innerHTML;
+                };
+                li[i].setAttribute('data-index', i);
+                li[i].setAttribute('data-selec-index', e);
+                // funcion click al selecionar 
+                li[i].addEventListener('click', function () { _select_option(this.getAttribute('data-index'), this.getAttribute('data-selec-index')); });
+
+                li[i].innerHTML = select_optiones[i].innerHTML;
+                ul_cont[0].appendChild(li[i]);
+
+            }; // Fin For select_optiones
+        }; // fin for divs_cont_select
+    } // Fin Function 
+
+
+
+    var cont_slc = 0;
+    function open_select(idx) {
+        var idx1 = idx.getAttribute('data-n-select');
+        var ul_cont_li = document.querySelectorAll("[data-indx-select='" + idx1 + "'] .cont_select_int > li");
+        var hg = 0;
+        var slect_open = document.querySelectorAll("[data-indx-select='" + idx1 + "']")[0].getAttribute('data-selec-open');
+        var slect_element_open = document.querySelectorAll("[data-indx-select='" + idx1 + "'] select")[0];
+        if (isMobileDevice()) {
+            if (window.document.createEvent) { // All
+                var evt = window.document.createEvent("MouseEvents");
+                evt.initMouseEvent("mousedown", false, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                slect_element_open.dispatchEvent(evt);
+            } else if (slect_element_open.fireEvent) { // IE
+                slect_element_open.fireEvent("onmousedown");
+            } else {
+                slect_element_open.click();
+            }
+        } else {
+
+
+            for (var i = 0; i < ul_cont_li.length; i++) {
+                hg += ul_cont_li[i].offsetHeight;
+            };
+            if (slect_open == 'false') {
+                document.querySelectorAll("[data-indx-select='" + idx1 + "']")[0].setAttribute('data-selec-open', 'true');
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .cont_list_select_mate > ul")[0].style.height = hg + "px";
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .icon_select_mate")[0].style.transform = 'rotate(180deg)';
+            } else {
+                document.querySelectorAll("[data-indx-select='" + idx1 + "']")[0].setAttribute('data-selec-open', 'false');
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .icon_select_mate")[0].style.transform = 'rotate(0deg)';
+                document.querySelectorAll("[data-indx-select='" + idx1 + "'] > .cont_list_select_mate > ul")[0].style.height = "0px";
+            }
+        }
+
+    } // fin function open_select
+
+    function salir_select(indx) {
+        var select_ = document.querySelectorAll("[data-indx-select='" + indx + "'] > select")[0];
+        document.querySelectorAll("[data-indx-select='" + indx + "'] > .cont_list_select_mate > ul")[0].style.height = "0px";
+        document.querySelector("[data-indx-select='" + indx + "'] > .icon_select_mate").style.transform = 'rotate(0deg)';
+        document.querySelectorAll("[data-indx-select='" + indx + "']")[0].setAttribute('data-selec-open', 'false');
+    }
+
+
+    function _select_option(indx, selc) {
+        if (isMobileDevice()) {
+            selc = selc - 1;
+        }
+        var select_ = document.querySelectorAll("[data-indx-select='" + selc + "'] > select")[0];
+
+        var li_s = document.querySelectorAll("[data-indx-select='" + selc + "'] .cont_select_int > li");
+        var p_act = document.querySelectorAll("[data-indx-select='" + selc + "'] > .selecionado_opcion")[0].innerHTML = li_s[indx].innerHTML;
+        var select_optiones = document.querySelectorAll("[data-indx-select='" + selc + "'] > select > option");
+        for (var i = 0; i < li_s.length; i++) {
+            if (li_s[i].className == 'active') {
+                li_s[i].className = '';
+            };
+            li_s[indx].className = 'active';
+
+        };
+        select_optiones[indx].selected = true;
+        select_.selectedIndex = indx;
+        select_.onchange();
+        salir_select(selc);
+    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const dropdown = document.getElementById('custom-dropdown');
+        const button = dropdown.querySelector('.dropdown-button');
+
+        button.addEventListener('click', () => {
+            dropdown.classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.addEventListener('click', (event) => {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    });
+
+
 </script>
 
 
-
 </html>
+
+
+<!-- 
+<input type="hidden" id="idjuego" name="idjuego" th:value="${juego.idElemento}">
+<input type="hidden" id="idusuario" name="idusuario" th:value="${session.usuario.id_persona}"> -->

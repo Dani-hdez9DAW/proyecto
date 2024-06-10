@@ -1,0 +1,536 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Evento</title>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.print.min.css' rel='stylesheet'
+        media='print' />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+    <style>
+
+    </style>
+    <style>
+        .container {
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .button-container {
+            position: absolute;
+            top: -1300px;
+            right: -1220px;
+            transform: translate(50%, -50%);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+
+        .small {
+            font-size: .7em;
+        }
+
+        .square {
+            width: .7em;
+            height: .7em;
+            margin: .5em;
+            display: inline-block;
+        }
+
+        /* Custom dropdown */
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 10px;
+            /* demo only */
+        }
+
+        .custom-dropdown select {
+            background-color: #B18FCF;
+            color: #fff;
+            font-size: inherit;
+            padding: .5em;
+            padding-right: 2.5em;
+            border: 0;
+            margin: 0;
+            border-radius: 3px;
+            text-indent: 0.01px;
+            text-overflow: '';
+            -webkit-appearance: button;
+            /* hide default arrow in chrome OSX */
+        }
+
+        .custom-dropdown::before,
+        .custom-dropdown::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .custom-dropdown::after {
+            /*  Custom dropdown arrow */
+            content: "\25BC";
+            height: 1em;
+            font-size: .625em;
+            line-height: 1;
+            right: 1.2em;
+            top: 50%;
+            margin-top: -.5em;
+        }
+
+        .custom-dropdown::before {
+            /*  Custom dropdown arrow cover */
+            width: 2em;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .custom-dropdown select[disabled] {
+            color: rgba(0, 0, 0, .3);
+        }
+
+        .custom-dropdown select[disabled]::after {
+            color: rgba(0, 0, 0, .1);
+        }
+
+        .custom-dropdown::before {
+            background-color: rgba(0, 0, 0, .15);
+        }
+
+        .custom-dropdown::after {
+            color: rgba(0, 0, 0, .4);
+        }
+
+        .boton {
+            padding: 17px 40px;
+            border-radius: 10px;
+            border: 0;
+            background-color: #B18FCF;
+            letter-spacing: 1.5px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: #f402f4;
+            color: hsl(0, 0%, 100%);
+            cursor: pointer;
+        }
+
+        .boton:hover {
+            box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
+        }
+
+        .boton:active {
+            background-color: rgb(255, 56, 86);
+            /*50, 168, 80*/
+            box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
+            transform: translateY(5px);
+            transition: 200ms;
+        }
+
+        .highlight-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #B18FCF;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        .input {
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid #B18FCF;
+            outline: none;
+            transition: 200ms ease-in;
+            padding-left: 1rem;
+        }
+
+        .input:focus {
+            border-bottom: 4px solid #B18FCF;
+            padding-top: 2px;
+        }
+
+        .input::placeholder {
+            color: #B18FCF;
+            opacity: 0.5;
+        }
+
+        /* ///  DECORATION CSS ///  */
+        .cont_select_center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-top: -30px;
+            margin-left: -150px;
+        }
+
+        .cont_heg_50 {
+            position: absolute;
+            height: 50%;
+            left: 0;
+            top: 0;
+            width: 100%;
+            background-color: #fd7b52;
+        }
+
+        /* ///  END DECORATION CSS  ///  */
+
+        .icon_select_mate {
+            position: absolute;
+            top: 20px;
+            right: 2%;
+            font-size: 16px;
+            height: 22px;
+            transition: all 275ms;
+        }
+
+        .select_mate {
+            position: relative;
+            font-family: 'Roboto';
+            color: #777;
+            font-weight: 300;
+            background-color: #fff;
+            box-shadow: 1px 2px 10px -2px rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            transition: all 375ms ease-in-out;
+
+            /* Oculto el elemento select */
+            select {
+                position: absolute;
+                overflow: hidden;
+                height: 0px;
+                opacity: 0;
+                z-index: -1;
+            }
+        }
+
+        .cont_list_select_mate {
+            position: relative;
+            float: left;
+            width: 100%;
+        }
+
+        .cont_select_int {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            z-index: 999;
+            overflow: hidden;
+            height: 0px;
+            width: 100%;
+            background-color: #fff;
+            padding: 0px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            border-radius: 0px 0px 3px 3px;
+            box-shadow: 1px 4px 10px -2px rgba(0, 0, 0, 0.2);
+            transition: all 375ms ease-in-out;
+
+            li {
+                position: relative;
+                float: left;
+                width: 96%;
+                border-bottom: 1px solid #E0E0E0;
+                background-color: #F5F5F5;
+                list-style-type: none;
+                padding: 10px 2%;
+                margin: 0px;
+                transition: all 275ms ease-in-out;
+                display: block;
+                cursor: pointer;
+
+                &:last-child {
+                    border-radius: 3px;
+                    border-bottom: 0px;
+
+                }
+
+                &:hover {
+                    background-color: #EEEEEE;
+                }
+            }
+
+            .active {
+                background-color: #EEEEEE;
+            }
+
+        }
+
+        /* etiqueta <p> con la opcion selecionada  */
+        .selecionado_opcion {
+            padding: 20px 2%;
+            width: 96%;
+            display: block;
+            margin: 0px;
+            cursor: pointer;
+        }
+
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown-content label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .custom-dropdown.show .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="highlight-text" style="text-align: center;">Nuevo Evento</h1>
+    <div class="container" style="background-color:#ced4da;">
+        <div class="row">
+            <div class="col-6">
+                <form id="eventoForm" action="/evento/c" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input class="form-control" name="nombre" required minlength="2" maxlength="30" type="text"
+                            placeholder="Nombre del evento">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <select class="form-control" name="tipo" required>
+                            <option value="" disabled selected>Seleccione un tipo</option>
+                            <option value="Videojuegos">Videojuegos</option>
+                            <option value="Peliculas">Peliculas</option>
+                            <option value="Estrenos">Estrenos</option>
+                            <option value="Concurso">Concurso</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="localizacion">Localización</label>
+                        <input class="form-control" name="localizacion" required min="2" max="200" type="text"
+                            placeholder="Localización del evento">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha">Fecha de salida</label>
+                        <input type="date" class="form-control" required id="fecha" name="fecha"
+                            placeholder="Fecha del evento">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="boton w-100">Crear</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-6">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/es.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Palabras prohibidas
+            var forbiddenWords = ["tonto", "idiota", "imbecil", "estupido", "burro",
+                "payaso", "loco", "tarado", "subnormal", "bestia",
+                "inútil", "patán", "cretino", "baboso", "bobo",
+                "bruto", "estúpido", "necio", "pesado", "zopenco",
+                "menso", "gilipollas", "cabrón", "capullo", "cachondeo",
+                "hp", "puta", "puto", "zorra", "hijo de puta", "atontado", "z0rra", "zoquete", "pilila", "chocho", "coño",
+                "suicidate", "pene", "muerete", "vagina", "polla", "tus muertos", "ojala te mueras", "puto", "puton"]; // Añadir las palabras prohibidas aquí
+
+            function containsForbiddenWords(text) {
+                for (var i = 0; i < forbiddenWords.length; i++) {
+                    if (text.toLowerCase().includes(forbiddenWords[i])) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function validateForm(data) {
+                var isValid = true;
+                var errors = [];
+
+                if (!data.nombre || data.nombre.trim() === "") {
+                    isValid = false;
+                    errors.push("El nombre no puede estar vacío.");
+                } else if (containsForbiddenWords(data.nombre)) {
+                    isValid = false;
+                    errors.push("El nombre contiene palabras prohibidas.");
+                }
+
+                if (!data.localizacion || data.localizacion.trim() === "") {
+                    isValid = false;
+                    errors.push("La localización no puede estar vacía.");
+                } else if (containsForbiddenWords(data.localizacion)) {
+                    isValid = false;
+                    errors.push("La localización contiene palabras prohibidas.");
+                }
+
+                if (!data.fecha || data.fecha.trim() === "") {
+                    isValid = false;
+                    errors.push("La fecha no puede estar vacía.");
+                }
+
+                return { isValid: isValid, errors: errors };
+            }
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay'
+                },
+                defaultDate: Date.now(),
+                editable: true,
+                eventLimit: true,
+                locale: 'es', // Establecer el idioma en español
+                events: function (start, end, timezone, callback) {
+                    console.log("Solicitando eventos al backend...");
+                    $.ajax({
+                        url: '/evento/all',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log("Eventos recibidos del backend:", response);
+                            var events = [];
+                            response.forEach(function (evento) {
+                                var eventColor, textColor = 'white';
+                                switch (evento.tipo) {
+                                    case 'Videojuegos':
+                                        eventColor = '#800080'; // Morado
+                                        break;
+                                    case 'Peliculas':
+                                        eventColor = '#f402f4'; // Rosa
+                                        break;
+                                    case 'Estrenos':
+                                        eventColor = '#964B00'; // Marrón
+                                        break;
+                                    case 'Concurso':
+                                        eventColor = '#000000'; // Negro
+                                        break;
+                                    default:
+                                        eventColor = '#f402f4'; // Rosa como color predeterminado
+                                }
+
+                                events.push({
+                                    title: evento.nombre,
+                                    start: evento.fecha,
+                                    allDay: true,
+                                    color: eventColor,
+                                    textColor: textColor // Texto en blanco
+                                });
+                            });
+                            console.log("Eventos procesados:", events);
+                            callback(events);
+                        },
+                        error: function (err) {
+                            console.error("Error al obtener eventos:", err);
+                        }
+                    });
+                },
+                eventRender: function (event, element) {
+                    var today = moment().format('YYYY-MM-DD');
+                    if (event.start.format('YYYY-MM-DD') === today) {
+                        console.log("Rendering event for today:", event.title);
+                        element.css('background-color', 'red');
+                        element.css('color', 'white');
+                    } else {
+                        console.log("Rendering event for other day:", event.title);
+                        element.css('background-color', event.color);
+                        element.css('color', event.textColor);
+                    }
+                }
+            });
+
+            $('#eventoForm').on('submit', function (e) {
+                e.preventDefault();
+
+                // Obtener los datos del formulario
+                var formData = $(this).serializeArray().reduce(function (obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+
+                // Validar los datos del formulario
+                var validation = validateForm(formData);
+
+                if (!validation.isValid) {
+                    alert(validation.errors.join("\n"));
+                    return;
+                }
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        var eventDate = moment(data.fecha).format('YYYY-MM-DD');
+                        var eventColor, textColor = 'white';
+                        switch (data.tipo) {
+                            case 'Videojuegos':
+                                eventColor = '#800080'; // Morado
+                                break;
+                            case 'Peliculas':
+                                eventColor = '#f402f4'; // Rosa
+                                break;
+                            case 'Estrenos':
+                                eventColor = '#964B00'; // Marrón
+                                break;
+                            case 'Concurso':
+                                eventColor = '#000000'; // Negro
+                                break;
+                            default:
+                                eventColor = '#f402f4'; // Rosa como color predeterminado
+                        }
+
+                        console.log("Evento creado:", data.nombre, "en", eventDate);
+                        $('#calendar').fullCalendar('renderEvent', {
+                            title: data.nombre,
+                            start: eventDate,
+                            allDay: true,
+                            color: eventColor,
+                            textColor: textColor // Texto en blanco
+                        }, true);
+                        $('#eventoForm')[0].reset();
+                        location.reload();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
+    </script>
+</body>

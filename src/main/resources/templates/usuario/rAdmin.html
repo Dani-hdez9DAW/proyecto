@@ -6,16 +6,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Usuarios</title>
     <!-- Enlaces de CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.2/css/uikit.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <style>
-        /* Estilos personalizados */
+        .highlight-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #B18FCF;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .icon-purple {
+            color: #B18FCF;
+        }
+
+        select option {
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+
+        /* Cambiar color del texto en los encabezados de la tabla */
+        .dataTables_wrapper table.dataTable thead th {
+            color: white;
+            /* Mantener el texto blanco en los encabezados */
+            background-color: #B18FCF;
+            /* Asegurar el contraste con un fondo morado oscuro */
+        }
+
+        /* Cambiar color del texto en la información y paginación */
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            color: white;
+            /* Mantener el texto blanco para la información y paginación */
+        }
+
+        /* Cambiar color del texto en los controles de paginación */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            color: white !important;
+            /* Mantener el texto blanco para los botones de paginación */
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: #ddd !important;
+            /* Cambiar el color al pasar el cursor por los botones de paginación */
+        }
+
+        /* Cambiar color del texto de la entrada de búsqueda */
+        .dataTables_wrapper .dataTables_filter label,
+        .dataTables_wrapper .dataTables_filter input {
+            color: white;
+            /* Cambiar el color del texto de la etiqueta y la entrada a blanco */
+        }
+
+        /* Cambiar color del texto del selector de registros */
+        .dataTables_wrapper .dataTables_length label,
+        .dataTables_wrapper .dataTables_length select {
+            color: white;
+            /* Cambiar el color del texto de la etiqueta y el selector a blanco */
+        }
+
+        .columnaCentrada {
+            text-align: center;
+        }
+
+        /* Estilo adicional para el input de búsqueda */
+        .dataTables_wrapper .dataTables_filter input {
+            background-color: transparent;
+            /* Hacer el fondo del input transparente */
+            border: 1px solid white;
+            /* Borde blanco */
+        }
+
+        /* Estilo adicional para el select de registros */
+        .dataTables_wrapper .dataTables_length select {
+            background-color: transparent;
+            /* Hacer el fondo del select transparente */
+            border: 1px solid white;
+            /* Borde blanco */
+        }
+
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_desc:after {
+            color: black !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #B18FCF !important;
+            /* Cambia este color al que prefieras */
+            color: white !important;
+            border: 1px solid #B18FCF !important;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #8B5FBF !important;
+            /* Cambia este color al que prefieras */
+            color: black !important;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- Botón Volver Atrás -->
+        <!-- Botón Volver Atrás
         <a href="#" onclick="goBack()">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                 class="bi bi-arrow-return-left" viewBox="0 0 16 16">
@@ -23,38 +122,60 @@
                     d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5" />
             </svg>
         </a>
-        <br><br>
+        <br><br> -->
 
-        <h1>Lista de Usuarios</h1>
-        <table id="example" class="uk-table uk-table-hover" style="width:100%">
-            <thead>
-                <tr>
-                    <th class="unaLinea">Nombre</th>
-                    <th class="unaLinea">Correo</th>
-                    <th class="unaLinea">Puntos</th>
-                    <th class="unaLinea">Editar</th>
-                    <th class="unaLinea">Borrar</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="usuario : ${usuarios}">
-                    <td th:text="${usuario.nombre}"></td>
-                    <td th:text="${usuario.correo}"></td>
-                    <td class="puntos" th:text="${usuario.puntos}"></td>
-                    <td>
-                        <a href="#" id="editarUsuario" th:href="@{'/usuario/u?id=' + ${usuario.correo}}">
-                            <i class="bi bi-pen-fill"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="#" class="delete-button" th:data-id="${usuario.idPersona}" data-toggle="modal"
-                            data-target="#deleteModal">
-                            <i class="bi bi-trash3-fill"></i>
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+        <h1 class="highlight-text">Lista de Usuarios</h1>
+        <div th:if="${session.usuario!=null and session.usuario.esAdmin==true}" class="container btn-group">
+            <button class="btn btn-primary btn-sm mb-3" style="font-size: larger;"
+                onclick="window.location.href='/usuario/cAdmin'">
+                <i class="bi bi-plus"></i>Crear nuevo usuario
+            </button>
+        </div>
+        <div style="text-align: center;">
+            <table id="example" class="uk-table uk-table-hover">
+                <thead>
+                    <tr>
+                        <th class="columnaCentrada">Nombre</th>
+                        <th class="columnaCentrada">Correo</th>
+                        <th class="columnaCentrada">Permisos</th>
+                        <th class="columnaCentrada">Puntos</th>
+                        <th class="columnaCentrada">Editar</th>
+                        <th class="columnaCentrada">Borrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.nombre}"></td>
+                        <td th:text="${usuario.correo}"></td>
+                        <td th:if="${usuario.esAdmin==true}" th:text="|Administrador|">
+                        </td>
+                        <td th:if="${usuario.esAdmin==false}" th:text="|Usuario|">
+                        </td>
+                        <td class="puntos" th:text="${usuario.puntos}"></td>
+
+                        <td>
+                            <a href="#" id="editarUsuario" th:href="@{'/usuario/u?id=' + ${usuario.idPersona}}">
+                                <i class="bi bi-pen-fill icon-purple"></i>
+                            </a>
+                        </td>
+                        <td th:if="${usuario.idPersona!=session.usuario.idPersona}">
+                            <a href="#" class="delete-button" th:data-id="${usuario.idPersona}" data-toggle="modal"
+                                data-target="#deleteModal">
+                                <i class="bi bi-trash3-fill icon-purple"></i>
+                            </a>
+                        </td>
+                        <td th:if="${usuario.idPersona==session.usuario.idPersona}">
+                            <a href="#" class="delete-button" th:data-id="${usuario.idPersona}" data-toggle="modal"
+                                data-target="#messageModal">
+                                <i class="bi bi-trash3-fill icon-purple"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
     <!-- Modal de Confirmación de Eliminación -->
@@ -62,22 +183,43 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="text-align: center;">
                     <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close btn btn-danger ms-auto" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ¿Estás seguro de que deseas eliminar este usuario?
+                    ¿Estás seguro de que deseas eliminar este usuario?,si lo borras no se podrá recuperar.
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary w-40" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger w-40" id="confirmDeleteBtn">Eliminar</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal de que no puede borrar su propio usuario -->
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align: center;">
+                    <h5 class="modal-title" id="deleteModalLabel">¡Atencion!</h5>
+                    <button type="button" class="close btn btn-danger ms-auto" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    No puedes borrar tu propio usuario.
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary w-40" data-dismiss="modal">Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Enlaces de JavaScript -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

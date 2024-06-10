@@ -48,8 +48,6 @@ public class PeliculaValidator {
             PRG.error("La sinopsis debe tener entre 50 y 500 caracteres.", "/pelicula/r");
         }
 
-        
-
         // Validar la cuenta de votos
         if (cuentaVotos == null || cuentaVotos < 0) {
             PRG.error("La cuenta de votos debe ser al menos 0.", "/pelicula/r");
@@ -75,10 +73,10 @@ public class PeliculaValidator {
             Integer cuentaVotos, String trailer, String url, MultipartFile imagen) throws DangerException {
         // Validar el nombre
         if (titulo == null || titulo.trim().isEmpty() || titulo.trim().length() < 2 || titulo.trim().length() > 30
-        || !titulo.matches("^[a-zA-Z0-9\\-\\s]+$")) {
-    PRG.error("El nombre debe tener entre 2 y 30 caracteres y solo puede contener letras, números y guiones.",
-            "/pelicula/r");
-}
+                || !titulo.matches("^[a-zA-Z0-9\\-\\s]+$")) {
+            PRG.error("El nombre debe tener entre 2 y 30 caracteres y solo puede contener letras, números y guiones.",
+                    "/pelicula/r");
+        }
 
         // Validar la clasificación
         if (clasificacion == null || clasificacion.trim().isEmpty()) {
@@ -110,8 +108,6 @@ public class PeliculaValidator {
             PRG.error("La sinopsis debe tener entre 50 y 500 caracteres.", "/pelicula/r");
         }
 
-        
-
         // Validar la cuenta de votos
         if (cuentaVotos == null || cuentaVotos < 0) {
             PRG.error("La cuenta de votos debe ser al menos 0.", "/pelicula/r");
@@ -127,9 +123,17 @@ public class PeliculaValidator {
         if (url == null || !url.matches("^(https?|ftp)://[^\\s/$.?#].[^\\s]*$")) {
             PRG.error("La URL de compra debe ser una URL válida.", "/pelicula/r");
         }
+        if (!ComentarioValidator.validarComentario(titulo)) {
+            PRG.error("El titulo no puede tener palabras prohibidas", "/pelicula/r");
+        }
+        if (!ComentarioValidator.validarComentario(plataforma)) {
+            PRG.error("La plataforma no puede tener palabras prohibidas", "/pelicula/r");
+        }
 
         // Validar la imagen
-        if (imagen == null || imagen.isEmpty()) {
+        if (imagen == null || imagen.isEmpty())
+
+        {
             PRG.error("La imagen es obligatoria.", "/pelicula/r");
         } else {
             String contentType = imagen.getContentType();
