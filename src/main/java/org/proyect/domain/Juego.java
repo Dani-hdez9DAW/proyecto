@@ -20,12 +20,12 @@ public class Juego extends Elemento {
     private String plataforma;
 
     @OneToMany(mappedBy = "juego")
-    private List<Comentario> comentarios ;
+    private List<Comentario> comentarios;
 
     @ManyToMany(mappedBy = "juegosFav")
     private List<Usuario> usuarios;
 
-    @ManyToMany(mappedBy = "categoriaJuegos")
+    @ManyToMany
     private List<Categoria> categorias;
 
     public Juego(String plataforma) {

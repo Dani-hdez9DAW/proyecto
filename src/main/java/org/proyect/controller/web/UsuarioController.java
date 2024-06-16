@@ -1,27 +1,22 @@
 package org.proyect.controller.web;
 
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.proyect.domain.Categoria;
 import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
+import org.proyect.domain.Voto;
 import org.proyect.exception.DangerException;
 import org.proyect.exception.InfoException;
 import org.proyect.helper.ComentarioValidator;
-import org.proyect.helper.EmailSenderService;
 import org.proyect.helper.EmailValidator;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
-import org.proyect.repository.JuegoRepository;
-import org.proyect.repository.PeliculaRepository;
 import org.proyect.service.UsuarioService;
+import org.proyect.service.VotoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -32,7 +27,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -43,24 +37,10 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private PeliculaRepository peliculaRepository;
+    private VotoService votoService;
 
-    @Autowired
-    private JuegoRepository juegoRepository;
     @Autowired
     private JavaMailSender javaMailSender;
-
-    // @GetMapping("r")
-    // public String r(ModelMap m) {
-    // List<Pelicula> pelicula = peliculaRepository.findAll();
-    // List<Juego> juego = juegoRepository.findAll();
-
-    // m.put("peliculas", pelicula);
-    // m.put("juegos", juego);
-
-    // m.put("view", "usuario/r");
-    // return "_t/frame";
-    // }
 
     @GetMapping("rAdmin")
     public String rUsuarios(ModelMap m, HttpSession s) {
@@ -90,10 +70,16 @@ public class UsuarioController {
             if (usuario != null && usuario.getPeliculasFav() != null && !usuario.getPeliculasFav().isEmpty()) {
                 // Obtener la lista de películas favoritas del usuario
                 List<Pelicula> peliculasFavoritas = usuario.getPeliculasFav();
-
+                List<Juego> juegosFavoritos = usuario.getJuegosFav();
+                int canPelis = peliculasFavoritas.size();
+                int canJuegos = juegosFavoritos.size();
                 // Poner la lista de películas favoritas en el modelo para que esté disponible
                 // en la vista
+                m.put("cantP", canPelis);
+                m.put("cantJ", canJuegos);
+                m.put("puntos", usuario.getPuntos());
                 m.put("peliculasFavoritas", peliculasFavoritas);
+                m.put("juegosFavoritos", juegosFavoritos);
             }
 
             m.put("usuario", usuario);
@@ -105,23 +91,25 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("obtenerPuntos")
-    @ResponseBody
-    public ResponseEntity<Map<String, Integer>> obtenerPuntos(HttpSession session) throws Exception {
-        // Obtiene el nombre de usuario de la sesión
-        String nombreUsuario = (String) session.getAttribute("nombre");
+    // @PostMapping("/guardarFotoPerfil")
+    // @ResponseBody
+    // public String guardarFotoPerfil(@RequestParam("imageUrl") String
+    // imageUrl,HttpSession session) {
+    // // Guarda la URL de la foto de perfil en la sesión del usuario
+    // session.setAttribute("profileImageUrl", imageUrl);
+    // return "Foto de perfil guardada en la sesión del usuario";
+    // }
 
-        // Obtiene los puntos del usuario desde el servicio
-        int puntos = usuarioService.obtenerPuntos(nombreUsuario);
-
-        System.out.println("Obteniendo puntos para el usuario: " + nombreUsuario);
-        // Crea un mapa para almacenar los puntos y lo devuelve como respuesta en
-        // formato JSON
-        Map<String, Integer> response = new HashMap<>();
-        response.put("puntos", puntos);
-
-        return ResponseEntity.ok(response);
-    }
+    // @GetMapping("/perfil")
+    // public String mostrarPerfil(ModelMap model, HttpSession session) {
+    // // Obtiene la URL de la foto de perfil de la sesión del usuario
+    // String profileImageUrl = (String) session.getAttribute("profileImageUrl");
+    // // Agrega la URL de la foto de perfil al modelo para que esté disponible en
+    // la vista
+    // model.addAttribute("profileImageUrl", profileImageUrl);
+    // // Retorna la vista del perfil
+    // return "perfil";
+    // }
 
     // EDITAR LA DESCRIPCIÓN
     @PostMapping("actualizarDescripcion")
@@ -280,9 +268,8 @@ public class UsuarioController {
         // EmailSender.sendEmail(correo, "Bienvenido a la plataforma de videojuegos",
         // "Que tengas un buen dia");
         // Informar al usuario si se creó correctamente
-        PRG.info("El usuario con el nombre " + nombre + " ha sido creado", "/");
 
-        return "redirect:/";
+        return "redirect:/usuario/rAdmin";
     }
 
     @PostMapping("cAdmin")
@@ -292,17 +279,6 @@ public class UsuarioController {
             @RequestParam("correo") String correo,
             @RequestParam("roleOptions") String rolSeleccionado, HttpSession session)
             throws Exception {
-        // String contenido = "Querido/a " + nombre + ",\n\n" +
-        // "Gracias por registrarte en nuestra página de películas y videojuegos.\n" +
-        // "En nuestra plataforma, encontrarás una amplia selección de películas y
-        // videojuegos para disfrutar.\n" +
-        // "No dudes en explorar nuestras secciones y descubrir contenido que te
-        // encante.\n" +
-        // "Si tienes alguna pregunta o necesitas ayuda, no dudes en ponerte en contacto
-        // con nosotros.\n\n" +
-        // "Un saludo,\n" +
-        // "Equipo de películas y videojuegos.📽️🎮";// La imagen será incluida mediante
-        // un identificador
 
         // Validar el formato del correo electrónico
         if (!EmailValidator.isValidEmail(correo)) {
@@ -327,13 +303,43 @@ public class UsuarioController {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         String correoUsuario = usuario.getCorreo();
         usuarioService.modificacionPuntos(correoUsuario, 8);
-        // sendEmail(correo, "Bienvenido a nuestra pagina de videojuegos y peliculas",
-        // contenido);
 
-        // EmailSender.sendEmail(correo, "Bienvenido a la plataforma de videojuegos",
-        // "Que tengas un buen dia");
         // Informar al usuario si se creó correctamente
         PRG.info("El usuario con el nombre " + nombre + " ha sido creado", "/");
+
+        return "redirect:/";
+    }
+
+    @PostMapping("updateUser")
+    public String updateUser(
+            @RequestParam("nombre") String nombre,
+            @RequestParam("password") String password,
+            @RequestParam("correo") String correo, HttpSession session)
+            throws Exception {
+
+        // Validar el formato del correo electrónico
+        if (!EmailValidator.isValidEmail(correo)) {
+            PRG.error("Formato de correo electrónico no válido");
+            return "redirect:/"; // Redirigir en caso de error de formato
+        }
+        if (!ComentarioValidator.validarComentario(nombre)) {
+            PRG.error("El nombre tiene palabras prohibidas", "/");
+        }
+        if (!ComentarioValidator.validarComentario(correo)) {
+            PRG.error("El email tiene palabras prohibidas", "/");
+        }
+
+        // Validar el nombre y la contraseña
+        if (!EmailValidator.isValidNamePass(nombre, password)) {
+            PRG.error("Nombre o contraseña no válidos");
+            return "redirect:/"; // Redirigir si la validación de nombre/contraseña falla
+        }
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        Long idUsuario = usuario.getIdPersona();
+        // Guardar el usuario
+        usuarioService.updateUser(idUsuario, nombre, password, correo);
+        PRG.info("Tu usuario ha sido actualizado", "/");
 
         return "redirect:/";
     }
@@ -364,6 +370,55 @@ public class UsuarioController {
         return "redirect:/usuario/r";
     }
 
+    // @PostMapping("dPelicula")
+    // public String dPelicula(
+    // @RequestParam("idPersona") Long idPersona,
+    // @RequestParam("idPelicula") Long idPelicula) throws DangerException {
+    // try {
+    // Usuario usuario = usuarioService.findById(idPersona);
+    // Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
+    // List<Pelicula> peliculasUsuario = usuario.getPeliculasFav();
+
+    // if (peliculasUsuario.contains(pelicula)) {
+    // peliculasUsuario.remove(pelicula);
+    // String nombre = usuario.getNombre();
+    // String correo = usuario.getCorreo();
+    // String contra = usuario.getContraseña();
+    // usuarioService.save(nombre, correo, contra);// Save changes to the user
+    // } else {
+    // PRG.error("Película no encontrada en los favoritos del usuario",
+    // "/usuario/rDetailed");
+    // }
+    // } catch (Exception e) {
+    // PRG.error("Error al eliminar la película", "/usuario/rDetailed");
+    // }
+    // return "redirect:/usuario/rDetailed";
+    // }
+
+    @PostMapping("dJuego")
+    public String dJuego(
+            @RequestParam("idPersona") Long idPersona,
+            @RequestParam("idjuego") Long idJuego) throws DangerException {
+        Usuario usuario = usuarioService.findById(idPersona);
+        usuarioService.eliminarJuegoFavorito(usuario, idJuego);
+
+        // Redirigir al usuario a la página de perfil.
+        return "redirect:/usuario/rDetailed";
+    }
+
+    @PostMapping("dPelicula")
+    public String dPelicula(
+            @RequestParam("idPersona") Long idPersona,
+            @RequestParam("idPelicula") Long idPelicula,
+            ModelMap m) throws DangerException {
+        Usuario usuario = usuarioService.findById(idPersona);
+        usuarioService.eliminarPeliculaFavorita(usuario, idPelicula);
+        List<Pelicula> peliculasNuevas = usuario.getPeliculasFav();
+        m.put("peliculasFavoritas", peliculasNuevas);
+
+        // Redirigir al usuario a la página de perfil.
+        return "redirect:/usuario/rDetailed";
+    }
     // @PostMapping("/uploadFoto")
     // public ResponseEntity<String> uploadFoto(@RequestParam("file") MultipartFile
     // file, HttpSession session) {

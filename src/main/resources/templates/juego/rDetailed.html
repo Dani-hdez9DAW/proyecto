@@ -41,11 +41,11 @@
                                     <div class="select_mate form-control" id="clasificacion" data-mate-select="active">
                                         <select name="clasificacion" id="select-clasificacion"
                                             class="form-control input-size">
-                                            <option value="3">Apto para todos</option>
-                                            <option value="7">Para 7 años</option>
-                                            <option value="PG-13">Mayores de 12</option>
-                                            <option value="16">Mayores de 16</option>
-                                            <option value="R">Mayores de 18</option>
+                                            <option value="PEGI 3">Apto para todos</option>
+                                            <option value="PEGI 7">Para 7 años</option>
+                                            <option value="PEGI 12">Mayores de 12</option>
+                                            <option value="PEGI 16">Mayores de 16</option>
+                                            <option value="PEGI 18">Mayores de 18</option>
                                         </select>
                                         <p class="selecionado_opcion" onclick="open_select(this)"></p>
                                         <span onclick="open_select(this)" class="icon_select_mate">
@@ -62,7 +62,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row" style="display: none;">
                                 <label for="estado" class="col-sm-4 col-form-label">
                                     <h4>Estado</h4>
                                 </label>
@@ -155,8 +155,8 @@
                             <label for="id-sinopsis">
                                 <h4>Sinopsis</h4>
                             </label>
-                            <textarea id="id-sinopsis" class="form-control" name="sinopsis"
-                                th:text="${juego.sinopsis}" minlength="50" maxlength="500"></textarea>
+                            <textarea id="id-sinopsis" class="form-control" name="sinopsis" th:text="${juego.sinopsis}"
+                                minlength="50" maxlength="500"></textarea>
                         </div>
                         <div class="form-group">
                             <label>
@@ -200,7 +200,7 @@
             <form id="checklistForm" action="/juego/rDetailed" method="POST">
                 <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
                 <input type="checkbox" class="checkbox" name="favourite" id="Give-It-An-Id"
-                    onclick="handleCheckboxClick()">
+                th:checked="${esFavorito ? 'checked' : null}" onclick="handleCheckboxClick()">
                 <div class="svg-container">
                     <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -221,9 +221,12 @@
                         <polygon points="80,80 70,70"></polygon>
                     </svg>
                 </div>
+
+
         </div>
+
         </form>
-        <div th:if="${juego.estado == 'No disponible'}"  class="text-end">
+        <div th:if="${juego.estado == 'No disponible'}" class="text-end">
             <span class="badge bg-primary rounded-pill fs-5 py-2 px-3 "
                 th:text="'Disponible el día ' + ${#temporals.format(juego.fecha_salida, 'd')} + ' de ' + ${#temporals.format(juego.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(juego.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(juego.fecha_salida, 'yyyy')}">
             </span>
@@ -263,19 +266,25 @@
                             <form id="ratingForm" action="/juego/rDetailedRating" method="POST">
                                 <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
                                 <div class="rating justify-content-center">
-                                    <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)">
+                                    <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)"
+                                        th:checked="${puntajeUsuario == 5}">
                                     <label for="star5"></label>
-                                    <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)">
+                                    <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)"
+                                        th:checked="${puntajeUsuario == 4}">
                                     <label for="star4"></label>
-                                    <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)">
+                                    <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)"
+                                        th:checked="${puntajeUsuario == 3}">
                                     <label for="star3"></label>
-                                    <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)">
+                                    <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)"
+                                        th:checked="${puntajeUsuario == 2}">
                                     <label for="star2"></label>
-                                    <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)">
+                                    <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)"
+                                        th:checked="${puntajeUsuario == 1}">
                                     <label for="star1"></label>
                                 </div>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -322,7 +331,7 @@
                             </p>
                         </div>
                         <div class="col-md-6">
-                            <h3>Fecha de salida</h3>
+                            <h3>Fecha</h3>
                             <p class="card-text">
                                 <span
                                     th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${juego.fecha_salida}"></span>
@@ -394,13 +403,13 @@
         <div class="card my-3">
             <div class="card-body">
                 <h5 class="card-title">Deja un comentario</h5>
-                <form action="/comentario/cJ" method="post">
+                <form action="/comentario/cJ" onsubmit="return validarComentario();" method="post">
                     <div class="mb-3">
                         <input type="hidden" name="autor" th:value="${session.usuario.nombre}">
                         <input type="hidden" name="idJuego" th:value="${juego.idElemento}">
 
                         <label for="contenido" class="form-label">Comentario</label>
-                        <textarea class="form-control" id="contenido" rows="3" name="contenido"
+                        <textarea class="form-control" id="contenido" rows="3" maxlength="500" name="contenido"
                             placeholder="Escribe tu comentario aquí"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Enviar</button>
@@ -422,7 +431,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
 </body>
@@ -437,6 +446,25 @@
         borrarButton.textContent = 'Borrar';
         borrarButton.classList.remove('btn-primary');
         borrarButton.classList.add('btn-danger');
+    }
+    function validarComentario() {
+
+        var comentarioUser = document.getElementById("contenido").value;
+
+        if (comentarioUser.trim() === "") {
+            alert("El comentario no puede estar vacío");
+            return false;
+        }
+
+        var palabrasProhibidas = ["tonto", "idiota", "imbecil", "estupido", "burro", "payaso", "loco", "tarado", "subnormal", "bestia", "inútil", "patán", "cretino", "baboso", "bobo", "bruto", "estúpido", "necio", "pesado", "zopenco", "menso", "gilipollas", "cabrón", "capullo", "cachondeo", "hp", "puta", "puto", "zorra", "hijo de puta", "atontado", "z0rra", "zoquete"];
+        for (var i = 0; i < palabrasProhibidas.length; i++) {
+            if (comentarioUser.toLowerCase().includes(palabrasProhibidas[i])) {
+                alert("El comentario no puede tener palabras prohibidas.");
+                return false;
+            }
+        }
+        alert("Comentario enviado correctamente");
+        return true;
     }
 
     function handleCheckboxClick() {

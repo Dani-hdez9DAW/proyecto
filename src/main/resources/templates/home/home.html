@@ -403,9 +403,9 @@
                     <br><br><br><br><br><br>
                     <h1 class="display-5 text-white text-center fw-bold mb-2 mt-4 titulo">Bienvenido al Catálogo de
                         Películas y Juegos</h1>
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                        <button type="button" class="btn bsb-btn-sm btn-outline-light">Registrate para mayor
-                            personalización</button>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center" th:if="${session.usuario == null}">
+                        <button type="button" class="btn bsb-btn-sm btn-outline-light" id="registerButton">Registrate
+                            para mayor personalización</button>
                     </div>
                 </div>
             </div>
@@ -427,28 +427,10 @@
                 </div>
             </div>
         </section>
-        <!-- FIN DEL CARRUSEL -->
-
-        <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div th:each="pelicula, iterStat : ${peliculas}" class="carousel-item"
-                    th:classappend="${iterStat.index == 0} ? 'active'">
-                    <img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" class="d-block" th:alt="${pelicula.titulo}">
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div> -->
 
         <div class="row justify-content-center mb-4 ">
             <div class="col-md-10">
-                <div class="description text-white justify">
+                <div class="description text-white justify mb-4">
                     <p>
                         Explora un universo de entretenimiento sin límites con nuestro catálogo de películas y juegos.
                         Sumérgete en una experiencia única donde podrás descubrir una amplia selección de emocionantes
@@ -520,6 +502,12 @@
     </button>
 </body>
 
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 <script>
     // Mostrar el botón cuando el usuario hace scroll hacia abajo
     window.onscroll = function () {
@@ -539,4 +527,81 @@
         });
     });
 
+    jQuery(document).ready(function ($) {
+        // Mostrar el modal de identificación al hacer clic en el icono de persona
+        $('#personIcon').click(function () {
+            $('#personModal').modal('show');
+        });
+
+        // Mostrar el modal de registro al hacer clic en el botón de registro
+        $('#registerButton').click(function () {
+            $('#registerModal').modal('show');
+        });
+
+        // Abrir el modal de registro cuando se hace clic en el botón "Registrarte" dentro del modal de identificación
+        $('#registerModalButton').click(function () {
+            $('#registerModal').modal('show');
+        });
+
+        // Función para manejar los submenús en la barra de navegación
+        if (window.innerWidth < 992) {
+            document.querySelectorAll('.navbar .dropdown').forEach(function (everydropdown) {
+                everydropdown.addEventListener('hidden.bs.dropdown', function () {
+                    this.querySelectorAll('.submenu').forEach(function (everysubmenu) {
+                        everysubmenu.style.display = 'none';
+                    });
+                })
+            });
+
+            document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
+                element.addEventListener('click', function (e) {
+                    let nextEl = this.nextElementSibling;
+                    if (nextEl && nextEl.classList.contains('submenu')) {
+                        e.preventDefault();
+                        if (nextEl.style.display == 'block') {
+                            nextEl.style.display = 'none';
+                        } else {
+                            nextEl.style.display = 'block';
+                        }
+                    }
+                });
+            })
+        }
+    });
+
+    function validarDatosRegistro() {
+        var pass = document.getElementById("id-passRegistro").value;
+        var nombre = document.getElementById("id-nombre").value;
+        var correo = document.getElementById("id-emailRegistro").value;
+
+        // Verificar que las contraseñas no estén vacías y sean iguales
+        if (pass.trim() === "" || nombre.trim() === "" || correo.trim() === "") {
+            if (nombre.trim() === "") {
+                alert("El nombre no puede estar vacío");
+            }
+            if (correo.trim() === "") {
+                alert("El correo no puede estar vacío");
+            }
+            if (pass.trim() === "") {
+                alert("La contraseña no puede estar vacía");
+            }
+        }
+
+        // Verificar restricciones en el nombre
+        var palabrasProhibidas = ["tonto", "idiota", "imbecil", "estupido", "burro", "payaso", "loco", "tarado", "subnormal", "bestia", "inútil", "patán", "cretino", "baboso", "bobo", "bruto", "estúpido", "necio", "pesado", "zopenco", "menso", "gilipollas", "cabrón", "capullo", "cachondeo", "hp", "puta", "puto", "zorra", "hijo de puta", "atontado", "z0rra", "zoquete"];
+        for (var i = 0; i < palabrasProhibidas.length; i++) {
+            if (nombre.toLowerCase().includes(palabrasProhibidas[i])) {
+                alert("El nombre no puede contener palabras prohibidas.");
+                return false;
+            }
+        }
+        for (var i = 0; i < palabrasProhibidas.length; i++) {
+            if (correo.toLowerCase().includes(palabrasProhibidas[i])) {
+                alert("El correo no puede contener palabras prohibidas.");
+                return false;
+            }
+        }
+
+        return true;
+    }
 </script>

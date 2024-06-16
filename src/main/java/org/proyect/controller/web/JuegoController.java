@@ -14,17 +14,18 @@ import org.proyect.domain.Categoria;
 import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
+import org.proyect.domain.Voto;
 import org.proyect.exception.DangerException;
 import org.proyect.exception.InfoException;
 import org.proyect.helper.ComentarioValidator;
 import org.proyect.helper.H;
 import org.proyect.helper.JuegoValidator;
 import org.proyect.helper.PRG;
-import org.proyect.helper.SistemaPuntuacion;
 import org.proyect.service.CategoriaService;
 import org.proyect.service.ComentarioService;
 import org.proyect.service.JuegoService;
 import org.proyect.service.UsuarioService;
+import org.proyect.service.VotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,6 +48,9 @@ public class JuegoController {
     private JuegoService juegoService;
 
     @Autowired
+    private VotoService votoService;
+
+    @Autowired
     private CategoriaService categoriaService;
 
     @Autowired
@@ -55,14 +59,6 @@ public class JuegoController {
     @Autowired
     private ComentarioService comentarioService;
 
-    // @GetMapping("r")
-    // public String r(ModelMap m) {
-
-    // List<Juego> juegos = juegoService.findAll();
-    // m.put("juegos", juegos);
-    // m.put("view", "juego/r");
-    // return "_t/frame";
-    // }
     @GetMapping("r")
     public String r(@RequestParam(defaultValue = "0") int page, ModelMap m) {
         Pageable pageable = PageRequest.of(page, 12); // 10 películas por página
@@ -212,18 +208,33 @@ public class JuegoController {
     public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
             ModelMap m, HttpSession session) throws DangerException {
         if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
-            // Si el usuario está autenticado, continúa con la lógica para cargar la vista
-            // rDetailed
-            m.put("juego", juegoService.findByIdElemento(id_elemento));
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            Juego juego = juegoService.findByIdElemento(id_elemento);
+
+            // Verificar si el usuario ya ha votado por este juego
+            Voto votoExistente = votoService.findByUsuarioAndJuego(usuario, juego);
+            Long puntajeUsuario = (votoExistente != null) ? votoExistente.getPuntaje() : null;
+
+            boolean esFavorito = false;
+            for (Juego favJuego : usuario.getJuegosFav()) {
+                if (favJuego.getIdElemento().equals(juego.getIdElemento())) {
+                    esFavorito = true;
+                    break;
+                }
+            }
+
+            m.put("juego", juego);
             m.put("categorias", categoriaService.findAll());
             m.put("comentarios", comentarioService.findByJuegoComentarios(id_elemento));
-            m.put("categoriasPertenecientes", juegoService.findByIdElemento(id_elemento).getCategorias());
+            m.put("categoriasPertenecientes", juego.getCategorias());
+            m.put("puntajeUsuario", puntajeUsuario); // Envía el puntaje del usuario si ya ha votado
+            m.put("esFavorito", esFavorito); // Pasamos el estado de favorito al modelo
             m.put("view", "juego/rDetailed");
             return "_t/frame";
         } else {
             // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la
             // página de inicio de sesión
-            PRG.error("Debe esta registrado para acceder", "/juego/r");
+            PRG.error("Debe estar registrado para acceder", "/juego/r");
             return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
         }
     }
@@ -235,21 +246,31 @@ public class JuegoController {
             ModelMap m) throws DangerException {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        String correoUsuario = usuario.getCorreo();
 
-        if (usuario == null || correoUsuario == null) {
-            return "redirect:/";
+        if (usuario == null) {
+            return "redirect:/login";
         }
 
         Juego juego = juegoService.findByIdElemento(idJuego);
         List<Juego> juegosFav = usuario.getJuegosFav();
 
-        if (!juegosFav.contains(juego)) {
-            usuarioService.saveUsuarioJuegos(usuario, juego);
+        boolean esFavoritoAntes = false;
+        for (Juego j : juegosFav) {
+            if (j.getIdElemento().equals(juego.getIdElemento())) {
+                esFavoritoAntes = true;
+                break;
+            }
         }
-        usuarioService.modificacionPuntos(correoUsuario, 5);
+
+        if (!esFavoritoAntes) {
+            usuarioService.saveUsuarioJuegos(usuario, juego);
+            String correoUsuario = usuario.getCorreo();
+            usuarioService.modificacionPuntos(correoUsuario, 2);
+        }
+        boolean esFavorito = juegosFav.contains(juego);
+
         m.put("juego", juego);
-        m.put("comentarios", comentarioService.findAll());
+        m.put("esFavorito", esFavorito);
 
         return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
     }
@@ -288,9 +309,15 @@ public class JuegoController {
             ModelMap m) throws DangerException {
 
         Juego juego = juegoService.findByIdElemento(idJuego);
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        Voto voto = votoService.votarJuego(usuario, juego, puntos);
+        // usuarioService.saveUsuarioJuegos(usuario, juego);
+        String correoUsuario = usuario.getCorreo();
+        usuarioService.modificacionPuntos(correoUsuario, 3);
 
+        m.put("voto", voto.getPuntaje());
         m.put("juego", juego);
-        m.put("calificacion", juegoService.setCalificacion(juego, puntos));
+        m.put("calificacion", juegoService.setCalificacion(usuario, juego, puntos));
         return "redirect:/juego/rDetailed?id_elemento=" + juego.getIdElemento();
     }
 

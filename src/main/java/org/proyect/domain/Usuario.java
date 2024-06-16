@@ -8,8 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Entity
@@ -37,6 +37,9 @@ public class Usuario extends Persona {
     @JoinTable(name = "usuario_juego", joinColumns = @JoinColumn(name = "usuario_idPersona"), inverseJoinColumns = @JoinColumn(name = "juego_idElemento"))
     private List<Juego> juegosFav;
 
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Voto> votos;
+
     @Column
     private Boolean estaRegistrado;
 
@@ -48,6 +51,8 @@ public class Usuario extends Persona {
     public Usuario() {
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
+        this.votos = new ArrayList<>();
+
     }
 
     public Usuario(String nombre, String passwd, String correo, Integer puntos) {
@@ -58,6 +63,8 @@ public class Usuario extends Persona {
         this.esAdmin = false;
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
+        this.votos = new ArrayList<>();
+
 
     }
 
@@ -69,6 +76,8 @@ public class Usuario extends Persona {
         this.esAdmin = esAdmin;
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
+        this.votos = new ArrayList<>();
+
     }
 
     public Usuario(Integer puntos, Long descuento) {
@@ -77,6 +86,8 @@ public class Usuario extends Persona {
         this.descuento = descuento;
         this.peliculasFav = new ArrayList<>();
         this.juegosFav = new ArrayList<>();
+        this.votos = new ArrayList<>();
+
     }
 
     public Boolean getEsAdmin() {

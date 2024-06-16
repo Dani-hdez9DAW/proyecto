@@ -86,6 +86,7 @@
             padding: 0.25rem 0.5rem;
             font-size: 0.8rem;
         }
+
         .icon-purple {
             color: #B18FCF;
         }
@@ -104,16 +105,24 @@
         table.dataTable thead .sorting_desc:after {
             color: black !important;
         }
+
         .dataTables_wrapper .dataTables_paginate .paginate_button {
-            background-color: #B18FCF !important; /* Cambia este color al que prefieras */
+            background-color: #B18FCF !important;
+            /* Cambia este color al que prefieras */
             color: white !important;
             border: 1px solid #B18FCF !important;
             border-radius: 4px;
             padding: 5px 10px;
         }
+
         .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background-color: #8B5FBF !important; /* Cambia este color al que prefieras */
+            background-color: #8B5FBF !important;
+            /* Cambia este color al que prefieras */
             color: black !important;
+        }
+
+        #peliculasTable td {
+            text-align: center;
         }
     </style>
 </head>
@@ -166,7 +175,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="text-align: center;">
-                    <h5 class="modal-title" id="deleteModalLabel" >Confirmar Eliminación</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
                     <button type="button" class="close btn btn-danger ms-auto" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>

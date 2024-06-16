@@ -2,7 +2,6 @@ package org.proyect.helper;
 
 import org.proyect.exception.DangerException;
 
-
 public class CategoriaValidator {
     public static final String[] CATEGORIAS_PELICULA_VIDEOJUEGOS = {
             "Accion", "Aventura", "Comedia", "Drama", "Fantasia", "Terror", "Misterio",

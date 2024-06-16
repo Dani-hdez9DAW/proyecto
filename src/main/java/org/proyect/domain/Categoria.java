@@ -22,11 +22,10 @@ public class Categoria {
     @Column
     private String nombre;
 
-
-    @ManyToMany
+    @ManyToMany(mappedBy = "categorias")
     private List<Pelicula> categoriaPelis;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "categorias")
     private List<Juego> categoriaJuegos;
 
     // ==================

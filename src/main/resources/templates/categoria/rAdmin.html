@@ -180,6 +180,7 @@
                 <tr>
                     <th class="columnaCentrada">Nombre</th>
                     <th class="columnaCentrada">Nº de peliculas asignadas</th>
+                    <th class="columnaCentrada">Nº de juegos asignados</th>
                     <th class="columnaCentrada">Editar</th>
                     <th class="columnaCentrada">Eliminar</th>
                 </tr>
@@ -189,6 +190,7 @@
                 <tr th:each="categoria : ${categorias}">
                     <td th:text="${categoria.nombre}"></td>
                     <td th:text="${categoria.categoriaPelis.size()}"></td>
+                    <td th:text="${categoria.categoriaJuegos.size()}"></td>
                     <td>
                         <a href="#" id="edbo" th:href="@{'/categoria/u?id=' + ${categoria.idCategoria}}">
                             <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}">

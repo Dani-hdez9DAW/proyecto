@@ -1,22 +1,14 @@
-<link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
 
-
-
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Vista de usuario</title>
+	<link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
+</head>
 <style>
-	/* Imagen de Spiderman */
-	body {
-		background: linear-gradient(to right, #39D2C0, #4B39EF);
-		/*f2E9E4
-		
-		6C0E23
-		B18FCF*/
-		height: 100vh;
-		margin: 0;
-		font-family: 'Orbitron', sans-serif;
-	}
-
-
 	.container {
 		display: table;
 		text-align: center;
@@ -43,7 +35,16 @@
 		color: #6C0E23;
 		padding: 15px;
 		height: 300px;
+		margin-bottom: -40%;
 	}
+
+	.profile-container {
+		display: flex;
+		align-items: center;
+		margin-top: 20%;
+		/* Ajusta este valor según sea necesario */
+	}
+
 
 
 	.container-usu {
@@ -70,7 +71,7 @@
 		color: #6C0E23;
 		font-size: 26px;
 		font-weight: 300;
-		margin-bottom: 12px;
+		/* margin-bottom: 12px; */
 	}
 
 	.tag {
@@ -228,7 +229,7 @@
 	/* Div que salen las películas */
 	.card.u-clearfix {
 		overflow-y: auto;
-		max-height: 300px;
+		max-height: 400px;
 		border: 1px solid #ddd;
 		border-radius: 5px;
 		padding: 10px;
@@ -475,22 +476,21 @@
 
 <body>
 	<div class="m-3 container-usu">
-		<div class="header-container">
+		<!-- <div class="header-container">
 			<div class="header">
 
 				<div class="change-bg-container">
-					<h1 class="main-heading" th:text="${session.usuario.nombre}"></h1>
-					<button class="change-bg-btn"><i class="bi bi-arrow-bar-up">Fondo</i> </button>
+					<h1 class="main-heading" th:text="${usuario.nombre}"></h1>
 					<input type="file" class="file-input" accept="image/*">
 				</div>
-				<span class="tag" id="puntos">Puntos</span>
+				<span class="tag" id="puntos">Puntos <span class="stat-number" th:text="${puntos}"></span></span>
 				<div class="stats">
-					<!-- Esto es para que muestre la cantidad de peliculas -->
-					<span class="stat-module">Películas <span class="stat-number" id="cantidadPeliculas"></span></span>
-					<span class="stat-module">Videojuegos <span class="stat-number" id="cantidadJuegos"></span></span>
+					<span class="stat-module">Películas <span class="stat-number" th:text="${cantP}"></span></span>
+					<span class="stat-module">Videojuegos <span class="stat-number" th:text="${cantJ}"></span></span>
 				</div>
-			</div> <!-- END header -->
-		</div>
+				
+			</div> 
+		</div> -->
 
 		<div class="overlay-header"></div>
 
@@ -507,11 +507,29 @@
 				<div>
 					<img src="https://i.postimg.cc/C1DT0ffF/HGDF.jpg" alt="Hugh Jackman" id="profile-image"
 						class="body-image">
-					<button class="change-bg-btn" onclick="document.getElementById('profile-file-input').click()">Añadir
-						foto</button>
-					<input type="file" id="profile-file-input" class="file-input" accept="image/*"
-						style="display: none;" onchange="uploadProfileImage()">
+
+					<div class="header-container">
+						<div class="header">
+
+							<div class="change-bg-container">
+								<h1 class="main-heading" th:text="${usuario.nombre}"></h1>
+								<input type="file" class="file-input" accept="image/*">
+							</div>
+							<span class="tag" id="puntos">Puntos <span class="stat-number"
+									th:text="${puntos}"></span></span>
+							<div class="stats">
+								<!-- Esto es para que muestre la cantidad de peliculas -->
+								<span class="stat-module">Películas <span class="stat-number"
+										th:text="${cantP}"></span></span>
+								<span class="stat-module">Videojuegos <span class="stat-number"
+										th:text="${cantJ}"></span></span>
+							</div>
+
+						</div> <!-- END header -->
+					</div>
+					<!-- <button class="change-bg-btn" onclick="selectProfileImage()">Cambiar foto</button> -->
 				</div>
+
 			</div>
 			<div id="description" class="body-info">
 				<!-- Descripción -->
@@ -520,6 +538,9 @@
 				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarDescripcionModal">
 					✎Descripción
 				</button>
+				<button onclick="alternarVisibilidad();" class="btn btn-primary">Modificar tus datos</button>
+
+
 				<!-- Modal para editar la descripción -->
 				<div class="modal fade" id="editarDescripcionModal" tabindex="-1" role="dialog"
 					aria-labelledby="editarDescripcionModalLabel" aria-hidden="true">
@@ -548,12 +569,48 @@
 				</div>
 
 			</div>
+			<div id="cambioDeDatos" style="display: none;">
+				<div class="row">
+					<form action="/usuario/updateUser" onsubmit="return validarContraseñas()" ; method="post">
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label for="nombre" class="form-label">Nombre</label>
+								<input type="text" minlength="4" maxlength="12" required name="nombre"
+									class="form-control" id="nombre">
+							</div>
+							<div class="mb-3">
+								<label for="correo" class="form-label">Correo</label>
+								<input type="email" minlength="2" maxlength="40" name="correo" required
+									class="form-control" id="correoUser">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label for="pass" class="form-label">Contraseña</label>
+								<input type="password" required minlength="4" maxlength="15" name="password"
+									class="form-control" id="pass">
+							</div>
+							<div class="mb-3">
+								<label for="pass2" class="form-label">Confirmar contraseña</label>
+								<input type="password" required minlength="4" maxlength="15" name="password2"
+									class="form-control" id="pass2">
+							</div>
+						</div>
+						<button type="submit" class=" btn bg-primary  btn-primary w-100">Confirmar cambios</button>
+					</form>
+				</div>
+			</div>
 
 
 		</div>
 
 		<div id="peliculas" class="card u-clearfix">
-			<span class="card-heading">Películas favoritas</span>
+			<div class="d-flex justify-content-between align-items-center">
+				<span class="card-heading">Películas favoritas</span>
+				<span class="stat-module">
+					<a class="badge bg-primary rounded-pill fs-6" href="/voto/r">Votadas</a>
+				</span>
+			</div>
 			<ul class="card-list">
 				<!-- Itera sobre las películas favoritas del usuario y muestra cada una -->
 				<li th:each="pelicula : ${peliculasFavoritas}">
@@ -561,46 +618,62 @@
 					<img th:src="@{'/img/peliculas/' + ${pelicula.imagen}}" />
 					<!-- Muestra el título de la película -->
 					<!-- <span th:text="${pelicula.titulo}"></span> -->
-					<!-- Botón de eliminación -->
-					<button class="btn btn-danger btn-sm btn-eliminar mt-2">
-						Eliminar
-					</button>
+					<form action="/usuario/dPelicula" method="post">
+						<input type="hidden" name="idPersona" th:value="${session.usuario.idPersona}" />
+						<input type="hidden" id="idPelicula" name="idPelicula" th:value="${pelicula.idElemento}">
+						<button class="btn btn-danger btn-sm btn-eliminar mt-2">
+							Eliminar
+						</button>
+					</form>
 				</li>
 			</ul>
 		</div>
-
-
+		
 		<div id="juegos" class="card u-clearfix">
-			<span class="card-heading">Juegos favoritos</span>
+			<div class="d-flex justify-content-between align-items-center">
+				<span class="card-heading">Juegos favoritos</span>
+				<span class="stat-module">
+					<a class="badge bg-primary rounded-pill fs-6" href="/voto/rJuego">Votados</a>
+				</span>
+			</div>
 			<ul class="card-list">
 				<!-- Itera sobre los juegos favoritos del usuario y muestra cada uno -->
 				<li th:each="juego : ${juegosFavoritos}">
 					<!-- Muestra la imagen del juego -->
 					<img th:src="@{'/img/juegos/' + ${juego.imagen}}" />
-					<!-- Muestra el título de la película -->
+					<!-- Muestra el título del juego -->
 					<!-- <span th:text="${juego.titulo}"></span> -->
-
+					<form action="/usuario/dJuego" method="post">
+						<input type="hidden" name="idPersona" th:value="${session.usuario.idPersona}" />
+						<input type="hidden" id="idjuego" name="idjuego" th:value="${juego.idElemento}">
+						<button class="btn btn-danger btn-sm btn-eliminar mt-2">
+							Eliminar
+						</button>
+					</form>
 				</li>
 			</ul>
 		</div>
+		
+
 	</div>
 
 	</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
 <script>
-	// //// //// //// FUNCIÓN DE LOS PUNTOS//// //// //// //// //
-	$(document).ready(function () {
-		// Agrega un evento de clic al span de puntos
-		$("#puntos").click(function () {
-			// Hacer una solicitud HTTP GET al backend para obtener los puntos del usuario
-			$.get("obtenerPuntos", function (data) {
-				// Actualizar el contenido del span de puntos con los datos recibidos
-				$("#puntos").text("Puntos: " + data.puntos);
-			});
-		});
-	});
+	// // //// //// //// FUNCIÓN DE LOS PUNTOS//// //// //// //// //
+	// $(document).ready(function () {
+	// 	// Agrega un evento de clic al span de puntos
+	// 	$("#puntos").click(function () {
+	// 		// Hacer una solicitud HTTP GET al backend para obtener los puntos del usuario
+	// 		$.get("obtenerPuntos", function (data) {
+	// 			// Actualizar el contenido del span de puntos con los datos recibidos
+	// 			$("#puntos").text("Puntos: " + data.puntos);
+	// 		});
+	// 	});
+	// });
 
 	// FUNCIÓN PARA MANDAR LOS DATOS EDITADOS DE LA DESCRIPCIÓN
 	$(document).ready(function () {
@@ -650,103 +723,237 @@
 
 
 
-	//Función para obtener al número de juegos favoritos 
-	$(document).ready(function () {
-		// Hacer una solicitud HTTP GET al backend para obtener el número de películas favoritas
-		$.get("cantidadJuegosFavoritos", function (data) {
-			// Actualizar el contenido del elemento con el número de películas favoritas recibido
-			$("#cantidadJuegos").text(data);
-		}).fail(function (xhr, status, error) {
-			console.error("Error al obtener la cantidad de juegos favoritos:", error);
-			$("#cantidadJuegos").text("0");
-		});
+	// //Función para obtener al número de juegos favoritos 
+	// $(document).ready(function () {
+	// 	// Hacer una solicitud HTTP GET al backend para obtener el número de películas favoritas
+	// 	$.get("cantidadJuegosFavoritos", function (data) {
+	// 		// Actualizar el contenido del elemento con el número de películas favoritas recibido
+	// 		$("#cantidadJuegos").text(data);
+	// 	}).fail(function (xhr, status, error) {
+	// 		console.error("Error al obtener la cantidad de juegos favoritos:", error);
+	// 		$("#cantidadJuegos").text("0");
+	// 	});
 
-		$('.change-bg-btn').on('click', function () {
-			$('.file-input').click(); // Cambiado a '.file-input' en lugar de '.file-input-bg'
-		});
+	// 	$('.change-bg-btn').on('click', function () {
+	// 		$('.file-input').click(); // Cambiado a '.file-input' en lugar de '.file-input-bg'
+	// 	});
 
-		$('.file-input').on('change', function (e) { // Cambiado a '.file-input' en lugar de '.file-input-bg'
-			const file = e.target.files[0];
-			if (file) {
-				const reader = new FileReader();
-				reader.onload = function (event) {
-					$('body').css('background-image', `url(${event.target.result})`);
-				};
-				reader.readAsDataURL(file);
-			}
-		});
+	// 	$('.file-input').on('change', function (e) { // Cambiado a '.file-input' en lugar de '.file-input-bg'
+	// 		const file = e.target.files[0];
+	// 		if (file) {
+	// 			const reader = new FileReader();
+	// 			reader.onload = function (event) {
+	// 				$('body').css('background-image', `url(${event.target.result})`);
+	// 			};
+	// 			reader.readAsDataURL(file);
+	// 		}
+	// 	});
 
-		// Cambiar imagen de perfil
-		$('.change-profile-btn').on('click', function () {
-			$('.file-input-profile').click();
-		});
+	// Cambiar imagen de perfil
+	// $('.change-profile-btn').on('click', function () {
+	// 	$('.file-input-profile').click();
+	// });
 
-		$('.file-input-profile').on('change', function (e) {
-			const file = e.target.files[0];
-			if (file) {
-				const reader = new FileReader();
-				reader.onload = function (event) {
-					$('#profileImage').attr('src', event.target.result);
-				};
-				reader.readAsDataURL(file);
+	// $('.file-input-profile').on('change', function (e) {
+	// 	const file = e.target.files[0];
+	// 	if (file) {
+	// 		const reader = new FileReader();
+	// 		reader.onload = function (event) {
+	// 			$('#profileImage').attr('src', event.target.result);
+	// 		};
+	// 		reader.readAsDataURL(file);
+	// 	}
+	// });
+	// });
+
+
+	// Función para eliminar un elemento de la lista
+	$('.btn-eliminar').on('click', function () {
+		var listItem = $(this).closest('li'); // Encuentra el elemento padre <li> del botón
+		var elementoId = $(this).data('id'); // Obtiene el ID del elemento a eliminar
+
+		// Envía una solicitud al servidor para eliminar el elemento
+		$.ajax({
+			type: 'POST',
+			url: '/eliminarElemento', // Reemplaza esto con la URL correcta para eliminar el elemento
+			data: { id: elementoId }, // Envía el ID del elemento a eliminar
+			success: function (response) {
+				// Si la eliminación se realizó con éxito, oculta el elemento de la lista
+				listItem.hide();
+
+				// Después de ocultar el elemento, actualiza la lista
+				actualizarLista();
+			},
+			error: function (xhr, status, error) {
+				// Maneja errores de eliminación si es necesario
+				console.error('Error al eliminar el elemento:', error);
 			}
 		});
 	});
 
+	// Función para actualizar la lista después de eliminar un elemento
+	function actualizarLista() {
+		// Envía una solicitud al servidor para obtener la lista actualizada de elementos
+		$.get("/obtenerLista", function (data) {
+			// Actualiza el contenido de la lista con la nueva lista recibida del servidor
+			$(".card-list").html(data);
+		}).fail(function (xhr, status, error) {
+			// Maneja errores de obtener la lista si es necesario
+			console.error("Error al obtener la lista actualizada:", error);
+		});
+	}
+
+
+	// function uploadImage() {
+	// 	var fileInput = document.getElementById('file-input');
+	// 	var file = fileInput.files[0];
+	// 	var formData = new FormData();
+	// 	formData.append('file', file);
+
+	// 	$.ajax({
+	// 		url: '/usuarios/{id}/uploadFoto',  // Reemplaza {id} con el ID real del usuario
+	// 		type: 'POST',
+	// 		data: formData,
+	// 		processData: false,
+	// 		contentType: false,
+	// 		success: function (response) {
+	// 			alert('Foto de fondo subida exitosamente');
+	// 		},
+	// 		error: function (jqXHR, textStatus, errorThrown) {
+	// 			alert('Error subiendo la foto de fondo');
+	// 		}
+	// 	});
+	// }
+
+	// function uploadProfileImage() {
+	// 	var fileInput = document.getElementById('profile-file-input');
+	// 	var file = fileInput.files[0];
+	// 	var formData = new FormData();
+	// 	formData.append('file', file);
+
+	// 	$.ajax({
+	// 		url: '/usuario/uploadFotoPerfil',  // URL para subir la foto de perfil
+	// 		type: 'POST',
+	// 		data: formData,
+	// 		processData: false,
+	// 		contentType: false,
+	// 		success: function (response) {
+	// 			alert('Foto de perfil subida exitosamente');
+	// 			// Actualizar la imagen de perfil en el DOM
+	// 			var reader = new FileReader();
+	// 			reader.onload = function (e) {
+	// 				document.getElementById('profile-image').src = e.target.result;
+	// 			}
+	// 			reader.readAsDataURL(file);
+	// 		},
+	// 		error: function (jqXHR, textStatus, errorThrown) {
+	// 			alert('Error subiendo la foto de perfil');
+	// 		}
+	// 	});
+	// }
+
+
+	// Definir un array con las URLs de las imágenes predefinidas
+	var profileImages = [
+		"/img/perfil/perfil1.jpg'",
+		"/img/perfil/perfil2.jpg'",
+		"/img/perfil/perfil3.jpg'",
+		"/img/perfil/perfil4.jpg'",
+		"/img/perfil/perfil5.jpg'",
+		"/img/perfil/perfil6.jpg'",
+		"/img/perfil/perfil7.jpg'",
+		"/img/perfil/perfil8.jpg'",
+		"/img/perfil/perfil9.jpg'",
+	];
+
+
+
+	function selectProfileImage() {
+		// Obtener una imagen aleatoria del array
+		var randomIndex = Math.floor(Math.random() * profileImages.length);
+		var newImageUrl = profileImages[randomIndex];
+
+		// Enviar la URL de la imagen seleccionada al servidor
+		$.post("/guardarFotoPerfil", { imageUrl: newImageUrl }, function (data) {
+			// Manejar la respuesta del servidor (opcional)
+			console.log(data); // Puedes imprimir el mensaje de éxito o hacer otras acciones si lo deseas
+
+			// Actualizar la imagen de perfil en el navegador del usuario
+			document.getElementById('profile-image').src = newImageUrl;
+		});
+	}
 
 
 </script>
-
-
 <script>
-	function uploadImage() {
-		var fileInput = document.getElementById('file-input');
-		var file = fileInput.files[0];
-		var formData = new FormData();
-		formData.append('file', file);
 
-		$.ajax({
-			url: '/usuarios/{id}/uploadFoto',  // Reemplaza {id} con el ID real del usuario
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (response) {
-				alert('Foto de fondo subida exitosamente');
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				alert('Error subiendo la foto de fondo');
-			}
-		});
+	function alternarVisibilidad() {
+		var cambioDeDatos = document.getElementById("cambioDeDatos");
+		if (cambioDeDatos.style.display === "none") {
+			cambioDeDatos.style.display = "block";
+		} else {
+			cambioDeDatos.style.display = "none";
+		}
 	}
 
-	function uploadProfileImage() {
-		var fileInput = document.getElementById('profile-file-input');
-		var file = fileInput.files[0];
-		var formData = new FormData();
-		formData.append('file', file);
 
-		$.ajax({
-			url: '/usuario/uploadFotoPerfil',  // URL para subir la foto de perfil
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (response) {
-				alert('Foto de perfil subida exitosamente');
-				// Actualizar la imagen de perfil en el DOM
-				var reader = new FileReader();
-				reader.onload = function (e) {
-					document.getElementById('profile-image').src = e.target.result;
+	function validarContraseñas() {
+		var pass = document.getElementById("pass").value;
+		var pass2 = document.getElementById("pass2").value;
+		var nombre = document.getElementById("nombre").value;
+		var correo = document.getElementById("correoUser").value;
+
+		if (nombre.trim() === "" || correo.trim() === "" || pass.trim() === "" || pass2.trim() === "") {
+			if (nombre.trim() === "") {
+				alert("El nombre no puede estar vacío");
+			}
+			if (correo.trim() === "") {
+				alert("El correo no puede estar vacío");
+			}
+			if(pass.trim() === ""){
+				alert("La contraseña no puede estar vacía");
+			}
+			if(pass2.trim() === ""){
+				alert("La confirmación de contraseña no puede estar vacía");
+			}
+			return false;
+		}
+
+
+			// Verificar que las contraseñas no estén vacías y sean iguales
+
+			if (pass !== pass2) {
+				alert("Las contraseñas no coinciden. Por favor, asegúrate de que las contraseñas coincidan.");
+				return false;
+			}
+
+			// Verificar restricciones en el nombre
+			var palabrasProhibidas = ["tonto", "idiota", "imbecil", "estupido", "burro", "payaso", "loco", "tarado", "subnormal", "bestia", "inútil", "patán", "cretino", "baboso", "bobo", "bruto", "estúpido", "necio", "pesado", "zopenco", "menso", "gilipollas", "cabrón", "capullo", "cachondeo", "hp", "puta", "puto", "zorra", "hijo de puta", "atontado", "z0rra", "zoquete"];
+			for (var i = 0; i < palabrasProhibidas.length; i++) {
+				if (nombre.toLowerCase().includes(palabrasProhibidas[i])) {
+					alert("El nombre no puede contener palabras prohibidas.");
+					return false;
 				}
-				reader.readAsDataURL(file);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				alert('Error subiendo la foto de perfil');
 			}
-		});
-	}
-</script>
+			for (var i = 0; i < palabrasProhibidas.length; i++) {
+				if (correo.toLowerCase().includes(palabrasProhibidas[i])) {
+					alert("El correo no puede contener palabras prohibidas.");
+					return false;
+				}
+			}
 
+			// Verificar patrón de correo electrónico
+			var patronCorreo = /^[\w._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+			if (!correo.match(patronCorreo)) {
+				alert("El formato del correo electrónico no es válido.");
+				return false;
+			}
+
+			// Si todas las validaciones pasan, puedes enviar el formulario o realizar otra acción
+			alert("Cambios realizados correctamente,si quieres verlos ,debera cerrar sesion y volver a iniciar");
+			return true;
+		}
+
+</script>
 
 </html>

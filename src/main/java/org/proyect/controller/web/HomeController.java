@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class HomeController {
@@ -107,17 +106,19 @@ public class HomeController {
 			if (!ComentarioValidator.validarComentario(email)) {
 				PRG.error("El email tiene palabras prohibidas", "/");
 			}
+			if (!ComentarioValidator.validarComentario(password)) {
+				PRG.error("La contraseña tiene palabras prohibidas", "/");
+			}
 
 			Usuario usuario = usuarioService.login(email, password);
 			usuarioService.setRegistro(email);
 			s.setAttribute("usuario", usuario);
 			s.setAttribute("nombre", email);
 
+		} catch (DangerException e) {
+			throw e; // Re-lanzar excepciones DangerException para que se manejen adecuadamente
 		} catch (Exception e) {
-			if (!EmailValidator.isValidEmail(email)) {
-				PRG.error("Formato de correo electrónico no válido");
-			}
-
+			PRG.error("Error inesperado al iniciar sesión", "/");
 		}
 		return "redirect:/";
 	}
@@ -187,5 +188,4 @@ public class HomeController {
 		javaMailSender.send(message);
 		System.out.println("Correo enviado exitosamente");
 	}
-
 }

@@ -1,6 +1,5 @@
 package org.proyect.controller.web;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import org.proyect.helper.PRG;
 import org.proyect.service.EventoService;
 import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;

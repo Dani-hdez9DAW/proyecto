@@ -62,7 +62,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row" style="display: none;">
                                 <label for="estado" class="col-sm-4 col-form-label">
                                     <h4>Estado</h4>
                                 </label>
@@ -203,7 +203,7 @@
             <form id="checklistForm" action="/pelicula/rDetailed" method="POST">
                 <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
                 <input type="checkbox" class="checkbox" name="favourite" id="Give-It-An-Id"
-                    onclick="handleCheckboxClick()">
+                th:checked="${esFavorita ? 'checked' : null}" onclick="handleCheckboxClick()">
                 <div class="svg-container">
                     <svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -228,7 +228,7 @@
         </div>
 
         </form>
-        <div th:if="${pelicula.estado == 'Unreleased'}"  class="text-end">
+        <div th:if="${pelicula.estado == 'Unreleased'}" class="text-end">
             <span class="badge bg-primary rounded-pill fs-5 py-2 px-3 "
                 th:text="'Disponible el día ' + ${#temporals.format(pelicula.fecha_salida, 'd')} + ' de ' + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).toUpperCase().substring(0,1)} + ${#temporals.format(pelicula.fecha_salida, 'MMMM', #locale).substring(1)} + ' del ' + ${#temporals.format(pelicula.fecha_salida, 'yyyy')}">
             </span>
@@ -267,21 +267,28 @@
                         <div class="form-group mb-3">
                             <h3 class="textContent">Valora</h3>
                             <form id="ratingForm" action="/pelicula/rDetailedRating" method="POST">
+                                <input type="hidden" name="idUsuario" th:value="${session.usuario.idPersona}">
                                 <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
                                 <div class="rating justify-content-center">
-                                    <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)">
+                                    <input value="5" name="rating" id="star5" type="radio" onclick="handleStarClick(5)"
+                                        th:checked="${puntajeUsuario != null && puntajeUsuario == 5}">
                                     <label for="star5"></label>
-                                    <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)">
+                                    <input value="4" name="rating" id="star4" type="radio" onclick="handleStarClick(4)"
+                                        th:checked="${puntajeUsuario != null && puntajeUsuario == 4}">
                                     <label for="star4"></label>
-                                    <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)">
+                                    <input value="3" name="rating" id="star3" type="radio" onclick="handleStarClick(3)"
+                                        th:checked="${puntajeUsuario != null && puntajeUsuario == 3}">
                                     <label for="star3"></label>
-                                    <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)">
+                                    <input value="2" name="rating" id="star2" type="radio" onclick="handleStarClick(2)"
+                                        th:checked="${puntajeUsuario != null && puntajeUsuario == 2}">
                                     <label for="star2"></label>
-                                    <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)">
+                                    <input value="1" name="rating" id="star1" type="radio" onclick="handleStarClick(1)"
+                                        th:checked="${puntajeUsuario != null && puntajeUsuario == 1}">
                                     <label for="star1"></label>
                                 </div>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -328,7 +335,7 @@
                             </p>
                         </div>
                         <div class="col-md-6">
-                            <h3>Fecha de salida</h3>
+                            <h3>Fecha</h3>
                             <p class="card-text">
                                 <span
                                     th:utext="'<i class=\'bi bi-calendar-event\'></i> ' + ${pelicula.fecha_salida}"></span>
@@ -400,13 +407,13 @@
         <div class="card my-3">
             <div class="card-body">
                 <h5 class="card-title">Deja un comentario</h5>
-                <form action="/comentario/cP" method="post">
+                <form action="/comentario/cP" onsubmit="return validarComentario();" method="post">
                     <div class="mb-3">
                         <input type="hidden" name="autor" th:value="${session.usuario.nombre}">
                         <input type="hidden" name="idPelicula" th:value="${pelicula.idElemento}">
 
                         <label for="contenido" class="form-label">Comentario</label>
-                        <textarea class="form-control" id="contenido" rows="3" name="contenido"
+                        <textarea class="form-control" id="contenido" maxlength="500" rows="3" name="contenido"
                             placeholder="Escribe tu comentario aquí"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Enviar</button>
@@ -420,17 +427,40 @@
                 <div class="mb-3">
                     <div th:each="comentario : ${comentarios}" class="border-bottom pb-3">
                         <div class="d-flex align-items-center">
-                            <strong class="mr-2" th:text="${comentario.autor}"></strong>
+                            <strong class="mr-2"
+                                th:classappend="${session.usuario != null and session.usuario.puntos != null and session.usuario.puntos > 70} ? 'text-primary' : (${session.usuario != null and session.usuario.puntos != null and session.usuario.puntos > 50} ? 'text-info' : '')"
+                                th:text="${comentario.autor}"></strong>
                             <span class="text-muted" th:text="| - ${comentario.fecha} |"></span>
                         </div>
                         <p class="mt-2" th:text="${comentario.contenido}"></p>
                     </div>
+
                 </div>
             </div>
         </div>
 
     </div>
 
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align: center;">
+                    <h5 class="modal-title" id="deleteModalLabel">Añadido a favoritos</h5>
+                    <button type="button" class="close btn btn-danger ms-auto" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Se ha agregado correctamente la pelicula <th:block th:value="${pelicula.titulo}"> </th:block> a sus
+                    peliculas favoritas.
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary w-40" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </body>
@@ -449,9 +479,33 @@
 
     function handleCheckboxClick() {
         var checkbox = document.getElementById("Give-It-An-Id");
+
         if (checkbox.checked) {
             document.getElementById("checklistForm").submit();
+            $(checkbox).on('click', function () {
+                eventoId = $(this).attr('data-id');
+                $('#infoModal').modal('show');
+            });
         }
+    }
+    function validarComentario() {
+
+        var comentarioUser = document.getElementById("contenido").value;
+
+        if (comentarioUser.trim() === "") {
+            alert("El comentario no puede estar vacío");
+            return false;
+        }
+
+        var palabrasProhibidas = ["tonto", "idiota", "imbecil", "estupido", "burro", "payaso", "loco", "tarado", "subnormal", "bestia", "inútil", "patán", "cretino", "baboso", "bobo", "bruto", "estúpido", "necio", "pesado", "zopenco", "menso", "gilipollas", "cabrón", "capullo", "cachondeo", "hp", "puta", "puto", "zorra", "hijo de puta", "atontado", "z0rra", "zoquete"];
+        for (var i = 0; i < palabrasProhibidas.length; i++) {
+            if (comentarioUser.toLowerCase().includes(palabrasProhibidas[i])) {
+                alert("El comentario no puede tener palabras prohibidas.");
+                return false;
+            }
+        }
+        alert("Comentario enviado correctamente");
+        return true;
     }
 
     function handleStarClick(rating) {
@@ -462,6 +516,8 @@
         // Enviar el formulario automáticamente
         document.getElementById("ratingForm").submit();
     }
+
+
 
 
     function habilitarCampos() {
@@ -487,57 +543,7 @@
         // Mostrar el botón de guardar
         document.getElementById('btnActualizar').style.display = 'block';
     }
-    // function initializeClock(id, endtime) {
-    //     var clock = document.getElementById(id);
-    //     var daysSpan = clock.querySelector('.days');
-    //     var hoursSpan = clock.querySelector('.hours');
-    //     var minutesSpan = clock.querySelector('.minutes');
-    //     var secondsSpan = clock.querySelector('.seconds');
 
-    //     function updateClock() {
-    //         var t = getTimeRemaining(endtime);
-
-    //         daysSpan.innerHTML = t.days;
-    //         hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
-    //         minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
-    //         secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
-
-    //         if (t.total <= 0) {
-    //             clearInterval(timeinterval);
-    //         }
-    //     }
-
-    //     updateClock();
-    //     var timeinterval = setInterval(updateClock, 1000);
-    // }
-
-    // function getTimeRemaining(endtime) {
-    //     var t = Date.parse(endtime) - Date.now();
-    //     var seconds = Math.floor((t / 1000) % 60);
-    //     var minutes = Math.floor((t / 1000 / 60) % 60);
-    //     var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-    //     var days = Math.floor(t / (1000 * 60 * 60 * 24));
-    //     return {
-    //         'total': t,
-    //         'days': days,
-    //         'hours': hours,
-    //         'minutes': minutes,
-    //         'seconds': seconds
-    //     };
-    // }
-    // var fechaSalida = document.getElementById('deadline').getAttribute('th:value');
-    // console.log(deadline);
-    // // Convertir la cadena de fecha en un objeto de fecha
-    // var fechaSalidaDate = new Date(fechaSalida);
-
-    // // Obtener el día y el mes de la fecha de salida de la película
-    // var dia = fechaSalidaDate.getDate();
-    // var mes = fechaSalidaDate.toLocaleString('en-US', { month: 'long' });
-    // var currentYear = new Date().getFullYear();
-    // console.log(dia);
-    // console.log(mes);
-    // var deadline = new Date(mes + ' 28', + currentYear + ' 00:00:00');
-    // initializeClock('clockdiv', deadline);
     window.onload = function () {
         crear_select();
     }
@@ -668,10 +674,27 @@
 
 </script>
 
+<script th:inline="javascript">
+    /* Obtener la puntuación actual del modelo de Thymeleaf */
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtener la puntuación del voto (simulado aquí)
+        var voto = document.getElementById("rating");
+
+        if (voto) {
+            // Desactivar todas las estrellas
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById("star" + i).disabled = true;
+            }
+
+            // Colorear las estrellas hasta el valor del voto
+            for (let i = 1; i <= voto; i++) {
+                document.getElementById("star" + i).checked = true;
+                document.querySelector('label[for="star' + i + '"]').classList.add("rated");
+            }
+        }
+    });
+</script>
+
+
 
 </html>
-
-
-<!-- 
-<input type="hidden" id="idpelicula" name="idpelicula" th:value="${pelicula.idElemento}">
-<input type="hidden" id="idusuario" name="idusuario" th:value="${session.usuario.id_persona}"> -->

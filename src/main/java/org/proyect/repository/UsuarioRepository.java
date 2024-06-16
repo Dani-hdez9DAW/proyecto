@@ -13,8 +13,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 
     public Usuario getByNombre(String nombre);
-    public Usuario getByCorreo(String email);
-
-
-    
+    public Usuario getByCorreo(String email);   
 }

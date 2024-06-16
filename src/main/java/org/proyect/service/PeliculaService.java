@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.proyect.domain.Categoria;
-import org.proyect.domain.Comentario;
+import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
-import org.proyect.helper.PRG;
+import org.proyect.domain.Usuario;
+import org.proyect.domain.Voto;
 import org.proyect.repository.CategoriaRepository;
 import org.proyect.repository.ComentarioRepository;
 import org.proyect.repository.PeliculaRepository;
@@ -26,34 +27,37 @@ public class PeliculaService {
     @Autowired
     private ComentarioRepository comentarioRepository;
 
-    private List<Long> calificaciones;
+    // private List<Long> calificaciones;
 
-    public PeliculaService() {
-        this.calificaciones = new ArrayList<>();
-    }
+    @Autowired
+    private VotoService votoService;
+
+    // public PeliculaService() {
+    //     this.calificaciones = new ArrayList<>();
+    // }
 
     public Page<Pelicula> findAll(Pageable pageable) {
         return peliculaRepository.findAll(pageable);
     }
 
-
     public List<Pelicula> findAll() {
         return peliculaRepository.findAll();
     }
 
-    public void save(String titulo, List<Long> categoriaIds, String clasificacion, Integer duracion,Integer puntuacion, String estado,
+    public void save(String titulo, List<Long> categoriaIds, String clasificacion, Integer duracion, Integer puntuacion,
+            String estado,
             String plataforma,
             String sinopsis, LocalDate fechaLanzamiento, String imagen, String trailer, String urlCompra) {
-        Pelicula pelicula = new Pelicula(titulo, clasificacion, duracion,puntuacion, estado, plataforma, sinopsis,
+        Pelicula pelicula = new Pelicula(titulo, clasificacion, duracion, puntuacion, estado, plataforma, sinopsis,
                 fechaLanzamiento, trailer, urlCompra);
         pelicula.setImagen(imagen);
         pelicula.setCuenta_votos(0);
         if (!fechaLanzamiento.isBefore(LocalDate.now())) {
             pelicula.setEstado("Unreleased");
-         }
-         if (fechaLanzamiento.isBefore(LocalDate.now())) {
+        }
+        if (fechaLanzamiento.isBefore(LocalDate.now())) {
             pelicula.setEstado("Released");
-         }
+        }
 
         // Inicializar la lista de categorías para evitar NullPointerException
         List<Categoria> categorias = new ArrayList<>();
@@ -72,7 +76,6 @@ public class PeliculaService {
         peliculaRepository.save(pelicula);
     }
 
-   
     public List<Pelicula> findByTitulo(String titulo) {
         return peliculaRepository.findByTitulo(titulo);
     }
@@ -93,7 +96,7 @@ public class PeliculaService {
         pelicula.setTitulo(titulo);
         pelicula.setClasificacion(clasificacion);
         pelicula.setDuracion(duracion);
-        pelicula.setEstado(estado);
+        // pelicula.setEstado(estado);
         pelicula.setPlataforma(plataforma);
         pelicula.setSinopsis(sinopsis);
         pelicula.setFecha_salida(fechaLanzamiento);
@@ -103,10 +106,10 @@ public class PeliculaService {
         pelicula.setPuntuacion(puntuacion);
         if (!fechaLanzamiento.isBefore(LocalDate.now())) {
             pelicula.setEstado("Unreleased");
-         }
-         if (fechaLanzamiento.isBefore(LocalDate.now())) {
+        }
+        if (fechaLanzamiento.isBefore(LocalDate.now())) {
             pelicula.setEstado("Released");
-         }
+        }
 
         idsCategoria = (idsCategoria == null) ? new ArrayList<Long>() : idsCategoria;
         pelicula.getCategorias().clear();
@@ -123,45 +126,88 @@ public class PeliculaService {
         peliculaRepository.delete(peliculaRepository.getReferenceById(idPelicula));
     }
 
-    public Long setCalificacion(Pelicula pelicula, Long puntos) {
-        if (puntos != null) {
-            // Agregar la calificación a la lista de la película específica
-            pelicula.getCalificaciones().add(puntos);
-            int conteoVotos = pelicula.getCalificaciones().size();
-            Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
-            pelicula.setCalificacion(cali);
-            peliculaRepository.save(pelicula);
-            return cali;
-        } else {
-            puntos = 0L;
-            // Agregar la calificación a la lista de la película específica
-            pelicula.getCalificaciones().add(puntos);
-            int conteoVotos = pelicula.getCalificaciones().size();
-            Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
-            pelicula.setCalificacion(cali);
-            peliculaRepository.save(pelicula);
-            return cali;
-        }
-    }
-    
+    // public Long setCalificacion(Pelicula pelicula, Long puntos) {
+    //     if (puntos != null) {
+    //         // Agregar la calificación a la lista de la película específica
+    //         pelicula.getCalificaciones().add(puntos);
+    //         int conteoVotos = pelicula.getCalificaciones().size();
+    //         Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
+    //         pelicula.setCalificacion(cali);
+    //         peliculaRepository.save(pelicula);
+    //         return cali;
+    //     } else {
+    //         puntos = 0L;
+    //         // Agregar la calificación a la lista de la película específica
+    //         pelicula.getCalificaciones().add(puntos);
+    //         int conteoVotos = pelicula.getCalificaciones().size();
+    //         Long cali = (long) calcularCalificacion(pelicula.getCalificaciones(), conteoVotos);
+    //         pelicula.setCalificacion(cali);
+    //         peliculaRepository.save(pelicula);
+    //         return cali;
+    //     }
+    // }
 
-    private double calcularCalificacion(List<Long> calificaciones, int conteoVotos) {
-        long sumaCalificaciones = 0;
-        for (Long calificacion : calificaciones) {
-            sumaCalificaciones += calificacion;
-        }
-        return (double) sumaCalificaciones / conteoVotos;
-    }
+    // private double calcularCalificacion(List<Long> calificaciones, int conteoVotos) {
+    //     long sumaCalificaciones = 0;
+    //     for (Long calificacion : calificaciones) {
+    //         sumaCalificaciones += calificacion;
+    //     }
+    //     return (double) sumaCalificaciones / conteoVotos;
+    // }
 
     public List<Pelicula> findByCategoria(Categoria categoria) {
         return peliculaRepository.findByCategorias(categoria);
     }
-    
+
     public List<Pelicula> findByClasificacion(String clasificacion) {
         return peliculaRepository.findByClasificacion(clasificacion);
     }
 
+    public long setCalificacion(Usuario usuario, Pelicula pelicula, Long puntaje) {
+        // Buscar si el usuario ya ha votado por este juego
+        Voto votoExistente = votoService.findByUsuarioAndPelicula(usuario, pelicula);
+
+        if (votoExistente != null) {
+            // Si el usuario ya ha votado, actualizar el puntaje
+            votoExistente.setPuntaje(puntaje);
+        } else {
+            // Si es un nuevo voto, crear un nuevo objeto Voto
+            Voto nuevoVoto = new Voto();
+            nuevoVoto.setUsuario(usuario);
+            nuevoVoto.setPelicula(pelicula);
+            nuevoVoto.setPuntaje(puntaje);
+            votoService.save(nuevoVoto); // Guardar el nuevo voto
+        }
+
+        // Recalcular la calificación del juego
+        long calificacion = recalcularCalificacion(pelicula);
+
+        // Actualizar la calificación en el juego
+        pelicula.setCalificacion(calificacion);
+        // Guardar los cambios en el juego
+        peliculaRepository.save(pelicula);
+
+        return calificacion;
+    }
+
+    // Método para recalcular la calificación promedio del juego
+    private long recalcularCalificacion(Pelicula pelicula) {
+        List<Voto> votos = votoService.findAllByPelicula(pelicula);
+
+        if (votos.isEmpty()) {
+            return 0L; // Calificación inicial si no hay votos
+        }
+
+        long totalPuntos = 0;
+        for (Voto voto : votos) {
+            totalPuntos += voto.getPuntaje();
+        }
+
+        // Calcular promedio redondeando hacia abajo
+        return totalPuntos / votos.size();
+    }
+
     // public List<Pelicula> buscarPorNombre(String titulo) {
-    //     return peliculaRepository.findByTituloContainingIgnoreCase(titulo);
+    // return peliculaRepository.findByTituloContainingIgnoreCase(titulo);
     // }
 }

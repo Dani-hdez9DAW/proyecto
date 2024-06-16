@@ -19,13 +19,220 @@
             padding: 20px;
             border-radius: 10px;
         }
+
+        #toggle-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #toggle-button:hover {
+            background-color: #0056b3;
+        }
+
+        .bgVideojuegos {
+            background-color: blueviolet;
+        }
+
+        .bgPeliculas {
+            background-color: pink;
+        }
+
+        .bgEstrenos {
+            background-color: rgb(72, 6, 130);
+        }
+
+        .bgConcurso {
+            background-color: black;
+        }
+        .highlight-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 3em;
+            color: #B18FCF;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        .highlight-text2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 1.7em;
+            color: #B18FCF;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
     </style>
 </head>
 
 <body>
+    <h1 class="highlight-text">EVENTOS</h1>
+    <h3 class="highlight-text2">VISTA DE CALENDARIO</h3>
+    <button id="toggle-button" class="btn btn-primary bg-primary">Mostrar/Ocultar Calendario</button>
     <div id="calendar-container">
         <div id="calendar"></div>
     </div>
+    <h3 class="highlight-text2">VISTA DETALLADA POR EVENTO</h3>
+    <div th:each="evento : ${eventos}" style="padding: 30px;">
+        <div th:if="${evento.tipo} == 'Videojuegos'">
+            <div class="card bg-dark border-primary mb-3">
+                <div class="row g-0">
+                    <div class="col-md-3 d-flex align-items-center">
+                        <img src="/img/evento/videojuegos.jpg" class="card-img img-thumbnail bg-dark" alt="Logo"
+                             style="padding: 30px; width: 100%; height: auto;" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h5 class="card-title text-white mb-3">
+                                <b><span class="text-decoration-underline" th:text="${evento.nombre}"></span></b>
+                            </h5>
+                            <p class="card-text">
+                                <ul class="list-unstyled text-white fs-5">
+                                    <li><span class="badge bg-primary rounded-pill" th:text="${evento.tipo}"></span></li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Nº de evento: <strong><span th:text="${evento.idEvento}"></span></strong>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Localización: <span th:text="${evento.localizacion}"></span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-calendar-alt"></i> Fecha del evento: <span th:text="${evento.fecha}"></span>
+                                    </li>
+                                </ul>
+                            </p>
+                            <p class="text-white">
+                                ¡Únete a nosotros en <span th:text="${evento.localizacion}"></span> el <span th:text="${evento.fecha}"></span> para una experiencia de videojuegos inolvidable!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div th:if="${evento.tipo} == 'Peliculas'">
+            <div class="card border-primary mb-3" style="background-color: #B18FCF;">
+                <div class="row g-0">
+                    <div class="col-md-3 d-flex align-items-center">
+                        <img src="/img/evento/peliculas.jpg" class="card-img img-thumbnail bg-dark" alt="Logo"
+                             style="padding: 30px; width: 100%; height: auto;" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body text-white">
+                            <h5 class="card-title mb-3">
+                                <b><span class="text-decoration-underline" th:text="${evento.nombre}"></span></b>
+                            </h5>
+                            <p class="card-text">
+                                <ul class="list-unstyled fs-5">
+                                    <li><span class="badge bgPeliculas rounded-pill" th:text="${evento.tipo}"></span></li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Nº de evento: <strong><span th:text="${evento.idEvento}"></span></strong>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Localización: <span th:text="${evento.localizacion}"></span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-calendar-alt"></i> Fecha del evento: <span th:text="${evento.fecha}"></span>
+                                    </li>
+                                </ul>
+                            </p>
+                            <p class="text-white">
+                                Ven a <span th:text="${evento.localizacion}"></span> el <span th:text="${evento.fecha}"></span> y disfruta de una noche mágica de películas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div th:if="${evento.tipo} == 'Estrenos'">
+            <div class="card border-primary mb-3" style="background-color: #D2B4DE;">
+                <div class="row g-0">
+                    <div class="col-md-3 d-flex align-items-center">
+                        <img src="/img/evento/estrenos.jpg" class="card-img img-thumbnail bg-dark" alt="Logo"
+                             style="padding: 30px; width: 100%; height: auto;" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body text-white">
+                            <h5 class="card-title mb-3">
+                                <b><span class="text-decoration-underline" th:text="${evento.nombre}"></span></b>
+                            </h5>
+                            <p class="card-text">
+                                <ul class="list-unstyled fs-5">
+                                    <li><span class="badge bgEstrenos rounded-pill" th:text="${evento.tipo}"></span></li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Nº de evento: <strong><span th:text="${evento.idEvento}"></span></strong>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Localización: <span th:text="${evento.localizacion}"></span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-calendar-alt"></i> Fecha del evento: <span th:text="${evento.fecha}"></span>
+                                    </li>
+                                </ul>
+                            </p>
+                            <p class="text-white">
+                                ¡No te pierdas el estreno en <span th:text="${evento.localizacion}"></span> el <span th:text="${evento.fecha}"></span>! 
+                                Será una noche inolvidable.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div th:if="${evento.tipo} == 'Concurso'">
+            <div class="card border-primary mb-3" style="background-color: #C39BD3;">
+                <div class="row g-0">
+                    <div class="col-md-3 d-flex align-items-center">
+                        <img src="/img/evento/concursos.jpg" class="card-img img-thumbnail bg-dark" alt="Logo"
+                             style="padding: 30px; width: 100%; height: auto;" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body text-white">
+                            <h5 class="card-title mb-3">
+                                <b><span class="text-decoration-underline" th:text="${evento.nombre}"></span></b>
+                            </h5>
+                            <p class="card-text">
+                                <ul class="list-unstyled fs-5">
+                                    <li><span class="badge bgConcurso rounded-pill" th:text="${evento.tipo}"></span></li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Nº de evento: <strong><span th:text="${evento.idEvento}"></span></strong>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i> Localización: <span th:text="${evento.localizacion}"></span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-calendar-alt"></i> Fecha del evento: <span th:text="${evento.fecha}"></span>
+                                    </li>
+                                </ul>
+                            </p>
+                            <p class="text-white">
+                                ¡Participa en nuestro concurso en <span th:text="${evento.localizacion}"></span> el <span th:text="${evento.fecha}"></span> y 
+                                muestra tu talento al mundo!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+    </div>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
@@ -100,6 +307,9 @@
                     }
                 }
             });
+        });
+        $('#toggle-button').click(function () {
+            $('#calendar-container').toggle();
         });
 
     </script>

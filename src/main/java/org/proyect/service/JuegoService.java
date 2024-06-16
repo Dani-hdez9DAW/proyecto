@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.proyect.domain.Categoria;
 import org.proyect.domain.Juego;
+import org.proyect.domain.Usuario;
+import org.proyect.domain.Voto;
 import org.proyect.repository.CategoriaRepository;
 import org.proyect.repository.JuegoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class JuegoService {
     private JuegoRepository juegoRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private VotoService votoService;
 
     public List<Juego> findAll() {
         return juegoRepository.findAll();
@@ -80,7 +85,7 @@ public class JuegoService {
         juego.setTitulo(titulo);
         juego.setClasificacion(clasificacion);
         juego.setDuracion(duracion);
-        juego.setEstado(estado);
+        // juego.setEstado(estado);
         juego.setPlataforma(plataforma);
         juego.setSinopsis(sinopsis);
         juego.setFecha_salida(fechaLanzamiento);
@@ -158,6 +163,50 @@ public class JuegoService {
         }
 
         juegoRepository.save(juego);
+    }
+
+    public long setCalificacion(Usuario usuario, Juego juego, Long puntaje) {
+        // Buscar si el usuario ya ha votado por este juego
+        Voto votoExistente = votoService.findByUsuarioAndJuego(usuario, juego);
+
+        if (votoExistente != null) {
+            // Si el usuario ya ha votado, actualizar el puntaje
+            votoExistente.setPuntaje(puntaje);
+        } else {
+            // Si es un nuevo voto, crear un nuevo objeto Voto
+            Voto nuevoVoto = new Voto();
+            nuevoVoto.setUsuario(usuario);
+            nuevoVoto.setJuego(juego);
+            nuevoVoto.setPuntaje(puntaje);
+            votoService.save(nuevoVoto); // Guardar el nuevo voto
+        }
+
+        // Recalcular la calificación del juego
+        long calificacion = recalcularCalificacion(juego);
+
+        // Actualizar la calificación en el juego
+        juego.setCalificacion(calificacion);
+        // Guardar los cambios en el juego
+        juegoRepository.save(juego);
+
+        return calificacion;
+    }
+
+    // Método para recalcular la calificación promedio del juego
+    private long recalcularCalificacion(Juego juego) {
+        List<Voto> votos = votoService.findAllByJuego(juego);
+
+        if (votos.isEmpty()) {
+            return 0L; // Calificación inicial si no hay votos
+        }
+
+        long totalPuntos = 0;
+        for (Voto voto : votos) {
+            totalPuntos += voto.getPuntaje();
+        }
+
+        // Calcular promedio redondeando hacia abajo
+        return totalPuntos / votos.size();
     }
 
 }

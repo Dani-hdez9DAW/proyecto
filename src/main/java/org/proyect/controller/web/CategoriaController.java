@@ -3,7 +3,6 @@ package org.proyect.controller.web;
 import java.util.Arrays;
 import java.util.List;
 
-import org.proyect.domain.Categoria;
 import org.proyect.domain.Usuario;
 import org.proyect.exception.DangerException;
 import org.proyect.helper.CategoriaValidator;
@@ -11,6 +10,7 @@ import org.proyect.exception.InfoException;
 import org.proyect.helper.H;
 import org.proyect.helper.PRG;
 import org.proyect.service.CategoriaService;
+import org.proyect.service.PeliculaService;
 import org.proyect.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +30,8 @@ public class CategoriaController {
     private CategoriaService categoriaService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private PeliculaService peliculaService;
 
     @GetMapping("r")
     public String r(
@@ -48,6 +50,7 @@ public class CategoriaController {
     public String rAdmin(
             ModelMap m, HttpSession s) {
         if (H.isRolOk("admin", s)) { // Verifica si el usuario está autenticado
+            m.put("peliculas", peliculaService.findAll());
             m.put("categorias", categoriaService.findAll());
             m.put("view", "categoria/rAdmin");
             return "_t/frame";
@@ -82,10 +85,10 @@ public class CategoriaController {
             }
 
         } catch (Exception e) {
-            PRG.error("El país " + nombre + " ya existe", "/categoria/c");
+            PRG.error("La categoria " + nombre + " ya existe", "/categoria/c");
         }
         if (creado) {
-            PRG.info("El país " + nombre + " se ha creado", "/categoria/rAdmin");
+            PRG.info("La categoria " + nombre + " se ha creado", "/categoria/rAdmin");
         }
         return "redirect:/categoria/rAdmin";
     }

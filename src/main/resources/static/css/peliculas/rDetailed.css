@@ -825,12 +825,7 @@
         }
 
         /* Ajuste para pantallas pequeñas */
-        @media (max-width: 200px) {
-            .classification-image {
-                width: 30vw;
-                /* Reducir el tamaño para pantallas más pequeñas */
-            }
-        }
+       
 
         .modal-trigger {
             top: 50%;

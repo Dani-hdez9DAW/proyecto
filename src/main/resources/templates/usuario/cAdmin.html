@@ -33,17 +33,17 @@
     <div class="container mt-5">
         <h1 class="highlight-text hidden" th:text="|Crea un usuario|"></h1>
 
-        <form action="/usuario/cAdmin" method="POST">
+        <form id="userForm" action="/usuario/cAdmin" method="POST">
 
             <div class="mb-3 hidden">
-                <label for="id-nombre" class="form-label">Nombre</label>
-                <input type="text" required minlength="2" maxlength="12" class="form-control" id="id-nombre"
-                    name="nombre"/>
+                <label for="idNombre" class="form-label">Nombre</label>
+                <input type="text" required minlength="2" maxlength="12" class="form-control" id="idNombre"
+                    name="nombre" />
             </div>
             <div class="mb-3 hidden">
                 <label for="id-correo" class="form-label">Correo</label>
                 <input type="email" required minlength="4" maxlength="25" class="form-control" id="id-correo"
-                    name="correo"/>
+                    name="correo" />
             </div>
             <div class="mb-3 hidden">
                 <label for="id-contra" class="form-label">Contraseña</label>
@@ -62,8 +62,9 @@
                     <label class="form-check-label btn btn-outline-secondary" for="userOption">Usuario</label>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Crear usuario</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary w-100 mt-3" disabled>Crear usuario</button>
         </form>
+        <button type="button" id="validateBtn" class="btn btn-secondary w-100 mt-3">Validar Datos</button>
     </div>
 
     <script>
@@ -75,6 +76,62 @@
 
             $('form').on('submit', function () {
                 $('button[type="submit"]').addClass('disabled').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...');
+            });
+        });
+
+        document.getElementById('validateBtn').addEventListener('click', function () {
+            // Get form fields
+            const nombre = document.getElementById('idNombre').value;
+            const correo = document.getElementById('id-correo').value;
+            const password = document.getElementById('id-contra').value;
+
+            // Validation patterns and prohibited words
+            const emailPattern = /^[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+            const prohibitedWords = [
+                "tonto", "idiota", "imbecil", "estupido", "burro", "payaso", "loco", "tarado", "subnormal", "bestia",
+                "inútil", "patan", "cretino", "baboso", "bobo", "bruto", "estupido", "necio", "pesado", "zopenco",
+                "menso", "gilipollas", "cabrón", "capullo", "cachondeo", "hp", "puta", "puto", "zorra", "hijo de puta",
+                "atontado", "z0rra", "zoquete"
+            ];
+
+            // Create a regular expression pattern for prohibited words
+            const prohibitedPattern = new RegExp(prohibitedWords.join("|"), "i");
+
+            // Validation functions
+            function containsProhibitedWords(text) {
+                return prohibitedPattern.test(text);
+            }
+            if (nombre === "" || correo === "" || password === "") {
+                alert('Todos los campos son obligatorios.');
+                return;
+            }
+            // Validate email format
+            if (!emailPattern.test(correo)) {
+                alert('Correo no es válido.');
+                return;
+            }
+
+            // Check for prohibited words in nombre and correo
+            if (containsProhibitedWords(nombre)) {
+                alert('El nombre contiene palabras no permitidas.');
+                return;
+            }
+
+            if (containsProhibitedWords(correo)) {
+                alert('El correo contiene palabras no permitidas.');
+                return;
+            }
+
+            // If all validations pass, enable the submit button
+            document.getElementById('submitBtn').disabled = false;
+            alert('Datos válidos. Ahora puedes enviar el formulario.');
+        });
+
+        // Disable submit button on input change after validation
+        const formFields = document.querySelectorAll('#id-nombre, #id-correo, #id-contra, input[name="roleOptions"]');
+        formFields.forEach(field => {
+            field.addEventListener('input', function () {
+                document.getElementById('submitBtn').disabled = true;
             });
         });
     </script>

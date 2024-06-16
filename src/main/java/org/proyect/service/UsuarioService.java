@@ -1,9 +1,7 @@
 package org.proyect.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
@@ -13,17 +11,20 @@ import org.proyect.helper.PRG;
 import org.proyect.helper.SistemaPuntuacion;
 import org.proyect.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private JuegoService juegoService;
+
+    @Autowired
+    private PeliculaService peliculaService;
 
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
@@ -35,6 +36,28 @@ public class UsuarioService {
 
     public Usuario getByNombre(String nombre) {
         return usuarioRepository.getByNombre(nombre);
+    }
+
+    public void eliminarJuegoFavorito(Usuario usuario, Long idJuego) {
+        List<Juego> juegosFav = usuario.getJuegosFav();
+        Juego juego = juegoService.findByIdElemento(idJuego);
+
+        if (juegosFav.contains(juego)) {
+            juegosFav.remove(juego);
+            usuario.setJuegosFav(juegosFav);
+            usuarioRepository.save(usuario);
+        }
+    }
+
+    public void eliminarPeliculaFavorita(Usuario usuario, Long idPelicula) {
+        List<Pelicula> peliculaFav = usuario.getPeliculasFav();
+        Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
+
+        if (peliculaFav.contains(pelicula)) {
+            peliculaFav.remove(pelicula);
+            usuario.setPeliculasFav(peliculaFav);
+            usuarioRepository.save(usuario);
+        }
     }
 
     public Usuario save(String nombre, String passwd, String correo) {
@@ -58,6 +81,22 @@ public class UsuarioService {
 
     public Usuario findByCorreo(String email) {
         return usuarioRepository.getByCorreo(email);
+    }
+
+    public void updateUser(Long idUsuario, String nombre, String password, String correo) {
+        // Verificar si el id del usuario no es nulo y es válido
+        if (idUsuario == null || !usuarioRepository.existsById(idUsuario)) {
+            throw new IllegalArgumentException("El ID de usuario no es válido.");
+        }
+
+        // Obtener el usuario desde el repositorio
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado."));
+        usuario.setNombre(nombre);
+        usuario.setContraseña((new BCryptPasswordEncoder()).encode(password));
+        usuario.setCorreo(correo);
+        usuarioRepository.save(usuario);
+
     }
 
     public void updatePermisos(Long id_Usuario, String rolSeleccionado) {
@@ -97,10 +136,10 @@ public class UsuarioService {
     public Usuario login(String email, String password) throws Exception {
         Usuario usuario = usuarioRepository.getByCorreo(email);
         if (usuario == null) {
-            throw new Exception("El nombre del usuario " + email + " no existe");
+            PRG.error("El usuario no existe", "/");
         }
         if (!(new BCryptPasswordEncoder()).matches(password, usuario.getContraseña())) {
-            throw new Exception("La contraseña para el usuario " + email + " es incorrecta");
+            PRG.error("La contraseña no coincide", "/");
         }
         return usuario;
     }
@@ -129,12 +168,16 @@ public class UsuarioService {
 
     public Usuario saveUsuarioPeliculas(Usuario usuario, Pelicula pelicula) {
         List<Pelicula> peliculasFav = usuario.getPeliculasFav();
-
-        peliculasFav.add(pelicula);
-        usuario.setPeliculasFav(peliculasFav);
-
+    
+        // Verificar si la película ya está en la lista de favoritos
+        if (!peliculasFav.contains(pelicula)) {
+            peliculasFav.add(pelicula);
+            usuario.setPeliculasFav(peliculasFav);
+        }
+    
         return usuarioRepository.save(usuario);
     }
+    
 
     public void modificacionPuntos(String correo, Integer puntuacionMaxima) {
         Usuario usuario = usuarioRepository.getByCorreo(correo);
@@ -150,32 +193,18 @@ public class UsuarioService {
         }
     }
 
-    @Transactional
     public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
         List<Juego> juegosFav = usuario.getJuegosFav();
-
-        juegosFav.add(juego);
-        usuario.setJuegosFav(juegosFav);
-
+    
+        // Verificar si el juego ya está en la lista de favoritos
+        if (!juegosFav.contains(juego)) {
+            juegosFav.add(juego);
+            usuario.setJuegosFav(juegosFav);
+        }
+    
         return usuarioRepository.save(usuario);
     }
-
-    public int obtenerPuntos(String nombreUsuario) throws Exception {
-        // Buscar el usuario por su nombre en la base de datos
-        List<Usuario> usuarios = usuarioRepository.findByNombre(nombreUsuario);
-
-        // Verificar si el usuario existe
-        if (!usuarios.isEmpty()) {
-            // Obtener el primer usuario de la lista (asumiendo que el nombre de usuario es
-            // único)
-            Usuario usuario = usuarios.get(0);
-            // Obtener los puntos del usuario y devolverlos
-            return usuario.getPuntos();
-        } else {
-            // Manejar el caso en el que el usuario no exista
-            throw new Exception("El usuario no existe: " + nombreUsuario);
-        }
-    }
+    
 
     public void actualizarDescripcion(String correoUsuario, String nuevaDescripcion) {
         // Buscar el usuario por su correo en la base de datos
@@ -190,7 +219,8 @@ public class UsuarioService {
             usuarioRepository.save(usuario);
         } else {
             // Manejar el caso en el que no se encuentre el usuario
-            throw new UsernameNotFoundException("Usuario no encontrado: " + correoUsuario);
+            // throw new UsernameNotFoundException("Usuario no encontrado: " +
+            // correoUsuario);
         }
     }
 
@@ -208,29 +238,27 @@ public class UsuarioService {
             return peliculasFavoritas.size();
         } else {
             // Manejar el caso en que el usuario no se encuentre
-            throw new UsernameNotFoundException("Usuario no encontrado: " +
-                    nombreUsuario);
+            // throw new UsernameNotFoundException("Usuario no encontrado: " +
+            // nombreUsuario);
         }
+        return 0;
     }
 
-    // // Método para mostrar los videojuegos
-    // public int obtenerCantidadJuegosFavoritos(String nombreUsuario) {
-    // // Buscar al usuario por su nombre en la base de datos
-    // Usuario usuario = usuarioRepository.getByNombre(nombreUsuario);
+    // Método para mostrar los videojuegos
+    public int obtenerCantidadJuegosFavoritos(String nombreUsuario) {
+        // Buscar al usuario por su nombre en la base de datos
+        Usuario usuario = usuarioRepository.getByNombre(nombreUsuario);
 
-    // // Verificar si se encontró el usuario
-    // if (usuario != null) {
-    // // Obtener la lista de películas favoritas del usuario
-    // List<Juego> juegosFavoritos = usuario.getJuegosFav();
+        // Verificar si se encontró el usuario
+        if (usuario != null) {
+            // Obtener la lista de películas favoritas del usuario
+            List<Juego> juegosFavoritos = usuario.getJuegosFav();
 
-    // // Devolver el tamaño de la lista de películas favoritas
-    // return juegosFavoritos.size();
-    // } else {
-    // // Manejar el caso en que el usuario no se encuentre
-    // throw new UsernameNotFoundException("Usuario no encontrado: " +
-    // nombreUsuario);
-    // }
-    // }
+            // Devolver el tamaño de la lista de películas favoritas
+            return juegosFavoritos.size();
+        }
+        return 0;
+    }
 
     public Usuario removeUsuarioPeliculas(Usuario usuario, Pelicula pelicula) {
         List<Pelicula> peliculasFav = new ArrayList<>(usuario.getPeliculasFav()); // Usando ArrayList

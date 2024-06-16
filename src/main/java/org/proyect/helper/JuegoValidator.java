@@ -12,9 +12,9 @@ public class JuegoValidator {
             Integer puntuacion, List<Long> idsCategoria, String sinopsis, LocalDate fechaLanzamiento,
             Integer cuentaVotos, String trailer, String url) throws DangerException {
         // Validar el nombre
-        if (titulo == null || titulo.trim().isEmpty() || titulo.trim().length() < 2 || titulo.trim().length() > 30
-                || !titulo.matches("^[a-zA-Z0-9\\-\\s]+$")) {
-            PRG.error("El nombre debe tener entre 2 y 30 caracteres y solo puede contener letras, números y guiones.",
+        if (titulo == null || titulo.trim().isEmpty() || titulo.trim().length() < 2 || titulo.trim().length() > 50
+                || !titulo.matches("^[a-zA-Z0-9,:\\-\\s]+$")) {
+            PRG.error("El nombre debe tener entre 2 y 50 caracteres y solo puede contener letras, números y guiones.",
                     "/juego/r");
         }
 

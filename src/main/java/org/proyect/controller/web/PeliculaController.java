@@ -13,6 +13,7 @@ import java.util.List;
 import org.proyect.domain.Categoria;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
+import org.proyect.domain.Voto;
 import org.proyect.exception.DangerException;
 import org.proyect.exception.InfoException;
 import org.proyect.helper.ComentarioValidator;
@@ -23,13 +24,13 @@ import org.proyect.service.CategoriaService;
 import org.proyect.service.ComentarioService;
 import org.proyect.service.PeliculaService;
 import org.proyect.service.UsuarioService;
+import org.proyect.service.VotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +51,8 @@ public class PeliculaController {
     private UsuarioService usuarioService;
     @Autowired
     private ComentarioService comentarioService;
+    @Autowired
+    private VotoService votoService;
 
     // @GetMapping("r")
     // public String r(ModelMap m) {
@@ -174,21 +177,43 @@ public class PeliculaController {
     public String rDetailed(@RequestParam("id_elemento") Long id_elemento,
             ModelMap m, HttpSession session) throws DangerException {
         if (H.isRolOk("auth", session)) { // Verifica si el usuario está autenticado y tiene el rol "auth"
-            // Si el usuario está autenticado, continúa con la lógica para cargar la vista
-            // rDetailed
+            // Obtenemos la película y el usuario actual
+            Pelicula pelicula = peliculaService.findByIdElemento(id_elemento);
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+    
+            // Verificamos si el usuario ha votado esta película
+            Voto votoUsuario = votoService.findByUsuarioAndPelicula(usuario, pelicula);
+            Long puntajeUsuario = (votoUsuario != null) ? votoUsuario.getPuntaje() : null;
+
+            boolean esFavorita = false;
+            for (Pelicula favPelicula : usuario.getPeliculasFav()) {
+                if (favPelicula.getIdElemento().equals(pelicula.getIdElemento())) {
+                    esFavorita = true;
+                    break;
+                }
+            }
+
+
+
+
+            // Pasamos los datos necesarios al modelo
+            m.put("pelicula", pelicula);
             m.put("categorias", categoriaService.findAll());
             m.put("comentarios", comentarioService.findByPeliculaComentarios(id_elemento));
-            m.put("categoriasPertenecientes", peliculaService.findByIdElemento(id_elemento).getCategorias());
-            m.put("pelicula", peliculaService.findByIdElemento(id_elemento));
+            m.put("categoriasPertenecientes", pelicula.getCategorias());
+            m.put("puntajeUsuario", puntajeUsuario); // Enviamos el puntaje del usuario si ha votado
+            m.put("esFavorita", esFavorita); // Pasamos el estado de favorito al modelo
+
+            System.out.println("liedhflidhsdf" + esFavorita);
             m.put("view", "pelicula/rDetailed");
             return "_t/frame";
         } else {
-            // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la
-            // página de inicio de sesión
-            PRG.error("Debe esta registrado para acceder", "/pelicula/r");
+            // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la página de inicio de sesión
+            PRG.error("Debe estar registrado para acceder", "/pelicula/r");
             return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
         }
     }
+    
 
     @PostMapping("u")
     public String updatePost(
@@ -240,19 +265,32 @@ public class PeliculaController {
         if (usuario == null) {
             return "redirect:/login";
         }
+
         Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
         List<Pelicula> peliculasFav = usuario.getPeliculasFav();
-        if (!peliculasFav.contains(pelicula)) {
+
+        boolean esFavoritaAntes = false;
+        for (Pelicula p : peliculasFav) {
+            if (p.getIdElemento().equals(pelicula.getIdElemento())) {
+                esFavoritaAntes = true;
+                break;
+            }
+        }
+
+        // Agregar la película a la lista de favoritos si no estaba presente antes
+        if (!esFavoritaAntes) {
             usuarioService.saveUsuarioPeliculas(usuario, pelicula);
             String correoUsuario = usuario.getCorreo();
             usuarioService.modificacionPuntos(correoUsuario, 2);
         }
 
-        // System.out.println("ID de la película: " + pelicula.getIdElemento());
-        // System.out.println("Título de la película: " + pelicula.getTitulo());
+        // Verificar si la película está en la lista de favoritos después de agregarla
+        boolean esFavorita = peliculasFav.contains(pelicula);
 
         m.put("pelicula", pelicula);
+        m.put("esFavorita", esFavorita);
 
+        // Redirigir a la página de detalles de la película
         return "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento();
     }
 
@@ -265,12 +303,14 @@ public class PeliculaController {
 
         Pelicula pelicula = peliculaService.findByIdElemento(idPelicula);
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        usuarioService.saveUsuarioPeliculas(usuario, pelicula);
+        Voto voto = votoService.votarPelicula(usuario,pelicula,puntos);
+        // usuarioService.saveUsuarioPeliculas(usuario, pelicula);
         String correoUsuario = usuario.getCorreo();
         usuarioService.modificacionPuntos(correoUsuario, 3);
 
+        m.put("voto", voto.getPuntaje());
         m.put("pelicula", pelicula);
-        m.put("calificacion", peliculaService.setCalificacion(pelicula, puntos));
+        m.put("calificacion", peliculaService.setCalificacion(usuario,pelicula, puntos));
         return "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento();
     }
 
@@ -472,16 +512,21 @@ public class PeliculaController {
     // return "nombre-de-tu-vista"; // Reemplaza con el nombre de tu archivo HTML
     // }
 
-     // MÉTODO PARA BUSCAR LA PELÍCULA
-    /*  @GetMapping("/buscarPelicula")
-     public String buscarPelicula(@RequestParam("titulo") String titulo, ModelMap m) {
-         // Realizar la búsqueda en la base de datos por el nombre de la película
-         List<Pelicula> peliculasEncontradas = peliculaService.buscarPorNombre(titulo);
- 
-         // Agregar las películas encontradas al modelo para mostrar en la vista
-         m.put("peliculasEncontradas", peliculasEncontradas);
- 
-         // Devolver el nombre de la vista que mostrará los resultados de la búsqueda
-         return "resultado/rResultado"; // Este es el nombre de la vista que mostrará los resultados
-     }*/
+    // MÉTODO PARA BUSCAR LA PELÍCULA
+    /*
+     * @GetMapping("/buscarPelicula")
+     * public String buscarPelicula(@RequestParam("titulo") String titulo, ModelMap
+     * m) {
+     * // Realizar la búsqueda en la base de datos por el nombre de la película
+     * List<Pelicula> peliculasEncontradas =
+     * peliculaService.buscarPorNombre(titulo);
+     * 
+     * // Agregar las películas encontradas al modelo para mostrar en la vista
+     * m.put("peliculasEncontradas", peliculasEncontradas);
+     * 
+     * // Devolver el nombre de la vista que mostrará los resultados de la búsqueda
+     * return "resultado/rResultado"; // Este es el nombre de la vista que mostrará
+     * los resultados
+     * }
+     */
 }

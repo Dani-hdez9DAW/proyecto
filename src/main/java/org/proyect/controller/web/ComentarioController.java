@@ -1,15 +1,12 @@
 package org.proyect.controller.web;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 import org.proyect.domain.Juego;
 import org.proyect.domain.Pelicula;
 import org.proyect.domain.Usuario;
 import org.proyect.helper.ComentarioValidator;
 import org.proyect.helper.PRG;
-import org.proyect.helper.SistemaPuntuacion;
 import org.proyect.service.ComentarioService;
 import org.proyect.service.JuegoService;
 import org.proyect.service.PeliculaService;
