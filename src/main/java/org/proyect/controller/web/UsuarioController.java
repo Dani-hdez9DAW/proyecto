@@ -245,19 +245,19 @@ public class UsuarioController {
 
         // Validar el formato del correo electrónico
         if (!EmailValidator.isValidEmail(correo)) {
-            PRG.error("Formato de correo electrónico no válido");
+            // PRG.error("Formato de correo electrónico no válido");
             return "redirect:/"; // Redirigir en caso de error de formato
         }
         if (!ComentarioValidator.validarComentario(nombre)) {
-            PRG.error("El nombre tiene palabras prohibidas", "/");
+            // PRG.error("El nombre tiene palabras prohibidas", "/");
         }
         if (!ComentarioValidator.validarComentario(correo)) {
-            PRG.error("El email tiene palabras prohibidas", "/");
+            // PRG.error("El email tiene palabras prohibidas", "/");
         }
 
         // Validar el nombre y la contraseña
         if (!EmailValidator.isValidNamePass(nombre, password)) {
-            PRG.error("Nombre o contraseña no válidos");
+            // PRG.error("Nombre o contraseña no válidos");
             return "redirect:/"; // Redirigir si la validación de nombre/contraseña falla
         }
 
@@ -282,19 +282,19 @@ public class UsuarioController {
 
         // Validar el formato del correo electrónico
         if (!EmailValidator.isValidEmail(correo)) {
-            PRG.error("Formato de correo electrónico no válido");
+            // PRG.error("Formato de correo electrónico no válido");
             return "redirect:/"; // Redirigir en caso de error de formato
         }
         if (!ComentarioValidator.validarComentario(nombre)) {
-            PRG.error("El nombre tiene palabras prohibidas", "/");
+            // PRG.error("El nombre tiene palabras prohibidas", "/");
         }
         if (!ComentarioValidator.validarComentario(correo)) {
-            PRG.error("El email tiene palabras prohibidas", "/");
+            // PRG.error("El email tiene palabras prohibidas", "/");
         }
 
         // Validar el nombre y la contraseña
         if (!EmailValidator.isValidNamePass(nombre, password)) {
-            PRG.error("Nombre o contraseña no válidos");
+            // PRG.error("Nombre o contraseña no válidos");
             return "redirect:/"; // Redirigir si la validación de nombre/contraseña falla
         }
 
@@ -305,7 +305,7 @@ public class UsuarioController {
         usuarioService.modificacionPuntos(correoUsuario, 8);
 
         // Informar al usuario si se creó correctamente
-        PRG.info("El usuario con el nombre " + nombre + " ha sido creado", "/");
+        // PRG.info("El usuario con el nombre " + nombre + " ha sido creado", "/");
 
         return "redirect:/";
     }
@@ -319,19 +319,19 @@ public class UsuarioController {
 
         // Validar el formato del correo electrónico
         if (!EmailValidator.isValidEmail(correo)) {
-            PRG.error("Formato de correo electrónico no válido");
+            // PRG.error("Formato de correo electrónico no válido");
             return "redirect:/"; // Redirigir en caso de error de formato
         }
         if (!ComentarioValidator.validarComentario(nombre)) {
-            PRG.error("El nombre tiene palabras prohibidas", "/");
+            // PRG.error("El nombre tiene palabras prohibidas", "/");
         }
         if (!ComentarioValidator.validarComentario(correo)) {
-            PRG.error("El email tiene palabras prohibidas", "/");
+            // PRG.error("El email tiene palabras prohibidas", "/");
         }
 
         // Validar el nombre y la contraseña
         if (!EmailValidator.isValidNamePass(nombre, password)) {
-            PRG.error("Nombre o contraseña no válidos");
+            // PRG.error("Nombre o contraseña no válidos");
             return "redirect:/"; // Redirigir si la validación de nombre/contraseña falla
         }
 
@@ -339,7 +339,7 @@ public class UsuarioController {
         Long idUsuario = usuario.getIdPersona();
         // Guardar el usuario
         usuarioService.updateUser(idUsuario, nombre, password, correo);
-        PRG.info("Tu usuario ha sido actualizado", "/");
+        // PRG.info("Tu usuario ha sido actualizado", "/");
 
         return "redirect:/";
     }
@@ -354,7 +354,7 @@ public class UsuarioController {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         String correoUsuario = usuario.getCorreo();
         usuarioService.modificacionPuntos(correoUsuario, 2);
-        PRG.info("Los permisos del usuario se han actualizado", "/usuario/rAdmin");
+        // PRG.info("Los permisos del usuario se han actualizado", "/usuario/rAdmin");
 
         return "redirect:/usuario/rAdmin";
     }
@@ -365,7 +365,7 @@ public class UsuarioController {
         try {
             usuarioService.delete(idPersona);
         } catch (Exception e) {
-            PRG.error("", "/usuario/r");
+            // PRG.error("", "/usuario/r");
         }
         return "redirect:/usuario/r";
     }

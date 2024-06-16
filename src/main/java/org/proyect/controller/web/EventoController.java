@@ -65,7 +65,7 @@ public class EventoController {
         try {
             eventoService.save(nuevoEvento);
         } catch (Exception e) {
-            PRG.error("Error al crear el evento", "evento/c");
+            // PRG.error("Error al crear el evento", "evento/c");
         }
 
         return "redirect:/evento/c";
@@ -90,10 +90,12 @@ public class EventoController {
             @RequestParam("tipo") String tipo,
             @RequestParam("fechaEvento") LocalDate fechaEvento, HttpSession session) throws DangerException {
         if (!ComentarioValidator.validarComentario(nombre)) {
-            PRG.error("El nombre del evento esta vacio o tiene palabras prohibidas", "/evento/u?id=" + idEvento);
+            // PRG.error("El nombre del evento esta vacio o tiene palabras prohibidas",
+            // "/evento/u?id=" + idEvento);
         }
         if (!ComentarioValidator.validarComentario(localizacion)) {
-            PRG.error("La localizacion del evento esta vacio o tiene palabras prohibidas", "/evento/u?id=" + idEvento);
+            // PRG.error("La localizacion del evento esta vacio o tiene palabras
+            // prohibidas", "/evento/u?id=" + idEvento);
         }
         eventoService.update(idEvento, nombre, localizacion, tipo, fechaEvento);
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -107,7 +109,7 @@ public class EventoController {
         try {
             eventoService.delete(idEvento);
         } catch (Exception e) {
-            PRG.error("Error al borrar el evento", "/evento/rAdmin");
+            // PRG.error("Error al borrar el evento", "/evento/rAdmin");
         }
 
         return "redirect:/evento/rAdmin";

@@ -50,7 +50,6 @@ public class HomeController {
 		m.put("peliculas", peliculas);
 		m.addAttribute("cantidadMaximaPeliculas", cantidadMaximaPeliculas);
 
-		// Agrega las películas para el carrusel
 		m.put("carouselPeliculas", peliculas.subList(0, Math.min(5, peliculas.size())));
 		m.put("carouselJuegos", juegos.subList(0, Math.min(4, juegos.size())));
 
@@ -101,13 +100,13 @@ public class HomeController {
 		try {
 			// Validar el formato del correo electrónico
 			if (!EmailValidator.isValidEmail(email)) {
-				PRG.error("Formato de correo electrónico no válido");
+				// PRG.error("Formato de correo electrónico no válido");
 			}
 			if (!ComentarioValidator.validarComentario(email)) {
-				PRG.error("El email tiene palabras prohibidas", "/");
+				// PRG.error("El email tiene palabras prohibidas", "/");
 			}
 			if (!ComentarioValidator.validarComentario(password)) {
-				PRG.error("La contraseña tiene palabras prohibidas", "/");
+				// PRG.error("La contraseña tiene palabras prohibidas", "/");
 			}
 
 			Usuario usuario = usuarioService.login(email, password);
@@ -118,7 +117,6 @@ public class HomeController {
 		} catch (DangerException e) {
 			throw e; // Re-lanzar excepciones DangerException para que se manejen adecuadamente
 		} catch (Exception e) {
-			PRG.error("Error inesperado al iniciar sesión", "/");
 		}
 		return "redirect:/";
 	}
@@ -167,7 +165,8 @@ public class HomeController {
 
 		Usuario usuario = (Usuario) session.getAttribute("usuario");
 		if (!ComentarioValidator.validarComentario(contenido)) {
-			PRG.error("El comentario no puede estar vacío o tiene palabras prohibidas", "redirect:/");
+			// PRG.error("El comentario no puede estar vacío o tiene palabras prohibidas",
+			// "redirect:/");
 		}
 		sendEmail(usuario.getCorreo(), tema, "Datos del usuario👤 \n" + "----------------------\n" +
 				"Nombre: " + usuario.getNombre() + "\n" + "Correo📧: " + usuario.getCorreo() + "\n"

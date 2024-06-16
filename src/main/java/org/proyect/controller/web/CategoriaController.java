@@ -85,10 +85,10 @@ public class CategoriaController {
             }
 
         } catch (Exception e) {
-            PRG.error("La categoria " + nombre + " ya existe", "/categoria/c");
+            // PRG.error("La categoria " + nombre + " ya existe", "/categoria/c");
         }
         if (creado) {
-            PRG.info("La categoria " + nombre + " se ha creado", "/categoria/rAdmin");
+            // PRG.info("La categoria " + nombre + " se ha creado", "/categoria/rAdmin");
         }
         return "redirect:/categoria/rAdmin";
     }
@@ -120,10 +120,10 @@ public class CategoriaController {
             String correoUsuario = usuario.getCorreo();
             usuarioService.modificacionPuntos(correoUsuario, 3);
         } catch (Exception e) {
-            PRG.error("La categoria no pudo ser actualizada", "/categoria/r");
+            // PRG.error("La categoria no pudo ser actualizada", "/categoria/r");
         }
         if (creado) {
-            PRG.info("La categoria se ha actualizado", "/categoria/r");
+            // PRG.info("La categoria se ha actualizado", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }
@@ -136,10 +136,10 @@ public class CategoriaController {
         try {
             categoriaService.delete(id_Bean);
         } catch (Exception e) {
-            PRG.error("Se ha eliminado la categoria", "/categoria/r");
+            // PRG.error("Se ha eliminado la categoria", "/categoria/r");
         }
         if (creado) {
-            PRG.info("Se ha eliminado la categoria", "/categoria/r");
+            // PRG.info("Se ha eliminado la categoria", "/categoria/r");
         }
         return "redirect:/categoria/r";
     }

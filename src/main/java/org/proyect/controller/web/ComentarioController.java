@@ -67,10 +67,12 @@ public class ComentarioController {
                 usuarioService.modificacionPuntos(correoUsuario, 4);
 
                 comentarioService.savePelicula(autor, contenido, LocalDate.now(), idPelicula);
-                PRG.info("Comentario guardado", "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento());
+                // PRG.info("Comentario guardado", "redirect:/pelicula/rDetailed?id_elemento=" +
+                // pelicula.getIdElemento());
             } else {
-                PRG.error("El comentario contiene palabras malsonantes.",
-                        "redirect:/pelicula/rDetailed?id_elemento=" + pelicula.getIdElemento());
+                // PRG.error("El comentario contiene palabras
+                // malsonantes.","redirect:/pelicula/rDetailed?id_elemento=" +
+                // pelicula.getIdElemento());
             }
 
         } catch (Exception e) {

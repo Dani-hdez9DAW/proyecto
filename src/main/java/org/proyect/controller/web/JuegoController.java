@@ -155,11 +155,12 @@ public class JuegoController {
             Usuario usuario = (Usuario) session.getAttribute("usuario");
             String correoUsuario = usuario.getCorreo();
             usuarioService.modificacionPuntos(correoUsuario, 15);
-            PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/juego/c");
+            // PRG.info("La película con nombre '" + titulo + "' ha sido creada",
+            // "/juego/c");
         }
 
         if (creado) {
-            PRG.info("El juego con el nombre " + titulo + " ha sido creado", "/juego/c");
+            // PRG.info("El juego con el nombre " + titulo + " ha sido creado", "/juego/c");
         }
 
         return "redirect:/juego/r";
@@ -199,7 +200,7 @@ public class JuegoController {
         }
 
         if (creado) {
-            PRG.info("El juego con el nombre " + titulo + " ha sido creado", "/juego/c");
+            // PRG.info("El juego con el nombre " + titulo + " ha sido creado", "/juego/c");
         }
         return "redirect:/juego/r";
     }
@@ -234,7 +235,7 @@ public class JuegoController {
         } else {
             // Si el usuario no está autenticado o no tiene el rol adecuado, redirígelo a la
             // página de inicio de sesión
-            PRG.error("Debe estar registrado para acceder", "/juego/r");
+            // PRG.error("Debe estar registrado para acceder", "/juego/r");
             return "redirect:/"; // Cambia "/login" por la ruta correcta de tu página de inicio de sesión
         }
     }
