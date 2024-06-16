@@ -73,7 +73,7 @@ public class HomeController {
 		m.put("severity", severity);
 		m.put("link", link);
 
-		m.put("view", "/_t/info");
+		m.put("view", "_t/info");
 		return "/_t/frame";
 	}
 
