@@ -80,7 +80,7 @@ public class PeliculaController {
         m.put("categorias", categorias);
         m.put("clasificaciones", clasificaciones);
         m.put("totalPages", peliculasPage.getTotalPages());
-        m.put("view", "/pelicula/r");
+        m.put("view", "pelicula/r");
         return "_t/frame";
     }
 
@@ -165,10 +165,10 @@ public class PeliculaController {
             } // PRG.info("La película con nombre '" + titulo + "' ha sido creada",
               // "/pelicula/c");
         } catch (Exception e) {
-            PRG.error("Error al crear la película: " + e.getMessage(), "/pelicula/c");
+            PRG.error("Error al crear la película: " + e.getMessage(), "pelicula/c");
         }
         if (creado) {
-            PRG.info("La película con nombre '" + titulo + "' ha sido creada", "/pelicula/c");
+            PRG.info("La película con nombre '" + titulo + "' ha sido creada", "pelicula/c");
         }
         return "redirect:/pelicula/r";
     }
@@ -457,7 +457,7 @@ public class PeliculaController {
             ModelMap m) {
         List<Pelicula> peliculasFiltradas;
         List<Pelicula> peliculas = peliculaService.findAll();
-        List<String> clasificaciones = Arrays.asList("G", "PG", "R13", "R15", "M", "R16", "RP16");
+        List<String> clasificaciones = Arrays.asList("R", "PG-13", "PG-16", "PG-17");
         Categoria categoria = null;
 
         if (idCategoria != null) {
