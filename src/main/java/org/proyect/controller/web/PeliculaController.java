@@ -80,7 +80,7 @@ public class PeliculaController {
         m.put("categorias", categorias);
         m.put("clasificaciones", clasificaciones);
         m.put("totalPages", peliculasPage.getTotalPages());
-        m.put("view", "/pelicula/r");
+        m.put("view", "pelicula/r");
         return "_t/frame";
     }
 

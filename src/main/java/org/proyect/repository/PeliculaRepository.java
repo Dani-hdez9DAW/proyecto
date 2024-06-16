@@ -18,6 +18,4 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
     public List<Pelicula> findByCategorias(Categoria categoria);
 
     public List<Pelicula> findByClasificacion(String clasificacion);
-
-    //  List<Pelicula> findByTituloContainingIgnoreCase(String titulo);
 }

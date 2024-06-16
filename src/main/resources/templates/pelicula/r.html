@@ -316,12 +316,85 @@
 </head>
 
 <body>
+    <!-- <div>
+        <button onclick="toggleView('list-view')">Vista de Lista</button>
+        <button onclick="toggleView('table-view')">Vista de Tabla</button>
+    </div> -->
+    <!-- <h3>Filtrar</h3> -->
+    <!-- <div> 
+        <form action="/pelicula/filtrarPorCategoria" method="get">
+            <select name="idCategoria">
+                <option th:each="categoria : ${categorias}" th:value="${categoria.idCategoria}"
+                    th:text="${categoria.nombre}"></option>
+            </select>
+            <button type="submit">Filtrar</button>
+
+        </form>
+        <button onclick="window.location.href='/pelicula/r'">Quitar filtro</button>
+
+        <form action="/pelicula/filtrarPorClasificacion" method="get">
+            <select name="clasificacion">
+                <option th:each="clasificacion : ${clasificaciones}" th:value="${clasificacion}"
+                    th:text="${clasificacion}"></option>
+            </select>
+            <button type="submit">Filtrar</button>
+        </form>
+        
+        <button onclick="window.location.href='/pelicula/r'">Quitar filtro</button>
+
+    </div> -->
+
+    <div class="filtro container">
+        <div style="display: inline-block;">
+            <h4 style="display: inline-block; margin: 0;color: white;">Filtrar</h4>
+            <form action="/pelicula/filtrar" method="get" style="display: inline-block;">
+                <select name="idCategoria">
+                    <option value="">Categorías</option>
+                    <option th:each="categoria : ${categorias}" th:value="${categoria.idCategoria}"
+                        th:text="${categoria.nombre}"></option>
+                </select>
+                <select name="clasificacion">
+                    <option value="">Clasificaciones</option>
+                    <option th:each="clasificacion : ${clasificaciones}" th:value="${clasificacion}"
+                        th:text="${clasificacion}"></option>
+                </select>
+                <button type="submit"><i class="bi bi-funnel-fill"></i>Filtrar</button>
+            </form>
+        </div>
+        <button class="quitar-filtro" onclick="window.location.href='/pelicula/r'" style="display: inline-block;"><i
+                class="bi bi-funnel"></i>Cancelar filtro</button>
+
+        <div class="switch-container text-white" style="display: inline-block; float: right;">
+            <h4 style="display: inline-block; margin: 0;">Vista:</h4>
+            <!-- Switch para cambiar entre vista de lista y vista de tabla -->
+            <label class="switch" id="toggle-view">
+                <input type="checkbox" onclick="toggleView()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
 
     <h1 class="highlight-text mb-3 mt-3 container">Películas</h1>
 
 
 
     <div class="container mt-4 mb-4 grid-view" id="list-view-container">
+        <nav style="padding: 20px;" aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/pelicula/r(page=0)}">Primera</a>
+                </li>
+                <!-- Mostrar números de página -->
+                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                    th:classappend="${pageNumber == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/pelicula/r(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/pelicula/r(page=${totalPages - 1})}">Última</a>
+                </li>
+            </ul>
+        </nav>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div th:each="pelicula : ${peliculas}" class="col">
                 <div class="card bg-secondary carta">
@@ -349,7 +422,46 @@
                 </div>
             </div>
         </div>
+        <nav style="padding: 20px;" aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/pelicula/r(page=0)}">Primera</a>
+                </li>
+                <!-- Mostrar números de página -->
+                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                    th:classappend="${pageNumber == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/pelicula/r(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/pelicula/r(page=${totalPages - 1})}">Última</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+    <div th:if="${session.usuario == null}">
+        <!-- <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">¡Autenticación requerida!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Por favor, inicia sesión para acceder a esta funcionalidad.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Iniciar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    </div>
+
+
     <div class="container  mt-4 text-primary" id="table-view-container" style="display: none;">
         <table id="peliculasTable" class="table table-dark table-striped" style="text-align: center;" >
             <thead class="thead-dark">
@@ -361,6 +473,7 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- Renderiza los datos directamente aquí -->
                 <tr th:each="pelicula : ${peliculas}">
                     <td th:text="${pelicula.titulo}"></td>
                     <td th:text="${pelicula.fecha_salida}"></td>
