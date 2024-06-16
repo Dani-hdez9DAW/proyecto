@@ -316,34 +316,6 @@
 </head>
 
 <body>
-    <!-- <div>
-        <button onclick="toggleView('list-view')">Vista de Lista</button>
-        <button onclick="toggleView('table-view')">Vista de Tabla</button>
-    </div> -->
-    <!-- <h3>Filtrar</h3> -->
-    <!-- <div> 
-        <form action="/pelicula/filtrarPorCategoria" method="get">
-            <select name="idCategoria">
-                <option th:each="categoria : ${categorias}" th:value="${categoria.idCategoria}"
-                    th:text="${categoria.nombre}"></option>
-            </select>
-            <button type="submit">Filtrar</button>
-
-        </form>
-        <button onclick="window.location.href='/pelicula/r'">Quitar filtro</button>
-
-        <form action="/pelicula/filtrarPorClasificacion" method="get">
-            <select name="clasificacion">
-                <option th:each="clasificacion : ${clasificaciones}" th:value="${clasificacion}"
-                    th:text="${clasificacion}"></option>
-            </select>
-            <button type="submit">Filtrar</button>
-        </form>
-        
-        <button onclick="window.location.href='/pelicula/r'">Quitar filtro</button>
-
-    </div> -->
-
     <div class="filtro container">
         <div style="display: inline-block;">
             <h4 style="display: inline-block; margin: 0;color: white;">Filtrar</h4>
@@ -438,30 +410,6 @@
             </ul>
         </nav>
     </div>
-    <div th:if="${session.usuario == null}">
-        <!-- <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="authModalLabel">¡Autenticación requerida!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Por favor, inicia sesión para acceder a esta funcionalidad.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Iniciar Sesión</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    </div>
-
-
     <div class="container  mt-4 text-primary" id="table-view-container" style="display: none;">
         <table id="peliculasTable" class="table table-dark table-striped" style="text-align: center;" >
             <thead class="thead-dark">
