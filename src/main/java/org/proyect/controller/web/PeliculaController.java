@@ -80,7 +80,7 @@ public class PeliculaController {
         m.put("categorias", categorias);
         m.put("clasificaciones", clasificaciones);
         m.put("totalPages", peliculasPage.getTotalPages());
-        m.put("view", "pelicula/r");
+        m.put("view", "/pelicula/r");
         return "_t/frame";
     }
 
@@ -449,6 +449,57 @@ public class PeliculaController {
     // m.put("view", "pelicula/r");
     // return "_t/frame";
     // }
+
+    @GetMapping("filtrar")
+    public String filtrar(@RequestParam(name = "idCategoria", required = false) Long idCategoria,
+            @RequestParam(name = "clasificacion", required = false) String clasificacion,
+            @RequestParam(defaultValue = "0") int page,
+            ModelMap m) {
+        List<Pelicula> peliculasFiltradas;
+        List<Pelicula> peliculas = peliculaService.findAll();
+        List<String> clasificaciones = Arrays.asList("G", "PG", "R13", "R15", "M", "R16", "RP16");
+        Categoria categoria = null;
+
+        if (idCategoria != null) {
+            categoria = categoriaService.findById(idCategoria);
+
+            peliculasFiltradas = new ArrayList<>();
+            for (Pelicula pelicula : peliculas) {
+                for (Categoria cat : pelicula.getCategorias()) {
+                    if (cat.getIdCategoria().equals(idCategoria)) {
+                        peliculasFiltradas.add(pelicula);
+                        break;
+                    }
+                }
+            }
+        } else if (clasificacion != null) {
+            peliculasFiltradas = new ArrayList<>();
+            for (Pelicula pelicula : peliculas) {
+                if (pelicula.getClasificacion().equals(clasificacion)) {
+                    peliculasFiltradas.add(pelicula);
+                }
+            }
+        } else {
+            peliculasFiltradas = peliculas;
+        }
+
+        // Crear un objeto Pageable específico para las películas filtradas
+        Pageable pageable = PageRequest.of(page, 12);
+        int start = (int) pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > peliculasFiltradas.size() ? peliculasFiltradas.size()
+                : (start + pageable.getPageSize());
+        Page<Pelicula> peliculasPage = new PageImpl<>(peliculasFiltradas.subList(start, end), pageable,
+                peliculasFiltradas.size());
+
+        m.put("peliculas", peliculasFiltradas);
+        m.put("currentPage", page);
+        m.put("categorias", categoriaService.findAll());
+        m.put("clasificaciones", clasificaciones);
+        m.put("totalPages", peliculasPage.getTotalPages());
+        m.put("categoria", categoria);
+        m.put("view", "pelicula/r");
+        return "_t/frame";
+    }
 
     // CARROUSELL
     // @GetMapping("/peliculas")
