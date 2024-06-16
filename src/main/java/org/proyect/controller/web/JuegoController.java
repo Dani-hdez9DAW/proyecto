@@ -71,7 +71,7 @@ public class JuegoController {
         m.put("categorias", categorias);
         m.put("clasificaciones", clasificaciones);
         m.put("totalPages", juegosPage.getTotalPages());
-        m.put("view", "/juego/r");
+        m.put("view", "juego/r");
         return "_t/frame";
     }
 
