@@ -136,10 +136,10 @@ public class UsuarioService {
     public Usuario login(String email, String password) throws Exception {
         Usuario usuario = usuarioRepository.getByCorreo(email);
         if (usuario == null) {
-            PRG.error("El usuario no existe", "/");
+            // PRG.error("El usuario no existe", "/");
         }
         if (!(new BCryptPasswordEncoder()).matches(password, usuario.getContraseña())) {
-            PRG.error("La contraseña no coincide", "/");
+            // PRG.error("La contraseña no coincide", "/");
         }
         return usuario;
     }
@@ -151,7 +151,7 @@ public class UsuarioService {
             usuarioRepository.save(usuario);
         } else {
             // Manejar el caso en que el usuario no exista
-            PRG.error("El usuario con nombre " + email + " no existe");
+            // PRG.error("El usuario con nombre " + email + " no existe");
         }
     }
 
@@ -168,16 +168,15 @@ public class UsuarioService {
 
     public Usuario saveUsuarioPeliculas(Usuario usuario, Pelicula pelicula) {
         List<Pelicula> peliculasFav = usuario.getPeliculasFav();
-    
+
         // Verificar si la película ya está en la lista de favoritos
         if (!peliculasFav.contains(pelicula)) {
             peliculasFav.add(pelicula);
             usuario.setPeliculasFav(peliculasFav);
         }
-    
+
         return usuarioRepository.save(usuario);
     }
-    
 
     public void modificacionPuntos(String correo, Integer puntuacionMaxima) {
         Usuario usuario = usuarioRepository.getByCorreo(correo);
@@ -195,16 +194,15 @@ public class UsuarioService {
 
     public Usuario saveUsuarioJuegos(Usuario usuario, Juego juego) {
         List<Juego> juegosFav = usuario.getJuegosFav();
-    
+
         // Verificar si el juego ya está en la lista de favoritos
         if (!juegosFav.contains(juego)) {
             juegosFav.add(juego);
             usuario.setJuegosFav(juegosFav);
         }
-    
+
         return usuarioRepository.save(usuario);
     }
-    
 
     public void actualizarDescripcion(String correoUsuario, String nuevaDescripcion) {
         // Buscar el usuario por su correo en la base de datos
